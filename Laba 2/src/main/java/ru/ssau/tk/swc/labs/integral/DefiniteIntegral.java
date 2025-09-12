@@ -12,7 +12,7 @@ public class DefiniteIntegral {
         double sum = (function.apply(a) + function.apply(b)) / 2;
 
         for (int i = 1; i < n; i++)
-            sum += function.apply(a + i * h;);
+            sum += function.apply(a + i * h);
 
         return sum * h;
     }
@@ -36,7 +36,7 @@ public class DefiniteIntegral {
         double sum = function.apply(a) + function.apply(b);
         for (int i = 1; i < n; i++) {
             double coeff = (i % 2 == 0) ? 2 : 4;
-            sum += coeff * f.apply(a + i * h);
+            sum += coeff * function.apply(a + i * h);
         }
         return sum * h / 3;
     }
