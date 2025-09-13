@@ -35,7 +35,7 @@ class SqrFunctionTest {
     }
 
     @Test
-    void testApply_PrecisionAndRounding() {
+    void testApplyPrecisionAndRounding() {
         SqrFunction function = new SqrFunction();
 
         // Числа, близкие к 1.0 (проверка точности)
@@ -49,5 +49,22 @@ class SqrFunctionTest {
         // Очень маленькие числа
         double smallNumber = 1.23456789e-8;
         assertEquals(smallNumber * smallNumber, function.apply(smallNumber), 1e-20);
+    }
+
+    @Test
+    void testApplySpecialMathematicalCases() {
+        SqrFunction function = new SqrFunction();
+
+        // Золотое сечение
+        double phi = (1 + Math.sqrt(5)) / 2;
+        assertEquals(phi + 1, function.apply(phi), 1e-10); // φ² = φ + 1
+
+        // Тригонометрические тождества
+        for (double angle = 0; angle < 2 * Math.PI; angle += Math.PI / 12) {
+            double sin = Math.sin(angle);
+            double cos = Math.cos(angle);
+            assertEquals(1.0, function.apply(sin) + function.apply(cos), 1e-10,
+                    "sin²(x) + cos²(x) должно быть равно 1 для x = " + angle);
+        }
     }
 }
