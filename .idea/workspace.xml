@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="66351c36-66cc-48dd-9d98-4f990e8d8106" name="Changes" comment="Доделал 1 задание. Жду тебя" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Ler0nBar0n&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/IvaSom/OOP_lab.git&quot;,
+    &quot;accountId&quot;: &quot;b28f315e-e7ef-49ad-b0a4-fcde55e50ad3&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="32al1giRXatVQSfebMjkZpPRfIm" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MyFirstClass.executor": "Profiler#1",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "com.intellij.ide.FileNotInSourceRootChecker.no.check": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "JAVA"
+    ]
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="MyFirstClass" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MyFirstClass" />
+      <module name="OOP_lab" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MyFirstClass" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="66351c36-66cc-48dd-9d98-4f990e8d8106" name="Changes" comment="" />
+      <created>1757666350784</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1757666350784</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Добавил свою 1 лабу">
+      <option name="closed" value="true" />
+      <created>1757666601953</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1757666601953</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Добавил свою 1 лабу">
+      <option name="closed" value="true" />
+      <created>1757666857359</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1757666857359</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Добавил функцию квадрата">
+      <option name="closed" value="true" />
+      <created>1757667414292</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1757667414292</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Добавил гетер и сетер в ОИ и обработку исключений">
+      <option name="closed" value="true" />
+      <created>1757683630105</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1757683630105</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Добавил классы ConstantFunction, ZeroFunction и UnitFunction.">
+      <option name="closed" value="true" />
+      <created>1757684863785</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1757684863785</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Доделал 1 задание. Жду тебя">
+      <option name="closed" value="true" />
+      <created>1757696820875</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1757696820875</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Доделал 1 задание. Жду тебя">
+      <option name="closed" value="true" />
+      <created>1757696830709</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1757696830709</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Добавил свою 1 лабу" />
+    <MESSAGE value="Добавил функцию квадрата" />
+    <MESSAGE value="Добавил гетер и сетер в ОИ и обработку исключений" />
+    <MESSAGE value="Добавил классы ConstantFunction, ZeroFunction и UnitFunction." />
+    <MESSAGE value="Доделал 1 задание. Жду тебя" />
+    <option name="LAST_COMMIT_MESSAGE" value="Доделал 1 задание. Жду тебя" />
+  </component>
+</project>
