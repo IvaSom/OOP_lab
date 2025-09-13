@@ -1,4 +1,5 @@
 package ru.ssau.tk.swc.labs.integral;
+import ru.ssau.tk.swc.labs.functions.*;
 
 public class DefiniteIntegral {
     private MathFunction function;
