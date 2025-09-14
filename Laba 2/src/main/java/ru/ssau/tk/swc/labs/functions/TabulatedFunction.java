@@ -1,6 +1,6 @@
 package ru.ssau.tk.swc.labs.functions;
 
-public interface TabulatedFunction {
+public interface TabulatedFunction extends MathFunction {
     int getCount(); //Метод получения количества табулированных значений
     double getX(int index); //Метод, получающий значение аргумента x по номеру индекса
     double getY(int index);//Метод, получающий значение y по номеру индекса
