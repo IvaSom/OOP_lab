@@ -8,7 +8,7 @@ public class ZeroFunctionTest {
     @Test
     void testApply(){
         ZeroFunction function = new ZeroFunction();
-        //
+
         assertEquals(0, function.apply(12.21));
         assertEquals(0, function.apply(73));
         assertEquals(0, function.apply(0));
