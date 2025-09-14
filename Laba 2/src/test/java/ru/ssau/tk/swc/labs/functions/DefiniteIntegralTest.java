@@ -8,7 +8,8 @@ public class DefiniteIntegralTest {
     private static final double epsilon = 1e-3;
 
     @Test
-    void testSqrFunctionAllMethod () {
+    void testSqrFunctionAllMethod() {
+
         SqrFunction f = new SqrFunction();
         DefiniteIntegral integral = new DefiniteIntegral(f);
         final float resultFirstIntegral = 125/3f;
@@ -33,5 +34,39 @@ public class DefiniteIntegralTest {
     }
 
     @Test
-    void test
+    void testCosSinSqrComposition() {
+
+        MathFunction cos = new CosFunction();
+        MathFunction sin = new SinFunction();
+        MathFunction sqr = new SqrFunction();
+
+        MathFunction composition = cos.andThen(sin).andThen(sqr);
+        DefiniteIntegral integral = new DefiniteIntegral(composition);
+
+        assertTrue(integral.methodSimpson(0, Math.PI/2, 2000) > 0);
+        assertTrue(integral.methodSimpson(0, Math.PI/2, 2000) < Math.PI/2);
+        assertEquals(integral.methodSimpson(0, Math.PI/2, 2000), integral.methodTrapezoid(0, Math.PI/2, 2000), 1e-7);
+
+        assertTrue(integral.methodSimpson(2*Math.PI, Math.PI/4, 2000) > -2);
+        assertTrue(integral.methodSimpson(2*Math.PI, Math.PI/4, 2000) < (2*Math.PI - Math.PI/4));
+        assertEquals(integral.methodSimpson(2*Math.PI, Math.PI/4, 2000), integral.methodTrapezoid(2*Math.PI, Math.PI/4, 2000), 1e-7);
+
+        assertTrue(integral.methodSimpson(-1, 2, 2000) > -3*3);
+        assertTrue(integral.methodSimpson(-1, 2, 2000) < 3*3);
+        assertEquals(integral.methodSimpson(-1, 2, 2000), integral.methodTrapezoid(-1, 2, 2000), 1e-7);
+    }
+
+    @Test
+    void testLnCosComposition() {
+
+        MathFunction cos = new CosFunction();
+        MathFunction ln = new LnFunction();
+        MathFunction composition = cos.andThen(ln);
+        DefiniteIntegral integral = new DefiniteIntegral(composition);
+
+        assertTrue(integral.methodSimpson(0, Math.PI/4, 2000) < 0);
+        assertTrue(integral.methodSimpson(0, Math.PI/4, 2000) > -0.2);
+        assertTrue(integral.methodSimpson(-Math.PI/2, Math.PI/2, 2000) < 0);
+        assertTrue(integral.methodSimpson(-Math.PI/2, Math.PI/2, 2000) > -2.3);
+    }
 }

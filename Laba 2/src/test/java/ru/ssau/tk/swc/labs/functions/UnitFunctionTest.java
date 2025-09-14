@@ -8,7 +8,7 @@ public class UnitFunctionTest {
     @Test
     void testApply(){
         UnitFunction function = new UnitFunction();
-        //
+
         assertEquals(1, function.apply(12.21));
         assertEquals(1, function.apply(73));
         assertEquals(1, function.apply(0));
