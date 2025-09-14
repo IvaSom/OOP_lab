@@ -9,5 +9,6 @@ class IdentityFunctionTest {
         IdentityFunction identityFunction = new IdentityFunction();
         Assertions.assertEquals(137, identityFunction.apply(137));
         Assertions.assertEquals(52.42, identityFunction.apply(52.42));
+        Assertions.assertEquals(0, identityFunction.apply(0));
     }
 }
