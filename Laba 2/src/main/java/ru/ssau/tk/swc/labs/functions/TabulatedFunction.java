@@ -11,5 +11,4 @@ public interface TabulatedFunction extends MathFunction {
 
     double leftBound(); //самый левый x
     double rightBound(); //самый правый x
-
 }
