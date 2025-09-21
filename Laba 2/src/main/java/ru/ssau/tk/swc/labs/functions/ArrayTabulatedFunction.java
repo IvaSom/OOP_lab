@@ -1,0 +1,138 @@
+package ru.ssau.tk.swc.labs.functions;
+
+import java.util.Arrays;
+
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
+    private final double[] xValues;
+    private final double[] yValues;
+    private final int count;
+
+    public ArrayTabulatedFunction(double[] xArr, double[] yArr) {
+        if (xArr.length != yArr.length)
+            throw new IllegalArgumentException("Количество точек должно совпадать!");
+
+        if (xArr.length < 2)
+            throw new IllegalArgumentException("Нужно как минимум 2 точки!");
+
+        this.count = xArr.length;
+        this.xValues = Arrays.copyOf(xArr, count);
+        this.yValues = Arrays.copyOf(yArr, count);
+
+        for (int i = 0; i < count; i++)
+            if (this.xValues[i] <= this.xValues[i - 1])
+                throw new IllegalArgumentException("xValues значения должны находиться в порядке возрастания!");
+    }
+
+    public ArrayTabulatedFunction(MathFunction source, double xFrom, double xTo, int countTemp) {
+        if (countTemp < 2)
+            throw new IllegalArgumentException("Нужно как минимум 2 точки!");
+
+        this.count = countTemp;
+        this.xValues = new double[count];
+        this.yValues = new double[count];
+
+        if (xFrom > xTo) {
+            double temp = xFrom;
+            xFrom = xTo;
+            xTo = temp;
+        }
+
+        if (xFrom == xTo) {
+            Arrays.fill(xValues, xFrom);
+
+            for (int i = 0; i < count; i++)
+                yValues[i] = source.apply(xFrom);
+        } else {
+            double step = (xTo - xFrom) / (count - 1);
+            for (int i = 0; i < count; i++) {
+                xValues[i] = xFrom + i * step;
+                yValues[i] = source.apply(xValues[i]);
+            }
+        }
+    }
+
+    @Override
+    public int floorIndexOfX(double x){
+        if (x < xValues[0]) return 0;
+        if (x > xValues[count - 1]) return count - 1;
+
+        for (int i = 0; i < count - 1; i++){
+            if (xValues[i] <= x)
+                if (xValues[i + 1] > x)
+                    return i;
+        }
+
+        return count - 1;
+    }
+
+    @Override
+    public double extrapolateLeft(double x) {
+        if (count == 1)
+            return yValues[0];
+
+        return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
+    }
+
+    @Override
+    public double extrapolateRight(double x) {
+        if (count == 1)
+            return yValues[0];
+
+        return interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
+    }
+
+    @Override
+    protected double interpolate(double x, int floorIndex) {
+        if (count == 1)
+            return yValues[0];
+
+        return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1],
+                yValues[floorIndex], yValues[floorIndex + 1]);
+    }
+
+    @Override
+    public int getCount() {return count;}
+
+    @Override
+    public double getX(int index) {
+        if (index < 0 || index >= count)
+            throw new IndexOutOfBoundsException("Невозможный индекс!");
+        return xValues[index];
+    }
+
+    @Override
+    public double getY(int index) {
+        if (index < 0 || index >= count)
+            throw new IndexOutOfBoundsException("Невозможный индекс!");
+        return yValues[index];
+    }
+
+    @Override
+    public void setY(int index, double value) {
+        if (index < 0 || index >= count)
+            throw new IndexOutOfBoundsException("Невозможный индекс!");
+        yValues[index] = value;
+    }
+
+    @Override
+    public int indexOfX(double x) {
+        for (int i = 0; i < count; i++)
+            if (xValues[i] == x)
+                return i;
+        return -1;
+    }
+
+    @Override
+    public int indexOfY(double y) {
+        for (int i = 0; i < count; i++)
+            if (yValues[i]== y)
+                return i;
+        return -1;
+    }
+
+    @Override
+    public double leftBound() {return xValues[0];}
+
+    @Override
+    public double rightBound() {return xValues[count - 1];}
+}
