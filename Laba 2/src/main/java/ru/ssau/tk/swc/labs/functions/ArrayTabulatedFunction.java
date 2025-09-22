@@ -138,7 +138,8 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public void remove(int index){
-        if (index < 0 || index >= count) throw new IndexOutOfBoundsException("Невозможный индекс!");
+        if (index < 0 || index >= count)
+            throw new IndexOutOfBoundsException("Невозможный индекс!");
 
         double[] tempXValues = new double[count - 1];
         double[] tempYValues = new double[count - 1];
