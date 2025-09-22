@@ -18,7 +18,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         this.xValues = Arrays.copyOf(xArr, count);
         this.yValues = Arrays.copyOf(yArr, count);
 
-        for (int i = 0; i < count; i++)
+        for (int i = 1; i < count; i++)
             if (this.xValues[i] <= this.xValues[i - 1])
                 throw new IllegalArgumentException("xValues значения должны находиться в порядке возрастания!");
     }

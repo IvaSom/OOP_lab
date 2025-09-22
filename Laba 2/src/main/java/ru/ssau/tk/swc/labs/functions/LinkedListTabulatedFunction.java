@@ -24,7 +24,20 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
         }
         count++;
     }
-    public LinkedListTabulatedFunction(double[] xValues, double[] yValues){//длины должны совпвдать и по возрастанию
+    public LinkedListTabulatedFunction(double[] xValues, double[] yValues){
+        if (xValues.length != yValues.length) {
+            throw new IllegalArgumentException("Количество точек должно совпадать!");
+        }
+
+        if (xValues.length < 2) {
+            throw new IllegalArgumentException("Нужно как минимум 2 точки!");
+        }
+
+        for (int i = 1; i < xValues.length; i++) {
+            if (xValues[i] <= xValues[i - 1])
+                throw new IllegalArgumentException("xValues значения должны находиться в порядке возрастания!");
+        }
+
         for(int i=0; i<xValues.length; i++){
             addNode(xValues[i], yValues[i]);
         }
