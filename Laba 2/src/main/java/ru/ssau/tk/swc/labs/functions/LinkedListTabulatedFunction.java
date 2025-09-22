@@ -1,6 +1,6 @@
 package ru.ssau.tk.swc.labs.functions;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable{
     private Node head = null;
 
     private void addNode(double x, double y){
@@ -154,5 +154,35 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction {
             return head.y;
         }
         return interpolate(x, getX(floorIndex), getX(floorIndex+1), getY(floorIndex), getY(floorIndex+1));
+    }
+
+    @Override
+    public void insert (double x, double y){
+        if (head == null)
+            addNode(x, y);
+
+        else {
+            int i = 0;
+            while (getX(i) < x && i < count)
+                i++;
+
+            if (i == count)
+                addNode(x, y);
+
+            else if (getX(i) == x)
+                setY(i, y);
+
+            else {
+                Node element = new Node();
+                element.x = x;
+                element.y = y;
+                Node temp = getNode(i);
+                temp.prev.next = element;
+                element.prev = temp.prev;
+                element.next = temp;
+                temp.prev = element;
+                count++;
+            }
+        }
     }
 }
