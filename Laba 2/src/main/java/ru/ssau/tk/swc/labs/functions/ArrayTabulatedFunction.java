@@ -2,10 +2,10 @@ package ru.ssau.tk.swc.labs.functions;
 
 import java.util.Arrays;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
-    private final double[] xValues;
-    private final double[] yValues;
-    private final int count;
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable{
+    private double[] xValues;
+    private double[] yValues;
+    private int count;
 
     public ArrayTabulatedFunction(double[] xArr, double[] yArr) {
         if (xArr.length != yArr.length)
@@ -135,4 +135,29 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction {
 
     @Override
     public double rightBound() {return xValues[count - 1];}
+
+    @Override
+    public void remove(int index){
+        if (index < 0 || index >= count) throw new IndexOutOfBoundsException("Невозможный индекс!");
+
+        double[] tempXValues = new double[count - 1];
+        double[] tempYValues = new double[count - 1];
+
+        int i = 0;
+        while (i < index) {
+            tempXValues[i] = xValues[i];
+            tempYValues[i] = yValues[i];
+            i++;
+        }
+
+        while (i < count - 1) {
+            tempXValues[i] = xValues[i+1];
+            tempYValues[i] = yValues[i+1];
+            i++;
+        }
+
+        this.xValues = tempXValues;
+        this.yValues = tempYValues;
+        this.count--;
+    }
 }
