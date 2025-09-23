@@ -2,6 +2,7 @@ package ru.ssau.tk.swc.labs.functions;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ArrayTabulatedFunctionTest {
 
@@ -209,5 +210,33 @@ class ArrayTabulatedFunctionTest {
         ArrayTabulatedFunction negFunction = new ArrayTabulatedFunction(negX, negY);
         assertEquals(-5.0, negFunction.leftBound());
         assertEquals(-1.0, negFunction.rightBound());
+    }
+
+    @Test
+    void testInsert(){
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction fun = new ArrayTabulatedFunction(xValues, yValues);
+        //в начало
+        fun.insert(0.5, 5.0);
+        assertEquals(4, fun.getCount());
+        assertEquals(0.5, fun.getX(0));
+        assertEquals(5.0, fun.getY(0));
+        //в середину
+        fun.insert(1.5, 15.0);
+        assertEquals(5, fun.getCount());
+        assertEquals(1.5, fun.getX(2));
+        assertEquals(15.0, fun.getY(2));
+        //в конец
+        fun.insert(3.5, 35.0);
+        assertEquals(6, fun.getCount());
+        assertEquals(3.5, fun.getX(5));
+        assertEquals(35.0, fun.getY(5));
+        //замена
+        fun.insert(2.0, 25.0);
+        assertEquals(6, fun.getCount());
+        assertEquals(2.0, fun.getX(3));
+        assertEquals(25.0, fun.getY(3));
+
     }
 }

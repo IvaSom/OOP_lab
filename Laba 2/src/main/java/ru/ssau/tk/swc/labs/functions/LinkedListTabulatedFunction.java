@@ -72,7 +72,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     private Node getNode(int index){
         Node temp = head;
-        for(int i=0; i<index; i++){
+        for(int i=0; i<index; i++){ //поэтому не будет недопустимых индексов
             temp=temp.next;
         }
         return temp;

@@ -92,4 +92,31 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(25.0, function.interpolate(2.5, 1));
     }
 
+    @Test
+    void testRemove(){
+        double[] xValues = {1.0, 2.0, 3.0, 4.0, 5.0};
+        double[] yValues = {10.0, 20.0, 30.0, 40.0, 50.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+        //из середины
+        function.remove(2); // удаляем элемент с индексом 2 (x=3.0)
+        assertEquals(4, function.getCount());
+        assertEquals(4.0, function.getX(2));
+        assertEquals(40.0, function.getY(2));
+        //из начала
+        function.remove(0); // удаляем первый элемент (x=1.0)
+        assertEquals(3, function.getCount());
+        assertEquals(2.0, function.getX(0));
+        assertEquals(20.0, function.getY(0));
+        //из конца
+        function.remove(2); // удаляем последний элемент (x=5.0)
+        assertEquals(2, function.getCount());
+        assertEquals(4.0, function.getX(1));
+        assertEquals(40.0, function.getY(1));
+        //в итоге
+        assertEquals(2.0, function.getX(0));
+        assertEquals(20.0, function.getY(0));
+        assertEquals(4.0, function.getX(1));
+        assertEquals(40.0, function.getY(1));
+    }
+
 }
