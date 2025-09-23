@@ -1,6 +1,12 @@
 package ru.ssau.tk.swc.labs.functions;
 
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
+    static class Node {
+        public Node next;
+        public Node prev;
+        public double x;
+        public double y;
+    }
     private Node head = null;
 
     private void addNode(double x, double y){
@@ -43,6 +49,9 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         }
     }
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count){
+        if (count < 2) {
+            throw new IllegalArgumentException("Нужно как минимум 2 точки!");
+        }
         if (xFrom > xTo){
             double temp =xFrom;
             xFrom = xTo;
@@ -71,8 +80,11 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     private Node getNode(int index){
+        if (index < 0 || index >= count) {
+            throw new IndexOutOfBoundsException("Невозможный индекс!");
+        }
         Node temp = head;
-        for(int i=0; i<index; i++){ //поэтому не будет недопустимых индексов
+        for(int i=0; i<index; i++){
             temp=temp.next;
         }
         return temp;
@@ -121,7 +133,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             return count;
         }
         if (head.x>x){
-            return 0;
+            throw new IllegalArgumentException("x меньше левой границы");
         }
         Node temp = head.prev; //идем сконнца тк х отсорт.
         int i =count-1;
