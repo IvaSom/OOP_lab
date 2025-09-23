@@ -1,6 +1,6 @@
 package ru.ssau.tk.swc.labs.functions;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable{
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
     private Node head = null;
 
     private void addNode(double x, double y){
@@ -184,5 +184,20 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
                 count++;
             }
         }
+    }
+    @Override
+    public void remove(int index){
+        Node temp=getNode(index);
+        if(temp==temp.next){
+            head=null;
+            count=0;
+            return;
+        }
+        if(temp==head){
+            head=temp.next;
+        }
+        temp.next.prev=temp.prev;
+        temp.prev.next=temp.next;
+        count--;
     }
 }
