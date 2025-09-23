@@ -2,7 +2,7 @@ package ru.ssau.tk.swc.labs.functions;
 
 import java.util.Arrays;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable{
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable{
     private double[] xValues;
     private double[] yValues;
     private int count;
@@ -160,5 +160,29 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         this.xValues = tempXValues;
         this.yValues = tempYValues;
         this.count--;
+    }
+    @Override
+    public void insert(double x, double y){
+        int iX=indexOfX(x);
+        int i=0;
+        if (iX!=-1){
+            yValues[iX]=y;
+        }
+        else {
+            double[] xArr = new double[xValues.length + 1];
+            double[] yArr = new double[yValues.length + 1];
+
+            for(; i<xValues.length && x>xValues[i]; i++){
+                xArr[i]=xValues[i];
+                yArr[i]=yValues[i];
+            }
+            xArr[i]=x;
+            yArr[i]=y;
+            System.arraycopy(xValues, i, xArr, i+1, xValues.length-i);
+            System.arraycopy(yValues, i, yArr, i+1, yValues.length-i);
+            xValues=xArr;
+            yValues=yArr;
+            count++;
+        }
     }
 }
