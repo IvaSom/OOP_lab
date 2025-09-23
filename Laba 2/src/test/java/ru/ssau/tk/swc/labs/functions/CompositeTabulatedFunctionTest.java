@@ -7,7 +7,6 @@ class CompositeTabulatedFunctionTest {
 
     @Test
     public void testArrayWithLinkedList() {
-        // Создаем табулированную функцию через массив
         double[] xArr = {0.0, 1.0, 2.0, 3.0, 4.0};
         double[] yArr = {0.0, 1.0, 4.0, 9.0, 16.0};
         ArrayTabulatedFunction arr = new ArrayTabulatedFunction(xArr, yArr);
@@ -27,7 +26,6 @@ class CompositeTabulatedFunctionTest {
 
     @Test
     public void testArrayWithArray() {
-        // Создаем табулированную функцию через массив
         double[] xArr = {0.0, 1.0, 2.0, 3.0, 4.0};
         double[] yArr = {0.0, 1.0, 4.0, 9.0, 16.0};
         ArrayTabulatedFunction arr = new ArrayTabulatedFunction(xArr, yArr);
@@ -44,7 +42,6 @@ class CompositeTabulatedFunctionTest {
 
     @Test
     public void testListWithList() {
-        // Создаем табулированную функцию через массив
         double[] xArr = {0.0, 1.0, 2.0, 3.0, 4.0};
         double[] yArr = {0.0, 1.0, 4.0, 9.0, 16.0};
 
@@ -62,7 +59,6 @@ class CompositeTabulatedFunctionTest {
 
     @Test
     public void testArrayWithFun() {
-        // Создаем табулированную функцию через массив
         double[] xArr = {0.0, 1.0, 2.0, 3.0, 4.0};
         double[] yArr = {0.0, 1.0, 4.0, 9.0, 16.0};
         ArrayTabulatedFunction arr = new ArrayTabulatedFunction(xArr, yArr);
@@ -79,7 +75,6 @@ class CompositeTabulatedFunctionTest {
 
     @Test
     public void testListWithFun() {
-        // Создаем табулированную функцию через массив
         double[] xArr = {0.0, 1.0, 2.0, 3.0, 4.0};
         double[] yArr = {0.0, 1.0, 4.0, 9.0, 16.0};
         LinkedListTabulatedFunction list = new LinkedListTabulatedFunction(xArr, yArr);
