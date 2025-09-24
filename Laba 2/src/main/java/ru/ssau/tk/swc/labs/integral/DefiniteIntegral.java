@@ -6,10 +6,6 @@ public class DefiniteIntegral {
 
     public DefiniteIntegral (MathFunction f) {this.function = f;}
 
-    public MathFunction getFunction() {return function;}
-
-    public void setFunction(MathFunction f) {this.function = f;}
-
     public double methodTrapezoid (double a, double b, int n) {
         if (a == b) return 0;
         if (n <= 0)

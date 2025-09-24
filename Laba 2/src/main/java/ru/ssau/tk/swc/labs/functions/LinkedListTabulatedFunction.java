@@ -158,33 +158,57 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
     @Override
     public void insert (double x, double y){
-        if (head == null)
+        if (head == null) {
+            addNode(x, y);
+            return;
+        }
+
+        if (x < head.x){
+            insertAtBegin(x, y);
+            return;
+        }
+
+        Node temp = head;
+        int i = 0;
+        while (temp.x < x && i < count) {
+            i++;
+            temp = temp.next;
+        }
+
+        if (i == count)
             addNode(x, y);
 
-        else {
-            int i = 0;
-            while (getX(i) < x && i < count)
-                i++;
+        else if (temp.x == x)
+            temp.y = y;
 
-            if (i == count)
-                addNode(x, y);
-
-            else if (getX(i) == x)
-                setY(i, y);
-
-            else {
-                Node element = new Node();
-                element.x = x;
-                element.y = y;
-                Node temp = getNode(i);
-                temp.prev.next = element;
-                element.prev = temp.prev;
-                element.next = temp;
-                temp.prev = element;
-                count++;
-            }
-        }
+        else
+            insertBeforeNode(temp, x, y);
     }
+    private void insertAtBegin(double x, double y) {
+        Node newNode = new Node();
+        newNode.x = x;
+        newNode.y = y;
+
+        newNode.next = head;
+        newNode.prev = head.prev;
+        head.prev = newNode;
+        head.next.prev = newNode;
+        head = newNode;
+        count++;
+    }
+
+    private void insertBeforeNode(Node node, double x, double y){
+        Node newNode = new Node();
+        newNode.x = x;
+        newNode.y = y;
+
+        newNode.next = node;
+        newNode.prev = node.prev;
+        node.prev = newNode;
+        node.next.prev = newNode;
+        count++;
+    }
+
     @Override
     public void remove(int index){
         Node temp=getNode(index);
