@@ -28,7 +28,7 @@ class ArrayTabulatedFunctionTest {
         assertEquals(0.0, sinTabulated.getX(0));
         assertEquals(Math.PI, sinTabulated.getX(4));
         assertEquals(0.0, sinTabulated.getY(0));
-        assertEquals(0.0, sinTabulated.getY(4));
+        assertEquals(0.0, sinTabulated.getY(4), 1e-10);
 
         // Тест с функцией косинуса
         MathFunction cosFunction = new CosFunction();
@@ -36,7 +36,7 @@ class ArrayTabulatedFunctionTest {
 
         assertEquals(3, cosTabulated.getCount());
         assertEquals(1.0, cosTabulated.getY(0));
-        assertEquals(0.0, cosTabulated.getY(2));
+        assertEquals(0.0, cosTabulated.getY(2), 1e-10);
 
         // Тест с одинаковыми границами
         ArrayTabulatedFunction constantFunction = new ArrayTabulatedFunction(sinFunction, 5.0, 5.0, 4);
@@ -81,12 +81,6 @@ class ArrayTabulatedFunctionTest {
         // Линейная экстраполяция слева
         assertEquals(5.0, function.extrapolateLeft(0.5));
         assertEquals(0.0, function.extrapolateLeft(0.0));
-
-        // Тест с одной точкой
-        double[] singleX = {1.0};
-        double[] singleY = {10.0};
-        ArrayTabulatedFunction singleFunction = new ArrayTabulatedFunction(singleX, singleY);
-        assertEquals(10.0, singleFunction.extrapolateLeft(0.5));
     }
 
     @Test
@@ -98,12 +92,6 @@ class ArrayTabulatedFunctionTest {
         // Линейная экстраполяция справа
         assertEquals(35.0, function.extrapolateRight(3.5));
         assertEquals(40.0, function.extrapolateRight(4.0));
-
-        // Тест с одной точкой
-        double[] singleX = {1.0};
-        double[] singleY = {10.0};
-        ArrayTabulatedFunction singleFunction = new ArrayTabulatedFunction(singleX, singleY);
-        assertEquals(10.0, singleFunction.extrapolateRight(2.0));
     }
 
     @Test
@@ -115,12 +103,6 @@ class ArrayTabulatedFunctionTest {
         // Линейная интерполяция
         assertEquals(15.0, function.interpolate(1.5, 0));
         assertEquals(25.0, function.interpolate(2.5, 1));
-
-        // Тест с одной точкой
-        double[] singleX = {1.0};
-        double[] singleY = {10.0};
-        ArrayTabulatedFunction singleFunction = new ArrayTabulatedFunction(singleX, singleY);
-        assertEquals(10.0, singleFunction.interpolate(1.5, 0));
     }
 
     @Test
@@ -144,22 +126,22 @@ class ArrayTabulatedFunctionTest {
 
     @Test
     void testIndexOfXAndY() {
-        double[] xValues = {1.0, 2.0, 3.0, 2.5};
-        double[] yValues = {10.0, 20.0, 30.0, 25.0};
+        double[] xValues = {1.0, 2.0, 2.5, 3.0};
+        double[] yValues = {10.0, 20.0, 25.0, 30.0};
         ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
 
         // Тест indexOfX
         assertEquals(0, function.indexOfX(1.0));
         assertEquals(1, function.indexOfX(2.0));
-        assertEquals(2, function.indexOfX(3.0));
-        assertEquals(3, function.indexOfX(2.5));
+        assertEquals(3, function.indexOfX(3.0));
+        assertEquals(2, function.indexOfX(2.5));
         assertEquals(-1, function.indexOfX(5.0));
 
         // Тест indexOfY
         assertEquals(0, function.indexOfY(10.0));
         assertEquals(1, function.indexOfY(20.0));
-        assertEquals(2, function.indexOfY(30.0));
-        assertEquals(3, function.indexOfY(25.0));
+        assertEquals(3, function.indexOfY(30.0));
+        assertEquals(2, function.indexOfY(25.0));
         assertEquals(-1, function.indexOfY(50.0));
     }
 

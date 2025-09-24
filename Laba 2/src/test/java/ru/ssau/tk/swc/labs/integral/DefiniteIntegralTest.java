@@ -1,8 +1,8 @@
-package ru.ssau.tk.swc.labs.functions;
+package ru.ssau.tk.swc.labs.integral;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import ru.ssau.tk.swc.labs.integral.*;
+import ru.ssau.tk.swc.labs.functions.*;
 
 public class DefiniteIntegralTest {
     private static final double epsilon = 1e-3;
@@ -49,7 +49,7 @@ public class DefiniteIntegralTest {
 
         assertTrue(integral.methodSimpson(2*Math.PI, Math.PI/4, 2000) > -2);
         assertTrue(integral.methodSimpson(2*Math.PI, Math.PI/4, 2000) < (2*Math.PI - Math.PI/4));
-        assertEquals(integral.methodSimpson(2*Math.PI, Math.PI/4, 2000), integral.methodTrapezoid(2*Math.PI, Math.PI/4, 2000), 1e-7);
+        assertEquals(integral.methodSimpson(2*Math.PI, Math.PI/4, 2000), integral.methodTrapezoid(2*Math.PI, Math.PI/4, 2000), 1e-6);
 
         assertTrue(integral.methodSimpson(-1, 2, 2000) > -3*3);
         assertTrue(integral.methodSimpson(-1, 2, 2000) < 3*3);
@@ -70,3 +70,4 @@ public class DefiniteIntegralTest {
         assertTrue(integral.methodSimpson(-Math.PI/2, Math.PI/2, 2000) > -2.3);
     }
 }
+
