@@ -62,13 +62,11 @@ class ArrayTabulatedFunctionTest {
         assertEquals(0, function.floorIndexOfX(1.5));
         assertEquals(1, function.floorIndexOfX(2.0));
         assertEquals(1, function.floorIndexOfX(2.7));
+        assertEquals(2, function.floorIndexOfX(3.3));
         assertEquals(3, function.floorIndexOfX(4.5));
         assertEquals(4, function.floorIndexOfX(5.0));
 
-        // Тест экстраполяции слева
         assertEquals(0, function.floorIndexOfX(0.5));
-
-        // Тест экстраполяции справа
         assertEquals(4, function.floorIndexOfX(6.0));
     }
 
@@ -220,5 +218,204 @@ class ArrayTabulatedFunctionTest {
         assertEquals(2.0, fun.getX(3));
         assertEquals(25.0, fun.getY(3));
 
+    }
+
+    @Test
+    void testRemove(){
+        double[] xValues = {1.31, 12.12, 51.412, 51.5, 222222};
+        double[] yValues = {1.0, 2.0, 3.0, 42.42, 52};
+
+        ArrayTabulatedFunction fun = new ArrayTabulatedFunction(xValues, yValues);
+
+        fun.remove(4);
+        assertEquals(4, fun.getCount());
+
+        fun.remove(0);
+        assertEquals(3, fun.getCount());
+        assertEquals(12.12, fun.getX(0));
+        assertEquals(2, fun.getY(0));
+
+        fun.remove(1);
+        assertEquals(2, fun.getCount());
+        assertEquals(51.5, fun.getX(1));
+        assertEquals(42.42, fun.getY(1));
+    }
+
+    @Test
+    void testConstructorWithDifferentArrayLengths() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0};
+
+        try {
+            new ArrayTabulatedFunction(xValues, yValues);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Количество точек должно совпадать!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testFirstConstructorWithLessThan2Points() {
+        double[] smallX = {1.0};
+        double[] smallY = {10.0};
+
+        try {
+            new ArrayTabulatedFunction(smallX, smallY);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Нужно как минимум 2 точки!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testSecondConstructorWithLessThan2Points(){
+        SqrFunction f = new SqrFunction();
+        double b = 20, a =10;
+        int temp = -1;
+
+        try {
+            new ArrayTabulatedFunction(f, a, b, temp);
+            fail("Expected IllegalArgumentException");
+        }catch (IllegalArgumentException e) {
+            assertEquals("Нужно как минимум 2 точки!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testFirstConstructorWithDuplicateXValues() {
+        double[] duplicateX = {1.0, 2.0, 2.0, 4.0};
+        double[] validY = {10.0, 20.0, 30.0, 40.0};
+
+        try {
+            new ArrayTabulatedFunction(duplicateX, validY);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("xValues значения должны находиться в порядке возрастания!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testFirstConstructorWithDescendingXValues() {
+        double[] descendingX = {4.0, 3.0, 2.0, 1.0};
+        double[] validY = {10.0, 20.0, 30.0, 40.0};
+
+        try {
+            new ArrayTabulatedFunction(descendingX, validY);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("xValues значения должны находиться в порядке возрастания!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetXWithNegativeIndex() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.getX(-1);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetXWithIndexOutOfBounds() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.getX(5);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetYWithNegativeIndex() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.getY(-1);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testGetYWithIndexOutOfBounds() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.getY(3);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testSetYWithNegativeIndex() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.setY(-1, 50.0);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testSetYWithIndexOutOfBounds() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.setY(5, 50.0);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testRemoveWithNegativeIndex() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.remove(-1);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
+    }
+
+    @Test
+    void testRemoveWithIndexOutOfBounds() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+
+        try {
+            function.remove(5);
+            fail("Expected IndexOutOfBoundsException");
+        } catch (IndexOutOfBoundsException e) {
+            assertEquals("Невозможный индекс!", e.getMessage());
+        }
     }
 }

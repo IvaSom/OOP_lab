@@ -19,4 +19,9 @@ public class ConstantFunctionTest {
         assertEquals(101, function.apply(1.23456789e-8));
     }
 
+    @Test
+    void testGetConstant(){
+        ConstantFunction function = new ConstantFunction(42.42);
+        assertEquals(42.42, function.getConstant());
+    }
 }

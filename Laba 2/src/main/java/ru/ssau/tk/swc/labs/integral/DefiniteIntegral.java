@@ -9,7 +9,7 @@ public class DefiniteIntegral {
     public double methodTrapezoid (double a, double b, int n) {
         if (a == b) return 0;
         if (n <= 0)
-            throw new IllegalArgumentException("n должно быть <= 0");
+            throw new IllegalArgumentException("n должно быть > 0");
 
         double h = (b - a) / n;
         double sum = (function.apply(a) + function.apply(b)) / 2;
@@ -23,7 +23,7 @@ public class DefiniteIntegral {
     public double methodRectangle (double a, double b, int n) {
         if (a == b) return 0;
         if (n <= 0)
-            throw new IllegalArgumentException("n должно быть <= 0");
+            throw new IllegalArgumentException("n должно быть > 0");
 
         double h = (b - a) / n;
         double sum = 0;
@@ -36,7 +36,7 @@ public class DefiniteIntegral {
     public double methodSimpson (double a, double b, int n) {
         if (a == b) return 0;
         if (n <= 0)
-            throw new IllegalArgumentException("n должно быть <= 0");
+            throw new IllegalArgumentException("n должно быть > 0");
         if (n % 2 == 1) n++;
 
         double h = (b - a) / n;

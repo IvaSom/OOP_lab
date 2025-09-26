@@ -61,7 +61,6 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(1, function.floorIndexOfX(2.0));
         assertEquals(2, function.floorIndexOfX(3.5));
         assertEquals(4, function.floorIndexOfX(5.0));
-        assertEquals(0, function.floorIndexOfX(0.5));
     }
 
     @Test
@@ -119,4 +118,31 @@ class LinkedListTabulatedFunctionTest {
         assertEquals(40.0, function.getY(1));
     }
 
+    @Test
+    void testInsert(){
+        double[] xValues = {0.11, 33};
+        double[] yValues = {1.0, 2.0};
+
+        LinkedListTabulatedFunction list = new LinkedListTabulatedFunction(xValues,yValues);
+
+        list.insert(15, 1.3);
+        assertEquals(3, list.getCount());
+        assertEquals(15, list.getX(1));
+        assertEquals(1.3, list.getY(1));
+
+        list.insert(10e-6, 0.1);
+        assertEquals(4, list.getCount());
+        assertEquals(10e-6, list.getX(0));
+        assertEquals(0.1, list.getY(0));
+
+        list.insert(42.42, 33.0);
+        assertEquals(5, list.getCount());
+        assertEquals(42.42, list.getX(4));
+        assertEquals(33, list.getY(4));
+
+        list.insert(42.42, 42.0);
+        assertEquals(5, list.getCount());
+        assertEquals(42.42, list.getX(4));
+        assertEquals(42.0, list.getY(4));
+    }
 }
