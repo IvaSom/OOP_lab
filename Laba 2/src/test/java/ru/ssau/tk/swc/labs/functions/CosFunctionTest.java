@@ -9,7 +9,7 @@ public class CosFunctionTest {
         MathFunction cos = new CosFunction();
 
         assertEquals(1.0, cos.apply(0));
-        assertEquals(0.0, cos.apply(Math.PI/2));
+        assertEquals(0.0, cos.apply(Math.PI/2), 10e-7);
         assertEquals(-1.0, cos.apply(Math.PI));
         assertEquals(cos.apply(1.5), cos.apply(-1.5));
     }

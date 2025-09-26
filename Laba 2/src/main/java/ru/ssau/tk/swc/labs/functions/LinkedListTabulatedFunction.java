@@ -148,33 +148,19 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
     @Override
     public double extrapolateLeft(double x){ //x должен быть между 0 и 1 индексами
-        if (head==head.next){
-            return head.y;
-        }
         return interpolate(x,head.x, head.next.x, head.y, head.next.y);
     }
     @Override
     public double extrapolateRight(double x){
-        if (head==head.next){
-            return head.y;
-        }
         return interpolate(x,head.prev.prev.x, head.prev.x, head.prev.prev.y, head.prev.y);
     }
     @Override
     public double interpolate (double x, int floorIndex){
-        if (head==head.next){
-            return head.y;
-        }
         return interpolate(x, getX(floorIndex), getX(floorIndex+1), getY(floorIndex), getY(floorIndex+1));
     }
 
     @Override
     public void insert (double x, double y){
-        if (head == null) {
-            addNode(x, y);
-            return;
-        }
-
         if (x < head.x){
             insertAtBegin(x, y);
             return;
@@ -217,7 +203,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         newNode.next = node;
         newNode.prev = node.prev;
         node.prev = newNode;
-        node.next.prev = newNode;
+        node.next.next = newNode;
         count++;
     }
 

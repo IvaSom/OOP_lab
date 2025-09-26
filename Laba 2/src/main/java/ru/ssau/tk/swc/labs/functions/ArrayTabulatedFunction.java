@@ -52,14 +52,13 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     }
 
     @Override
-    public int floorIndexOfX(double x){
-        if (x < xValues[0]) throw new IllegalArgumentException("x меньше левой границы");;
-        if (x > xValues[count - 1]) return count - 1;
+    public int floorIndexOfX(double x) {
+        if (x < xValues[0]) return 0;
 
-        for (int i = 0; i < count - 1; i++){
-            if (xValues[i] <= x)
-                if (xValues[i + 1] > x)
-                    return i;
+        for (int i = 0; i < count - 1; i++) {
+            if (x < xValues[i + 1]) {
+                return i;
+            }
         }
 
         return count - 1;
@@ -67,27 +66,17 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public double extrapolateLeft(double x) {
-        if (count == 1)
-            return yValues[0];
-
         return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     public double extrapolateRight(double x) {
-        if (count == 1)
-            return yValues[0];
-
-        return interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
+      return interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
     }
 
     @Override
     protected double interpolate(double x, int floorIndex) {
-        if (count == 1)
-            return yValues[0];
-
-        return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1],
-                yValues[floorIndex], yValues[floorIndex + 1]);
+       return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1], yValues[floorIndex], yValues[floorIndex + 1]);
     }
 
     @Override
