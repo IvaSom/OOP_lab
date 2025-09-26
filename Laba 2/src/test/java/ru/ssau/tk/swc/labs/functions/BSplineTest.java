@@ -46,4 +46,37 @@ class BSplineTest {
         assertEquals(0.020833333333333332, spline.apply(1.5), 1e-10);
         assertEquals(0.16666666666666666, spline.apply(2.0), 1e-10);
     }
+
+    @Test
+    void testNotEnoughKnots() {
+        double[] knots = {0, 1, 2};
+        try {
+            BSpline spline= new BSpline(knots, 3, 1);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Для B-сплайна степени k нужно как минимум k + 1 узел", e.getMessage());
+        }
+    }
+
+    @Test
+    void testInvalidIndex1() {
+        double[] knots = {0, 1, 2, 3, 4, 5};
+        try {
+            BSpline spline= new BSpline(knots, 3, -52);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Недопустимый индекс базисной функции", e.getMessage());
+        }
+    }
+
+    @Test
+    void testInvalidIndex2() {
+        double[] knots = {0, 1, 2, 3, 4, 5};
+        try {
+            BSpline spline= new BSpline(knots, 3, 2);
+            fail("Expected IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Недопустимый индекс базисной функции", e.getMessage());
+        }
+    }
 }
