@@ -37,6 +37,18 @@ class LinkedListTabulatedFunctionTest {
     }
 
     @Test
+    void testConstructorXtoLessThenXfrom() {
+        SqrFunction source = new SqrFunction();
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(source, 4.0, 0.0, 5);
+
+        assertEquals(5, function.getCount());
+        assertEquals(0.0, function.leftBound());
+        assertEquals(4.0, function.rightBound());
+        assertEquals(0.0, function.getY(0));
+        assertEquals(16.0, function.getY(4));
+    }
+
+    @Test
     void testIndexOf() {
         double[] xValues = {1.0, 2.0, 3.0, 4.0};
         double[] yValues = {10.0, 20.0, 30.0, 40.0};
