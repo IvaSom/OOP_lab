@@ -1,5 +1,8 @@
 package ru.ssau.tk.swc.labs.functions;
 
+import ru.ssau.tk.swc.labs.exceptions.ArrayIsNotSortedException;
+import ru.ssau.tk.swc.labs.exceptions.DifferentLengthOfArraysException;
+
 abstract public class AbstractTabulatedFunction implements TabulatedFunction{
     protected int count;
     abstract protected int floorIndexOfX(double x);
@@ -20,5 +23,17 @@ abstract public class AbstractTabulatedFunction implements TabulatedFunction{
             return getY(indexOfX(x));
 
         return interpolate(x, floorIndexOfX(x));
+    }
+
+    static void checkLengthIsTheSame(double[] xValues, double[] yValues) {
+        if (xValues.length != yValues.length)
+            throw new DifferentLengthOfArraysException("Количество точек должно совпадать!");
+    }
+
+    static void checkSorted(double[] xValues) {
+        for (int i = 0; i < xValues.length - 1; i++) {
+            if (xValues[i] > xValues[i + 1])
+                throw new ArrayIsNotSortedException("xValues значения должны находиться в порядке возрастания!");
+        }
     }
 }
