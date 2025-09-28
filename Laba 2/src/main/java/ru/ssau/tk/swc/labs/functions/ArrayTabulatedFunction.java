@@ -1,6 +1,7 @@
 package ru.ssau.tk.swc.labs.functions;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable{
     private double[] xValues;
@@ -173,5 +174,27 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             yValues=yArr;
             count++;
         }
+    }
+
+    @Override
+    public Iterator<Point> iterator() {
+        return new Iterator<Point>() {
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex != count;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new UnsupportedOperationException();
+                }
+                Point point = new Point(xValues[currentIndex], yValues[currentIndex]);
+                currentIndex++;
+                return point;
+            }
+        };
     }
 }
