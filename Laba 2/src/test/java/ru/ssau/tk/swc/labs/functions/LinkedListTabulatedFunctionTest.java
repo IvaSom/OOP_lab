@@ -3,6 +3,9 @@ package ru.ssau.tk.swc.labs.functions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.NoSuchElementException;
+import java.util.Iterator;
+
 class LinkedListTabulatedFunctionTest {
     @Test
     void testConstructor1() {
@@ -165,7 +168,7 @@ class LinkedListTabulatedFunctionTest {
         double[] yValues = {10.0, 20.0};
 
         try {
-            new ArrayTabulatedFunction(xValues, yValues);
+            new LinkedListTabulatedFunction(xValues, yValues);
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals("Количество точек должно совпадать!", e.getMessage());
@@ -178,7 +181,7 @@ class LinkedListTabulatedFunctionTest {
         double[] smallY = {10.0};
 
         try {
-            new ArrayTabulatedFunction(smallX, smallY);
+            new LinkedListTabulatedFunction(smallX, smallY);
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals("Нужно как минимум 2 точки!", e.getMessage());
@@ -192,7 +195,7 @@ class LinkedListTabulatedFunctionTest {
         int temp = -1;
 
         try {
-            new ArrayTabulatedFunction(f, a, b, temp);
+            new LinkedListTabulatedFunction(f, a, b, temp);
             fail("Expected IllegalArgumentException");
         }catch (IllegalArgumentException e) {
             assertEquals("Нужно как минимум 2 точки!", e.getMessage());
@@ -205,7 +208,7 @@ class LinkedListTabulatedFunctionTest {
         double[] validY = {10.0, 20.0, 30.0, 40.0};
 
         try {
-            new ArrayTabulatedFunction(duplicateX, validY);
+            new LinkedListTabulatedFunction(duplicateX, validY);
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals("xValues значения должны находиться в порядке возрастания!", e.getMessage());
@@ -218,7 +221,7 @@ class LinkedListTabulatedFunctionTest {
         double[] validY = {10.0, 20.0, 30.0, 40.0};
 
         try {
-            new ArrayTabulatedFunction(descendingX, validY);
+            new LinkedListTabulatedFunction(descendingX, validY);
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             assertEquals("xValues значения должны находиться в порядке возрастания!", e.getMessage());
@@ -229,7 +232,7 @@ class LinkedListTabulatedFunctionTest {
     void testGetXWithNegativeIndex() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.getX(-1);
@@ -243,7 +246,7 @@ class LinkedListTabulatedFunctionTest {
     void testGetXWithIndexOutOfBounds() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.getX(5);
@@ -257,7 +260,7 @@ class LinkedListTabulatedFunctionTest {
     void testGetYWithNegativeIndex() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.getY(-1);
@@ -271,7 +274,7 @@ class LinkedListTabulatedFunctionTest {
     void testGetYWithIndexOutOfBounds() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.getY(3);
@@ -285,7 +288,7 @@ class LinkedListTabulatedFunctionTest {
     void testSetYWithNegativeIndex() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.setY(-1, 50.0);
@@ -299,7 +302,7 @@ class LinkedListTabulatedFunctionTest {
     void testSetYWithIndexOutOfBounds() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.setY(5, 50.0);
@@ -313,7 +316,7 @@ class LinkedListTabulatedFunctionTest {
     void testRemoveWithNegativeIndex() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.remove(-1);
@@ -327,7 +330,7 @@ class LinkedListTabulatedFunctionTest {
     void testRemoveWithIndexOutOfBounds() {
         double[] xValues = {1.0, 2.0, 3.0};
         double[] yValues = {10.0, 20.0, 30.0};
-        ArrayTabulatedFunction function = new ArrayTabulatedFunction(xValues, yValues);
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
 
         try {
             function.remove(5);
@@ -336,4 +339,62 @@ class LinkedListTabulatedFunctionTest {
             assertEquals("Невозможный индекс!", e.getMessage());
         }
     }
+
+    @Test
+    public void testIteratorWhile() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+        Iterator<Point> iterator = function.iterator();
+        int i = 0;
+
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+            assertEquals(point.x, xValues[i]);
+            assertEquals(point.y, yValues[i]);
+            i++;
+        }
+
+        assertEquals(i, xValues.length);
+    }
+
+    @Test
+    public void testIteratorFor() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+        int i = 0;
+        for (Point point : function) {
+            assertEquals(point.x, xValues[i]);
+            assertEquals(point.y, yValues[i]);
+            i++;
+        }
+
+        assertEquals(i, xValues.length);
+    }
+
+    @Test
+    public void testIteratorNoSuchElementException() {
+        double[] xValues = {1.0, 2.0, 3.0};
+        double[] yValues = {10.0, 20.0, 30.0};
+        LinkedListTabulatedFunction function = new LinkedListTabulatedFunction(xValues, yValues);
+
+        Iterator<Point> iterator = function.iterator();
+        int i = 0;
+
+        while (iterator.hasNext()) {
+            Point point = iterator.next();
+        }
+
+        try {
+            Point point = iterator.next();
+            fail("Expected NoSuchElementException");
+        } catch (NoSuchElementException e) {
+            assertEquals("Следующего элемента нет", e.getMessage());
+        }
+    }
+
+
 }

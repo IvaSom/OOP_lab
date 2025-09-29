@@ -1,5 +1,8 @@
 package ru.ssau.tk.swc.labs.functions;
 
+import java.util.NoSuchElementException;
+import java.util.Iterator;
+
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable{
     static class Node {
         public Node next;
@@ -221,5 +224,26 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         temp.next.prev=temp.prev;
         temp.prev.next=temp.next;
         count--;
+    }
+    @Override
+    public Iterator<Point> iterator() {
+        return new Iterator<Point>() {
+            private Node cur = head;
+
+            @Override
+            public boolean hasNext() {
+                return cur.next!=head;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException("Следующего элемента нет");
+                }
+                Point point = new Point(cur.x, cur.y);
+                cur=cur.next;
+                return point;
+            }
+        };
     }
 }

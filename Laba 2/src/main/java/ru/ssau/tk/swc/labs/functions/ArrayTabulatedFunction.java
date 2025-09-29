@@ -1,5 +1,6 @@
 package ru.ssau.tk.swc.labs.functions;
 
+import java.util.NoSuchElementException;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -189,7 +190,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
             @Override
             public Point next() {
                 if (!hasNext()) {
-                    throw new UnsupportedOperationException();
+                    throw new NoSuchElementException("Следующего элемента нет");
                 }
                 Point point = new Point(xValues[currentIndex], yValues[currentIndex]);
                 currentIndex++;
