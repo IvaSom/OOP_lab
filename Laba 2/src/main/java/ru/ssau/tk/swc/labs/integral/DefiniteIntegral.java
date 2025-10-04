@@ -47,5 +47,4 @@ public class DefiniteIntegral {
         }
         return sum * h / 3;
     }
-
 }

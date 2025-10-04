@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class CompositeFunctionTest {
     @Test
     void testCompositeSqr() {
-        //квадрат тождественной функции
         MathFunction identity = new IdentityFunction();
         MathFunction sqr = new SqrFunction();
         CompositeFunction composite = new CompositeFunction(identity, sqr);
@@ -46,7 +45,6 @@ class CompositeFunctionTest {
         MathFunction identity = new IdentityFunction();
         MathFunction sqr = new SqrFunction();
 
-        //метод andThen из интерфейса
         MathFunction composite = identity.andThen(sqr).andThen(sqr);
 
         assertEquals(0.0, composite.apply(0.0));
