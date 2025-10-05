@@ -4,7 +4,7 @@ import ru.ssau.tk.swc.labs.functions.*;
 import ru.ssau.tk.swc.labs.functions.factory.*;
 import ru.ssau.tk.swc.labs.exceptions.*;
 
-public class TabulatedFunctionOperationService { //Я переделал так как он мне возвращал null иногда
+public class TabulatedFunctionOperationService {
     private TabulatedFunctionFactory factory;
 
     public TabulatedFunctionOperationService (TabulatedFunctionFactory f){
