@@ -8,6 +8,7 @@ final public class FunctionsIO {
         throw new UnsupportedOperationException();
     }
 
+
     public static void writeTabulatedFunction(BufferedWriter writer, TabulatedFunction function){
         PrintWriter printWriter = new PrintWriter(writer);
         printWriter.println(function.getCount());
