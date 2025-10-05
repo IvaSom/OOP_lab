@@ -3,7 +3,7 @@ package ru.ssau.tk.swc.labs.operations;
 import ru.ssau.tk.swc.labs.functions.*;
 import ru.ssau.tk.swc.labs.functions.factory.*;
 
-public class TabulatedDifferentialOperator implements DifferentialOperator{
+public class TabulatedDifferentialOperator implements DifferentialOperator <TabulatedFunction>{
     private TabulatedFunctionFactory factory;
     public TabulatedDifferentialOperator(TabulatedFunctionFactory factory) {
         this.factory = factory;
@@ -21,7 +21,7 @@ public class TabulatedDifferentialOperator implements DifferentialOperator{
         this.factory = factory;
     }
     @Override
-    TabulatedFunction derive(TabulatedFunction function){
+    public TabulatedFunction derive(TabulatedFunction function){//производная
         Point[] points=TabulatedFunctionOperationService.asPoints(function);
         double[] xValues=new double[points.length];
         double[] yValues=new double[points.length];
