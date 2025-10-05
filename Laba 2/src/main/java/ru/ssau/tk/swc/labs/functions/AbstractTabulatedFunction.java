@@ -36,4 +36,15 @@ abstract public class AbstractTabulatedFunction implements TabulatedFunction{
                 throw new ArrayIsNotSortedException("xValues значения должны находиться в порядке возрастания!");
         }
     }
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getClass().getSimpleName()).append(" size = ").append(count).append("\n");
+
+        for (Point point : this) {
+            stringBuilder.append("[").append(point.x).append("; ").append(point.y).append("]\n");
+        }
+
+        return stringBuilder.toString();
+    }
 }
