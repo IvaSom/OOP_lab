@@ -47,7 +47,7 @@ final public class FunctionsIO {
                 String[] parts = line.split(" ");
                 try {
                     xValues[i] = numberFormatter.parse(parts[0]).doubleValue();
-                    yValues[i] = numberFormatter.parse(parts[0]).doubleValue();
+                    yValues[i] = numberFormatter.parse(parts[1]).doubleValue();
                 } catch (ParseException e){
                     throw new IOException();
                 }
