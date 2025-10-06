@@ -2,9 +2,18 @@ package ru.ssau.tk.swc.labs.functions;
 
 import java.util.NoSuchElementException;
 import java.util.Iterator;
+import java.io.Serializable;
+import java.io.Serial;
 
-public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable {
-    static class Node {
+public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -1240839760745047117L;
+
+    static class Node implements Serializable {
+
+        @Serial
+        private static final long serialVersionUID = -311565367373451294L;
         public Node next;
         public Node prev;
         public double x;

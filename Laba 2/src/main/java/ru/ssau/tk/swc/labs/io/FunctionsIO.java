@@ -1,10 +1,11 @@
 package ru.ssau.tk.swc.labs.io;
 
 import ru.ssau.tk.swc.labs.functions.*;
-import ru.ssau.tk.swc.labs.functions.factory.TabulatedFunctionFactory;
+import ru.ssau.tk.swc.labs.functions.factory.*;
+import java.io.*;
 import java.text.*;
 import java.util.Locale;
-import java.io.*;
+
 
 final public class FunctionsIO {
     private FunctionsIO(){
@@ -34,6 +35,23 @@ final public class FunctionsIO {
         dataOutputStream.flush();
     }
 
+    public static TabulatedFunction readTabulatedFunction(BufferedInputStream inputStream,TabulatedFunctionFactory factory) throws IOException {
+
+        DataInputStream dataStream = new DataInputStream(inputStream);
+
+        int size = dataStream.readInt();
+
+        double[] xValues = new double[size];
+        double[] yValues = new double[size];
+
+        for (int i = 0; i < size; i++) {
+            xValues[i] = dataStream.readDouble();
+            yValues[i] = dataStream.readDouble();
+        }
+
+        return factory.create(xValues, yValues);
+    }
+
     public static TabulatedFunction readTabulatedFunction(BufferedReader reader, TabulatedFunctionFactory factory) throws IOException{
         try{
             String line = reader.readLine();
@@ -54,8 +72,14 @@ final public class FunctionsIO {
             }
 
             return factory.create(xValues, yValues);
-            } catch (IOException e) {
+        } catch (IOException e) {
             throw e;
         }
+    }
+
+    public static TabulatedFunction deserialize(BufferedInputStream stream) throws IOException, ClassNotFoundException {
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(stream);
+        return (TabulatedFunction) objectInputStream.readObject();
     }
 }
