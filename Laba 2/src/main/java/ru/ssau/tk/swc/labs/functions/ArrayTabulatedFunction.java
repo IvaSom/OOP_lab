@@ -7,7 +7,6 @@ import java.util.Iterator;
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable{
     private double[] xValues;
     private double[] yValues;
-    private int count;
 
     public ArrayTabulatedFunction(double[] xArr, double[] yArr) {
         if (xArr.length != yArr.length)
