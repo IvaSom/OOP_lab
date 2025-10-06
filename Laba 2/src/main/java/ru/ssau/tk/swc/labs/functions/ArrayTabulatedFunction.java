@@ -1,12 +1,13 @@
 package ru.ssau.tk.swc.labs.functions;
 
-import java.util.NoSuchElementException;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.io.Serializable;
+import java.util.*;
 
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable{
+
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable, Serializable {
     private double[] xValues;
     private double[] yValues;
+    private static final long serialVersionUID = 1234567890123456789L;
 
     public ArrayTabulatedFunction(double[] xArr, double[] yArr) {
         if (xArr.length != yArr.length)
