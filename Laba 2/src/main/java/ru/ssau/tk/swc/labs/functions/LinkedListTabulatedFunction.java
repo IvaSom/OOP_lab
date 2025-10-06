@@ -245,10 +245,11 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     public Iterator<Point> iterator() {
         return new Iterator<Point>() {
             private Node cur = head;
+            private int index = 0;
 
             @Override
             public boolean hasNext() {
-                return cur.next != head;
+                return index < count;
             }
 
             @Override
@@ -258,6 +259,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
                 }
                 Point point = new Point(cur.x, cur.y);
                 cur = cur.next;
+                index++;
                 return point;
             }
         };
