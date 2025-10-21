@@ -1,13 +1,12 @@
 package ru.ssau.tk.swc.labs.functions;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
 
-
-public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable, Serializable {
+public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable{
     private double[] xValues;
     private double[] yValues;
-    private static final long serialVersionUID = 1234567890123456789L;
+    private int count;
 
     public ArrayTabulatedFunction(double[] xArr, double[] yArr) {
         if (xArr.length != yArr.length)
@@ -54,13 +53,14 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
     }
 
     @Override
-    public int floorIndexOfX(double x) {
-        if (x < xValues[0]) return 0;
+    public int floorIndexOfX(double x){
+        if (x < xValues[0]) throw new IllegalArgumentException("x меньше левой границы");;
+        if (x > xValues[count - 1]) return count - 1;
 
-        for (int i = 0; i < count - 1; i++) {
-            if (x < xValues[i + 1]) {
-                return i;
-            }
+        for (int i = 0; i < count - 1; i++){
+            if (xValues[i] <= x)
+                if (xValues[i + 1] > x)
+                    return i;
         }
 
         return count - 1;
@@ -68,17 +68,27 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public double extrapolateLeft(double x) {
+        if (count == 1)
+            return yValues[0];
+
         return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
     }
 
     @Override
     public double extrapolateRight(double x) {
-      return interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
+        if (count == 1)
+            return yValues[0];
+
+        return interpolate(x, xValues[count - 2], xValues[count - 1], yValues[count - 2], yValues[count - 1]);
     }
 
     @Override
     protected double interpolate(double x, int floorIndex) {
-       return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1], yValues[floorIndex], yValues[floorIndex + 1]);
+        if (count == 1)
+            return yValues[0];
+
+        return interpolate(x, xValues[floorIndex], xValues[floorIndex + 1],
+                yValues[floorIndex], yValues[floorIndex + 1]);
     }
 
     @Override
@@ -179,23 +189,6 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public Iterator<Point> iterator() {
-        return new Iterator<Point>() {
-            private int currentIndex = 0;
-
-            @Override
-            public boolean hasNext() {
-                return currentIndex != count;
-            }
-
-            @Override
-            public Point next() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException("Следующего элемента нет");
-                }
-                Point point = new Point(xValues[currentIndex], yValues[currentIndex]);
-                currentIndex++;
-                return point;
-            }
-        };
+        return null;
     }
 }
