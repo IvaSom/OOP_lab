@@ -1,5 +1,6 @@
 package ru.ssau.tk.swc.labs.operations;
 
+import ru.ssau.tk.swc.labs.concurrent.SynchronizedTabulatedFunction;
 import ru.ssau.tk.swc.labs.functions.*;
 import ru.ssau.tk.swc.labs.functions.factory.*;
 
@@ -32,5 +33,11 @@ public class TabulatedDifferentialOperator implements DifferentialOperator <Tabu
         xValues[xValues.length-1]=points[points.length-1].x;
         yValues[yValues.length-1]=yValues[yValues.length-2];//сказано находить ее слева, поэтому такая же
         return factory.create(xValues, yValues);
+    }
+
+    public TabulatedFunction deriveSynchronously(TabulatedFunction function) {
+        SynchronizedTabulatedFunction syncFunc = (function instanceof SynchronizedTabulatedFunction) ? (SynchronizedTabulatedFunction) function : new SynchronizedTabulatedFunction(function);
+
+        return syncFunc.doSynchronously(func -> derive(func));
     }
 }
