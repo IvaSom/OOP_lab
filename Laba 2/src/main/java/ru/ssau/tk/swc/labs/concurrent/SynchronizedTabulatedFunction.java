@@ -1,9 +1,12 @@
 package ru.ssau.tk.swc.labs.concurrent;
 
+import ru.ssau.tk.swc.labs.functions.LinkedListTabulatedFunction;
 import ru.ssau.tk.swc.labs.functions.Point;
 import ru.ssau.tk.swc.labs.functions.TabulatedFunction;
+import ru.ssau.tk.swc.labs.operations.TabulatedFunctionOperationService;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class SynchronizedTabulatedFunction implements TabulatedFunction {
     private final TabulatedFunction function;
@@ -53,11 +56,6 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
     }
 
     @Override
-    public synchronized Iterator<Point> iterator() {
-        return function.iterator();
-    }
-
-    @Override
     public synchronized double apply(double x) {
         return function.apply(x);
     }
@@ -71,4 +69,28 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
             return operation.apply(this);
         }
     }
+
+    @Override
+    public synchronized Iterator<Point> iterator() {
+        synchronized (function) {
+            Point[] points = TabulatedFunctionOperationService.asPoints(function);
+            return new Iterator<Point>() {
+                private int index = 0;
+
+                @Override
+                public boolean hasNext() {
+                    return index < points.length;
+                }
+
+                @Override
+                public Point next() {
+                    if (!hasNext()) {
+                        throw new NoSuchElementException("Следующего элемента нет");
+                    }
+                    return points[index++];
+                }
+            };
+        }
+    }
 }
+
