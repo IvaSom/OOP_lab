@@ -1,10 +1,13 @@
 package ru.ssau.tk.swc.labs.operations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ssau.tk.swc.labs.functions.*;
 import ru.ssau.tk.swc.labs.functions.factory.*;
 import ru.ssau.tk.swc.labs.exceptions.*;
 
 public class TabulatedFunctionOperationService {
+    private static final Logger logger = LoggerFactory.getLogger(TabulatedFunctionOperationService.class);
     private TabulatedFunctionFactory factory;
 
     public TabulatedFunctionOperationService (TabulatedFunctionFactory f){
@@ -29,6 +32,7 @@ public class TabulatedFunctionOperationService {
 
     private TabulatedFunction doOperation(TabulatedFunction a, TabulatedFunction b, BiOperation operation) {
         if (a.getCount() != b.getCount()) {
+            logger.error("Ошибка: функции имеют разное количество точек");
             throw new InconsistentFunctionsException();
         }
         Point[] pointsA = asPoints(a);
@@ -38,11 +42,13 @@ public class TabulatedFunctionOperationService {
         double[] yValues = new double[n];
         for (int i = 0; i < n; i++) {
             if (pointsA[i].x != pointsB[i].x) {
+                logger.error("Ошибка: несоответствие координат x в точке {}", i);
                 throw new InconsistentFunctionsException();
             }
             xValues[i] = pointsA[i].x;
             yValues[i] = operation.apply(pointsA[i].y, pointsB[i].y);
         }
+        logger.info("Операция выполнена успешно");
         return factory.create(xValues, yValues);
     }
 
