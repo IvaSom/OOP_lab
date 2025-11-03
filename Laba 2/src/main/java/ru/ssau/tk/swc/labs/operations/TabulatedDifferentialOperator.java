@@ -1,10 +1,13 @@
 package ru.ssau.tk.swc.labs.operations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ssau.tk.swc.labs.concurrent.SynchronizedTabulatedFunction;
 import ru.ssau.tk.swc.labs.functions.*;
 import ru.ssau.tk.swc.labs.functions.factory.*;
 
 public class TabulatedDifferentialOperator implements DifferentialOperator <TabulatedFunction>{
+    private static final Logger logger = LoggerFactory.getLogger(TabulatedDifferentialOperator.class);
     private TabulatedFunctionFactory factory;
     public TabulatedDifferentialOperator(TabulatedFunctionFactory factory) {
         this.factory = factory;
@@ -22,7 +25,8 @@ public class TabulatedDifferentialOperator implements DifferentialOperator <Tabu
         this.factory = factory;
     }
     @Override
-    public TabulatedFunction derive(TabulatedFunction function){//производная
+    public TabulatedFunction derive(TabulatedFunction function){
+        logger.info("Начало вычисления производной для функции: {}", function.getClass().getSimpleName());
         Point[] points=TabulatedFunctionOperationService.asPoints(function);
         double[] xValues=new double[points.length];
         double[] yValues=new double[points.length];
@@ -32,6 +36,7 @@ public class TabulatedDifferentialOperator implements DifferentialOperator <Tabu
         }
         xValues[xValues.length-1]=points[points.length-1].x;
         yValues[yValues.length-1]=yValues[yValues.length-2];//сказано находить ее слева, поэтому такая же
+        logger.info("Производная успешно вычислена");
         return factory.create(xValues, yValues);
     }
 
