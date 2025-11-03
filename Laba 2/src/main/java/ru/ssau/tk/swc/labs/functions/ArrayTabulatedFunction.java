@@ -2,6 +2,7 @@ package ru.ssau.tk.swc.labs.functions;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements Removable, Insertable{
     private double[] xValues;
@@ -189,6 +190,23 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
 
     @Override
     public Iterator<Point> iterator() {
-        return null;
+        return new Iterator<Point>() {
+            private int currentIndex = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentIndex != count;
+            }
+
+            @Override
+            public Point next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException("Следующего элемента нет");
+                }
+                Point point = new Point(xValues[currentIndex], yValues[currentIndex]);
+                currentIndex++;
+                return point;
+            }
+        };
     }
 }
