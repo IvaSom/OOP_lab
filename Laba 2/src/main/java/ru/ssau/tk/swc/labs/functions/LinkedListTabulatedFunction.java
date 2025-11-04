@@ -5,6 +5,10 @@ import java.util.Iterator;
 import java.io.Serializable;
 import java.io.Serial;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public class LinkedListTabulatedFunction extends AbstractTabulatedFunction implements Insertable, Removable, Serializable {
 
     @Serial
@@ -21,6 +25,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
     }
 
     private Node head = null;
+    private static final Logger logger = LoggerFactory.getLogger(LinkedListTabulatedFunction.class);
 
     private void addNode(double x, double y) {
         if (head == null) {
@@ -41,29 +46,36 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
         }
         count++;
+        logger.info("Узел добавлен");
     }
 
     public LinkedListTabulatedFunction(double[] xValues, double[] yValues) {
         if (xValues.length != yValues.length) {
+            logger.error("Колличество точек x и y не совпало");
             throw new IllegalArgumentException("Количество точек должно совпадать!");
         }
 
         if (xValues.length < 2) {
+            logger.error("Недостаточно точек для создания функции");
             throw new IllegalArgumentException("Нужно как минимум 2 точки!");
         }
 
         for (int i = 1; i < xValues.length; i++) {
-            if (xValues[i] <= xValues[i - 1])
+            if (xValues[i] <= xValues[i - 1]) {
+                logger.error("Значения x записаны не в порядке возрастания");
                 throw new IllegalArgumentException("xValues значения должны находиться в порядке возрастания!");
+            }
         }
 
         for (int i = 0; i < xValues.length; i++) {
             addNode(xValues[i], yValues[i]);
         }
+        logger.info("Конструктор LinkedListTabulatedFunction завершил работу");
     }
 
     public LinkedListTabulatedFunction(MathFunction source, double xFrom, double xTo, int count) {
         if (count < 2) {
+            logger.error("Недостаточно точек для создания функции");
             throw new IllegalArgumentException("Нужно как минимум 2 точки!");
         }
         if (xFrom > xTo) {
@@ -79,47 +91,56 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             double y = source.apply(x);
             addNode(x, y);
         }
+        logger.info("Конструктор LinkedListTabulatedFunction завершил работу");
     }
 
     @Override
     public int getCount() {
+        logger.info("Возвращается количество точек функции");
         return count;
     }
 
     @Override
     public double leftBound() {
+        logger.info("Возвращается левая граница");
         return head.x;
     }
 
     @Override
     public double rightBound() {
+        logger.info("Возвращается правая граница");
         return head.prev.x;
     }
 
     private Node getNode(int index) {
         if (index < 0 || index >= count) {
+            logger.error("Невозможный индекс узла");
             throw new IndexOutOfBoundsException("Невозможный индекс!");
         }
         Node temp = head;
         for (int i = 0; i < index; i++) {
             temp = temp.next;
         }
+        logger.info("Узел по индексу найден");
         return temp;
     }
 
     @Override
     public double getX(int index) {
+        logger.info("x по индексу найден");
         return getNode(index).x;
     }
 
     @Override
     public double getY(int index) {
+        logger.info("y по индексу найден");
         return getNode(index).y;
     }
 
     @Override
     public void setY(int index, double value) {
         getNode(index).y = value;
+        logger.info("Значение y по указанному индексу установлено");
     }
 
     @Override
@@ -128,11 +149,13 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         int i = 0;
         do {
             if (temp.x == x) {
+                logger.info("Индекс для указанного x найден");
                 return i;
             }
             i++;
             temp = temp.next;
         } while (temp != head);
+        logger.info("Индекс для указанного x не найден");
         return -1;
     }
 
@@ -142,42 +165,54 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         int i = 0;
         do {
             if (temp.y == y) {
+                logger.info("Индекс для указанного y найден");
                 return i;
             }
             i++;
             temp = temp.next;
         } while (temp != head);
+        logger.info("Индекс для указанного y не найден");
         return -1;
     }
 
     @Override
     public int floorIndexOfX(double x) { //макс х < заданного
         if (head.prev.x < x) {
+            logger.info("x больше правой границы, возвращается индекс последнего x");
             return count;
         }
         if (head.x > x) {
+            logger.error("x меньше левой границы");
             throw new IllegalArgumentException("x меньше левой границы");
         }
         Node temp = head.prev; //идем сконнца тк х отсорт.
         int i = count - 1;
         do {
             if (temp.x <= x) {
+                logger.info("Место для x найдено");
                 return i;
             }
             i--;
             temp = temp.prev;
         } while (temp != head);
+        logger.info("Место для x найдено");
         return 0;
     }
 
     @Override
     public double extrapolateLeft(double x) { //x должен быть между 0 и 1 индексами
-        return interpolate(x, head.x, head.next.x, head.y, head.next.y);
+        logger.info("Для экстраполяции слева начата интерполяция");
+        double temp = interpolate(x, head.x, head.next.x, head.y, head.next.y);
+        logger.info("Интерполяция завершена");
+        return temp;
     }
 
     @Override
     public double extrapolateRight(double x) {
-        return interpolate(x, head.prev.prev.x, head.prev.x, head.prev.prev.y, head.prev.y);
+        logger.info("Для экстраполяции справа начата интерполяция");
+        double temp =  interpolate(x, head.prev.prev.x, head.prev.x, head.prev.prev.y, head.prev.y);
+        logger.info("Интерполяция завершена");
+        return temp;
     }
 
     @Override
@@ -207,6 +242,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
 
         else
             insertBeforeNode(temp, x, y);
+        logger.info("Точка была добавлена в функцию");
     }
 
     private void insertAtBegin(double x, double y) {
@@ -220,6 +256,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         head.next.prev = newNode;
         head = newNode;
         count++;
+        logger.info("Точка была добавлена в начало функции");
     }
 
     private void insertBeforeNode(Node node, double x, double y) {
@@ -232,6 +269,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         node.prev = newNode;
         node.next.next = newNode;
         count++;
+        logger.info("Точка была добавлена перед указанным узлом функции");
     }
 
     @Override
@@ -248,10 +286,12 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
         temp.next.prev = temp.prev;
         temp.prev.next = temp.next;
         count--;
+        logger.info("Точка с указанным индексом была удалена");
     }
 
     @Override
     public Iterator<Point> iterator() {
+        logger.info("Итеретор ArrayTabulatedFunction начал работу");
         return new Iterator<Point>() {
             private Node cur = head;
             private int index = 0;
@@ -264,6 +304,7 @@ public class LinkedListTabulatedFunction extends AbstractTabulatedFunction imple
             @Override
             public Point next() {
                 if (!hasNext()) {
+                    logger.error("Следующего элемента нет");
                     throw new NoSuchElementException("Следующего элемента нет");
                 }
                 Point point = new Point(cur.x, cur.y);
