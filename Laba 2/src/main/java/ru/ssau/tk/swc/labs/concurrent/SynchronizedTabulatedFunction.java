@@ -1,6 +1,7 @@
 package ru.ssau.tk.swc.labs.concurrent;
 
-import ru.ssau.tk.swc.labs.functions.LinkedListTabulatedFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.ssau.tk.swc.labs.functions.Point;
 import ru.ssau.tk.swc.labs.functions.TabulatedFunction;
 import ru.ssau.tk.swc.labs.operations.TabulatedFunctionOperationService;
@@ -10,6 +11,7 @@ import java.util.NoSuchElementException;
 
 public class SynchronizedTabulatedFunction implements TabulatedFunction {
     private final TabulatedFunction function;
+    private static final Logger logger = LoggerFactory.getLogger(SynchronizedTabulatedFunction.class);
 
     public SynchronizedTabulatedFunction(TabulatedFunction function){
         this.function = function;
@@ -85,6 +87,7 @@ public class SynchronizedTabulatedFunction implements TabulatedFunction {
                 @Override
                 public Point next() {
                     if (!hasNext()) {
+                        logger.error("Не возможный элемент");
                         throw new NoSuchElementException("Следующего элемента нет");
                     }
                     return points[index++];
