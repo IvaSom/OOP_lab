@@ -79,11 +79,11 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         for (int i = 0; i < count - 1; i++){
             if (xValues[i] <= x)
                 if (xValues[i + 1] > x) {
-                    logger.info("место для x найдено");
+                    logger.info("Место для x найдено");
                     return i;
                 }
         }
-        logger.info("место для x найдено");
+        logger.info("Место для x найдено");
         return count - 1;
     }
 
@@ -95,7 +95,9 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         }
 
         logger.info("Для экстраполяции слева начата интерполяция");
-        return interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
+        double temp =  interpolate(x, xValues[0], xValues[1], yValues[0], yValues[1]);
+        logger.info("Интерполяция завершена");
+        return temp;
     }
 
     @Override
@@ -217,7 +219,7 @@ public class ArrayTabulatedFunction extends AbstractTabulatedFunction implements
         this.xValues = tempXValues;
         this.yValues = tempYValues;
         this.count--;
-        logger.info("Точка с указанным индексом было удалена");
+        logger.info("Точка с указанным индексом была удалена");
     }
     @Override
     public void insert(double x, double y){
