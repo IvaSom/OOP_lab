@@ -4,20 +4,29 @@ package ru.ssau.tk.swc.labs.concurrent;
 import ru.ssau.tk.swc.labs.functions.*;
 import  java.lang.Runnable;
 
-public class WriteTask implements Runnable{
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class WriteTask implements Runnable {
+    private static final Logger logger = LoggerFactory.getLogger(WriteTask.class);
+
     private TabulatedFunction function;
-    double value;
-    public WriteTask(TabulatedFunction function, double value){
-        this.function=function;
-        this.value=value;
+    private double value;
+
+    public WriteTask(TabulatedFunction function, double value) {
+        this.function = function;
+        this.value = value;
+        logger.info("Создан WriteTask с значением {}", value);
     }
+
     @Override
-    public void run(){
-        for (int i=0; i<function.getCount(); i++){
+    public void run() {
+        for (int i = 0; i < function.getCount(); i++) {
             synchronized (function) {
                 function.setY(i, value);
-                System.out.printf("Writing for index %d complete\n", i);
+                logger.debug("Запись завершена для индекса {}", i);
             }
         }
+        logger.info("WriteTask с значением {} завершена", value);
     }
 }
