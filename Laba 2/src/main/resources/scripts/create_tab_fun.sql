@@ -1,8 +1,4 @@
 CREATE TABLE tabFun (
     id BIGSERIAL PRIMARY KEY,
-    x DOUBLE PRECISION NOT NULL,
-    y DOUBLE PRECISION NOT NULL,
-    derive DOUBLE PRECISION NOT NULL,
-    --что в типе надо я не понял
     type VARCHAR(50) NOT NULL
 );
