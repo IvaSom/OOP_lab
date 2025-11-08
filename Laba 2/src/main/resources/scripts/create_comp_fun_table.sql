@@ -3,6 +3,7 @@ CREATE TABLE compFun (
     name VARCHAR(50) NOT NULL
 );
 
+--тут уже с самом коде придется сделать рекурсивное хранение
 CREATE TABLE composite_structure (
     id BIGSERIAL PRIMARY KEY,
     composite_id BIGINT NOT NULL,
