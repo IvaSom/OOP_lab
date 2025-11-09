@@ -1,9 +1,9 @@
-SELECT * FROM anal_fun WHERE id = :id;
-SELECT * FROM anal_fun WHERE name = :name;
-SELECT * FROM anal_fun WHERE type = :type;
+SELECT * FROM analFun WHERE id = :id;
+SELECT * FROM analFun WHERE name = :name;
+SELECT * FROM analFun WHERE type = :type;
 
-INSERT INTO anal_fun (name, type) VALUES (:name, :type);
+INSERT INTO analFun (name, type) VALUES (:name, :type);
 
-UPDATE anal_fun SET name = :name, type = :type WHERE id = :id;
+UPDATE analFun SET name = :name, type = :type WHERE id = :id;
 
-DELETE FROM anal_fun WHERE id = :id;
+DELETE FROM analFun WHERE id = :id;
