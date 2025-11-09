@@ -3,8 +3,8 @@ package ru.ssau.tk.swc.labs.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "anal_points")
-public class anal_points {
+@Table(name = "comp_points")
+public class comp_points {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,15 +19,15 @@ public class anal_points {
     @Column(name = "derive", nullable = false)
     private Double derive;
 
-    @ManyToOne(fetch = FetchType.LAZY) //fetch - настройка когда загружать связаный объект
-    //lazy значит загружается только когда обратщение к методу где надо function
-    @JoinColumn(name = "funID", nullable = false) //связывает с колонкой
-    private analFun function;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "funID", nullable = false)
+    private compFun function;
 
-    public anal_points() {
+
+    public comp_points() {
     }
 
-    public anal_points(Double x, Double y, Double derive, analFun function) {
+    public comp_points(Double x, Double y, Double derive, compFun function) {
         this.x = x;
         this.y = y;
         this.derive = derive;
@@ -66,11 +66,12 @@ public class anal_points {
         this.derive = derive;
     }
 
-    public analFun getFunction() {
+    public compFun getFunction() {
         return function;
     }
 
-    public void setFunction(analFun function) {
+    public void setFunction(compFun function) {
         this.function = function;
     }
+
 }
