@@ -85,7 +85,7 @@ public class AnalFunDAO {
         try (Connection conn = dataSourceProvider.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, analFun.getName());
-            stmt.setString(2, analFun.getType());
+            stmt.setInt(2, analFun.getType());
 
             if (stmt.executeUpdate() > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -127,7 +127,7 @@ public class AnalFunDAO {
         AnalFun analFun = new AnalFun();
         analFun.setId(rs.getLong("id"));
         analFun.setName(rs.getString("name"));
-        analFun.setType(rs.getString("type"));
+        analFun.setType(rs.getInt("type"));
         return analFun;
     }
 }
