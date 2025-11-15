@@ -1,46 +1,49 @@
 package ru.ssau.tk.swc.labs.dto;
 
-import ru.ssau.tk.swc.labs.entity.*;
+import ru.ssau.tk.swc.labs.entity.TabPoint;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AnalPointDTO {
+public class TabPointDTO {
     private Long id;
     private double x;
     private double y;
     private double derive;
     private Long funID;
 
-    private static final Logger logger = LoggerFactory.getLogger(AnalPointDTO.class);
-    public AnalPointDTO() {logger.info("Создан пустой AnalPointDTO");}
+    private static final Logger logger = LoggerFactory.getLogger(TabPointDTO.class);
 
-    public AnalPointDTO(Long id, double x, double y, double derive, Long funID){
+    public TabPointDTO() {
+        logger.info("Создан пустой TabPointDTO");
+    }
+
+    public TabPointDTO(Long id, double x, double y, double derive, Long funID) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.derive = derive;
         this.funID = funID;
-        logger.info("Создан AnalPointDTO по значениям");
+        logger.info("Создан TabPointDTO по значениям");
     }
 
-    public static AnalPointDTO fromEntity(AnalPoint entity) {
+    public static TabPointDTO fromEntity(TabPoint entity) {
         if (entity == null) {
             return null;
         }
-        AnalPointDTO temp = new AnalPointDTO(entity.getId(), entity.getX(), entity.getY(), entity.getDerive(), entity.getFunID());
-        logger.info("Создан AnalPointDTO по entity");
+        TabPointDTO temp = new TabPointDTO(entity.getId(), entity.getX(), entity.getY(), entity.getDerive(), entity.getFunID());
+        logger.info("Создан TabPointDTO по entity");
         return temp;
     }
 
-    public AnalPoint toEntity() {
-        AnalPoint entity = new AnalPoint();
+    public TabPoint toEntity() {
+        TabPoint entity = new TabPoint();
         entity.setId(this.id);
         entity.setX(this.x);
         entity.setY(this.y);
         entity.setDerive(this.derive);
         entity.setFunID(this.funID);
-        logger.info("AnalPointDTO переведен в entity");
+        logger.info("TabPointDTO переведен в entity");
         return entity;
     }
 
@@ -86,16 +89,20 @@ public class AnalPointDTO {
 
     @Override
     public boolean equals(Object o) {
-        logger.info("Производится сравнение AnalPointDTO");
+        logger.info("Производится сравнение TabPointDTO");
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AnalPointDTO that = (AnalPointDTO) o;
-        return (Objects.equals(id, that.id) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(derive, that.derive)&& Objects.equals(funID, that.funID));
+        TabPointDTO that = (TabPointDTO) o;
+        return (Objects.equals(id, that.id) &&
+                Objects.equals(x, that.x) &&
+                Objects.equals(y, that.y) &&
+                Objects.equals(derive, that.derive) &&
+                Objects.equals(funID, that.funID));
     }
 
     @Override
     public int hashCode() {
-        logger.info("Возвращается хэш-код AnalPointDTO");
+        logger.info("Возвращается хэш-код TabPointDTO");
         return Objects.hash(id, x, y, derive, funID);
     }
 }

@@ -79,7 +79,7 @@ public class CompFunDAO {
     }
 
     public Long create(CompFun compFun){
-        String sql = "INSERT INTO compFun (name) VALUE (?)";
+        String sql = "INSERT INTO compFun (name) VALUES (?)";
         logger.info("Создание композитной функции: {}", compFun.getName());
 
         try (Connection conn = dataSourceProvider.getConnection();

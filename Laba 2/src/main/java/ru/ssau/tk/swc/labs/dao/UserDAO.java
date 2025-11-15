@@ -81,7 +81,7 @@ public class UserDAO {
 
     public Optional<User> findByLoginAndPassword(String login, String password){
         String sql = "SELECT * FROM users WHERE login = ? AND password = ?";
-        logger.info("Начало писка пользователя по login: {} и паролю", login);
+        logger.info("Начало поиска пользователя по login: {} и паролю", login);
 
         try(Connection conn = dataSourceProvider.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
@@ -95,7 +95,7 @@ public class UserDAO {
                 }
             }
         } catch (SQLException e) {
-            logger.error("Ошибка писка пользователя по логину и паролю", e);
+            logger.error("Ошибка поиска пользователя по логину и паролю", e);
         }
         logger.debug("Аутентификация по login: {} проваленa", login);
         return Optional.empty();
@@ -173,7 +173,7 @@ public class UserDAO {
 
             return stmt.executeUpdate() > 0;
         }catch (SQLException e) {
-            logger.error("Ошибка обновления пароля подбзователя под id: {}", user.getId(), e);
+            logger.error("Ошибка обновления пароля пользователя под id: {}", user.getId(), e);
         }
 
         return false;
@@ -242,7 +242,7 @@ public class UserDAO {
 
             return stmt.executeUpdate() > 0;
         }catch (SQLException e) {
-            logger.error("Ошибка обновления имени подбзователя под id: {}", user.getId(), e);
+            logger.error("Ошибка обновления имени пользователя под id: {}", user.getId(), e);
         }
 
         return false;
