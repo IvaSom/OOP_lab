@@ -38,7 +38,7 @@ public class AnalPointDAO {
         return Optional.empty();
     }
 
-    public Optional<AnalPoint> findByXAndFubID(double x, Long funid){
+    public Optional<AnalPoint> findByXAndFunID(double x, Long funid){
         String sql = "SELECT * FROM anal_points WHERE x = ? AND funID = ?";
         logger.info("Начало поиска точки по x: {} и по функции: {}", x, funid);
 
