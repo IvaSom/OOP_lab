@@ -3,11 +3,11 @@ package ru.ssau.tk.swc.labs.entity;
 public class AnalFun {
     private Long id;
     private String name;
-    private String type;
+    private Integer type;
 
     public AnalFun(){}
 
-    public AnalFun(Long id, String name, String type){
+    public AnalFun(Long id, String name, Integer type){
         this.id = id;
         this.name = name;
         this.type = type;
@@ -21,7 +21,7 @@ public class AnalFun {
         this.id = id;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -33,7 +33,7 @@ public class AnalFun {
         return name;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
