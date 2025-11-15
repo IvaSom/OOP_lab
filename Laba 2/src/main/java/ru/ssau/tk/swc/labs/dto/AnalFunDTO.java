@@ -1,6 +1,5 @@
 package ru.ssau.tk.swc.labs.dto;
 
-import ru.ssau.tk.swc.labs.dao.AnalFunDAO;
 import ru.ssau.tk.swc.labs.entity.*;
 import java.util.Objects;
 import org.slf4j.Logger;
