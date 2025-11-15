@@ -79,19 +79,18 @@ public class TabFunDAO {
     }
 
     public Long create(TabFun tabFun){
-        String sql = "INSERT INTO tabFun (name, type) VALUES (?, ?)";
-        logger.info("Создание табулированной функции: {}", tabFun.getName());
+        String sql = "INSERT INTO tabFun (type) VALUES ?;";
+        logger.info("Создание табулированной функции: {}", tabFun.getType());
 
         try (Connection conn = dataSourceProvider.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, tabFun.getName());
-            stmt.setString(2, tabFun.getType());
+            stmt.setString(1, tabFun.getType());
 
             if (stmt.executeUpdate() > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         Long id = generatedKeys.getLong(1);
-                        logger.info("Аналиточеская функция: {} под id: {} создана", tabFun.getName(),id);
+                        logger.info("Аналиточеская функция: {} под id: {} создана", tabFun.getType(),id);
                         return id;
                     }
                 }
@@ -99,7 +98,7 @@ public class TabFunDAO {
         } catch (SQLException e) {
             logger.error("Ошибка создания табулированной функции", e);
         }
-        logger.error("Ошибка создания табулированной функции: {}", tabFun.getName());
+        logger.error("Ошибка создания табулированной функции: {}", tabFun.getType());
         return null;
     }
 
@@ -126,7 +125,6 @@ public class TabFunDAO {
     private TabFun mapResultSetToTabFun(ResultSet rs) throws SQLException {
         TabFun tabFun = new TabFun();
         tabFun.setId(rs.getLong("id"));
-        tabFun.setName(rs.getString("name"));
         tabFun.setType(rs.getString("type"));
         return tabFun;
     }
