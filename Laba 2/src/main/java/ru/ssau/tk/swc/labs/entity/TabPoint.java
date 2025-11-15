@@ -59,7 +59,7 @@ public class TabPoint {
 
     @Override
     public String toString() {
-        return "AnalPoint{" +
+        return "TabPoint{" +
                 "id=" + id +
                 ", x=" + x +
                 ", y=" + y +

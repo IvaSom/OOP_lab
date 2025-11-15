@@ -59,7 +59,7 @@ public class CompPoint {
 
     @Override
     public String toString() {
-        return "AnalPoint{" +
+        return "CompPoint{" +
                 "id=" + id +
                 ", x=" + x +
                 ", y=" + y +
