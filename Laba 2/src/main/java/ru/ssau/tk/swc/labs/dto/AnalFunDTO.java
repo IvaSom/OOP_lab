@@ -13,13 +13,13 @@ public class AnalFunDTO {
 
     private static final Logger logger = LoggerFactory.getLogger(AnalFunDTO.class);
 
-    public AnalFunDTO() {logger.info("Создан пустой DTO");}
+    public AnalFunDTO() {logger.info("Создан пустой AnalFunDTO");}
 
     public AnalFunDTO(Long id, String name, Integer type) {
         this.id = id;
         this.name = name;
         this.type = type;
-        logger.info("Создан DTO по значениям");
+        logger.info("Создан AnalFunDTO по значениям");
     }
 
     public static AnalFunDTO fromEntity(AnalFun entity) {
@@ -27,7 +27,7 @@ public class AnalFunDTO {
             return null;
         }
         AnalFunDTO temp = new AnalFunDTO(entity.getId(), entity.getName(), entity.getType());
-        logger.info("Создан DTO по entity");
+        logger.info("Создан AnalFunDTO по entity");
         return temp;
     }
 
@@ -36,7 +36,7 @@ public class AnalFunDTO {
         entity.setId(this.id);
         entity.setName(this.name);
         entity.setType(this.type);
-        logger.info("DTO переведен в entity");
+        logger.info("AnalFunDTO переведен в entity");
         return entity;
     }
 
@@ -51,7 +51,7 @@ public class AnalFunDTO {
 
     @Override
     public boolean equals(Object o) {
-        logger.info("Производится сравнение DTO");
+        logger.info("Производится сравнение AnalFunDTO");
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AnalFunDTO that = (AnalFunDTO) o;
@@ -60,7 +60,7 @@ public class AnalFunDTO {
 
     @Override
     public int hashCode() {
-        logger.info("Возвращается хэш-код DTO");
+        logger.info("Возвращается хэш-код AnalFunDTO");
         return Objects.hash(id, name, type);
     }
 
