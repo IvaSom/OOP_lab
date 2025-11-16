@@ -1,16 +1,7 @@
 package ru.ssau.tk.swc.labs.entity;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "tabFun")
-
 public class TabFun {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "type", nullable = false, length =  50)
     private String type;
 
     public TabFun(){}

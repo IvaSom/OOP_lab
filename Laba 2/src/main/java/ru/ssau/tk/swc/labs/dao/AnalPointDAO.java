@@ -126,6 +126,63 @@ public class AnalPointDAO {
         return false;
     }
 
+    public List<AnalPoint> sortedByX(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM anal_points ORDER BY x " + sortOrder;
+        logger.info("Сортировка точек по X: {}", sortOrder);
+        List<AnalPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToAnalPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по X: {}", e.getMessage());
+        }
+        return points;
+    }
+
+    public List<AnalPoint> sortedByFunID(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM anal_points ORDER BY funID " + sortOrder;
+        logger.info("Сортировка точек по funID: {}", sortOrder);
+        List<AnalPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToAnalPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по funID: {}", e.getMessage());
+        }
+        return points;
+    }
+
+    public List<AnalPoint> sortedByID(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM anal_points ORDER BY id " + sortOrder;
+        logger.info("Сортировка точек по ID: {}", sortOrder);
+        List<AnalPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToAnalPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по ID: {}", e.getMessage());
+        }
+        return points;
+    }
+
     private AnalPoint mapResultSetToAnalPoint(ResultSet rs) throws SQLException {
         AnalPoint analPoint = new AnalPoint();
         analPoint.setId(rs.getLong("id"));
