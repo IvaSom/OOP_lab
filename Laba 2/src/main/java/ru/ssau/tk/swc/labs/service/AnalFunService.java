@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.ssau.tk.swc.labs.entity.analFun;
+import ru.ssau.tk.swc.labs.entity.compFun;
 import ru.ssau.tk.swc.labs.repository.AnalFunRepository;
 
 import java.util.*;
@@ -27,15 +28,21 @@ public class AnalFunService {
         return result;
     }
 
-    public List<analFun> findMultipleWithSorting(Integer[] types, String namePattern, String sortBy, String direction) {
-        logger.info("Множественный поиск функций: типы: {}, паттерн имени: '{}', сортировка по {} {}",
-                Arrays.toString(types), namePattern, sortBy, direction);
+    public Optional<analFun> findSingleFunctionById(Long id) {
+        logger.info("Одиночный поиск функции по ID: {}", id);
+        Optional<analFun> result = analFunRepository.findById(id);
+        logger.info("Одиночный поиск по ID завершен. Найдено: {}", result.isPresent() ? "1 функция" : "0 функций");
+        return result;
+    }
+
+    public List<analFun> findMultipleWithSorting(Integer[] types, String sortBy, String direction) {
+        logger.info("Множественный поиск функций: типы: {}, сортировка по {} {}",
+                Arrays.toString(types), sortBy, direction);
 
         List<analFun> allFunctions = analFunRepository.findAll();
 
         List<analFun> filtered = allFunctions.stream()
                 .filter(f -> types == null || types.length == 0 || Arrays.asList(types).contains(f.getType()))
-                .filter(f -> namePattern == null || f.getName().toLowerCase().contains(namePattern.toLowerCase()))
                 .toList();
 
         Comparator<analFun> comparator = createComparator(sortBy, direction);
@@ -50,7 +57,6 @@ public class AnalFunService {
 
 
 
-    //приватные методы
     private Comparator<analFun> createComparator(String sortBy, String direction) {
         Comparator<analFun> comparator = switch(sortBy.toLowerCase()) {
             case "name" -> Comparator.comparing(analFun::getName);

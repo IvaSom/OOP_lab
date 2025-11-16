@@ -27,13 +27,14 @@ public class AnalPointsService {
         return result;
     }
 
-    public List<anal_points> findMultipleWithSorting(Double minX, Double maxX, Double minY, Double maxY, String sortBy, String direction) {
-        logger.info("Множественный поиск с сортировкой: X[{}-{}], Y[{}-{}], сортировка по {} {}", minX, maxX, minY, maxY, sortBy, direction);
+    public List<anal_points> findMultipleWithSorting(Double minX, Double maxX, Double minY, Double maxY, String sortBy, String direction, Long funId) {
+        logger.info("Множественный поиск с сортировкой: X[{}-{}], Y[{}-{}], сортировка по {} {} c funID {}",
+                minX, maxX, minY, maxY, sortBy, direction, funId);
 
         List<anal_points> allPoints = analPointsRepository.findAll();
 
-        //фильтруем
         List<anal_points> filtered = allPoints.stream()
+                .filter(p -> p.getFunction().getId().equals(funId))
                 .filter(p -> p.getX() >= minX && p.getX() <= maxX)
                 .filter(p -> p.getY() >= minY && p.getY() <= maxY)
                 .toList();
@@ -48,7 +49,6 @@ public class AnalPointsService {
         return result;
     }
 
-    //в ширину bfs
     public List<anal_points> breadthFirstSearch(Double startX, Double radius, Long functionId) {
         logger.info("Поиск в ширину: старт X={}, радиус={}, функция={}", startX, radius, functionId);
 
@@ -86,26 +86,6 @@ public class AnalPointsService {
         return result;
     }
 
-    //в глубину по производной
-    public List<anal_points> depthFirstSearchByDerivative(Double startDerive, Long functionId) {
-        logger.info("Поиск в глубину по производной: старт производная={}, функция={}", startDerive, functionId);
-
-        List<anal_points> result = new ArrayList<>();
-        Set<Long> visited = new HashSet<>();
-
-        List<anal_points> startPoints = analPointsRepository.findByFunId(functionId)
-                .stream()
-                .filter(p -> Math.abs(p.getDerive() - startDerive) < 0.001)
-                .toList();
-
-        for (anal_points start : startPoints) {
-            dfsByDerivative(start, result, visited, functionId);
-        }
-
-        logger.info("DFS поиск завершен. Обнаружено точек: {}", result.size());
-        return result;
-    }
-
     //приватные методы
     private Comparator<anal_points> createComparator(String sortBy, String direction) {
         Comparator<anal_points> comparator = switch(sortBy.toLowerCase()) {
@@ -121,22 +101,4 @@ public class AnalPointsService {
 
         return comparator;
     }
-
-    private void dfsByDerivative(anal_points current, List<anal_points> result, Set<Long> visited, Long functionId) {
-        if (visited.contains(current.getId())) return;
-
-        visited.add(current.getId());
-        result.add(current);
-
-        List<anal_points> similarDerivativePoints = analPointsRepository.findByFunId(functionId) //все точки нашей функции
-                .stream()
-                .filter(p -> !visited.contains(p.getId())) //фильтруем непосещенные
-                .filter(p -> Math.abs(p.getDerive() - current.getDerive()) < 0.1) //оставили с близкими знач
-                .toList();
-
-        for (anal_points next : similarDerivativePoints) {
-            dfsByDerivative(next, result, visited, functionId);
-        }
-    }
-
 }
