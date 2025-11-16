@@ -1,10 +1,24 @@
 package ru.ssau.tk.swc.labs.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "tab_points")
 public class TabPoint {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "x", nullable = false)
     private double x;
-    private double y;
-    private double derive;
+
+    @Column(name = "y", nullable = false)
+    private Double y;
+
+    @Column(name = "derive", nullable = false)
+    private Double derive;
+
+    @Column(name = "funID", nullable = false)
     private Long funID;
 
     public TabPoint(){}

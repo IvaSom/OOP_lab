@@ -1,9 +1,21 @@
 package ru.ssau.tk.swc.labs.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "composite_structure")
 public class CompositeStructure {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "composite_id", nullable = false)
     private Long composite_id;
+
+    @Column(name = "analytic_id", nullable = false)
     private Long analytic_id;
+
+    @Column(name = "order", nullable = false)
     private int order;
 
     public CompositeStructure(){}
