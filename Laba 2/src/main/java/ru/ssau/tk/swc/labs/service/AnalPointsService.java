@@ -36,7 +36,7 @@ public class AnalPointsService {
         List<anal_points> filtered = allPoints.stream()
                 .filter(p -> p.getX() >= minX && p.getX() <= maxX)
                 .filter(p -> p.getY() >= minY && p.getY() <= maxY)
-                .collect(Collectors.toList());
+                .toList();
 
         Comparator<anal_points> comparator = createComparator(sortBy, direction);
 
