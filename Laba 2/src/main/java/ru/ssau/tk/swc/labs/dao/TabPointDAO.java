@@ -126,6 +126,63 @@ public class TabPointDAO {
         return false;
     }
 
+    public List<TabPoint> sortedByX(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM tab_points ORDER BY x " + sortOrder;
+        logger.info("Сортировка точек по X: {}", sortOrder);
+        List<TabPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToTabPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по X: {}", e.getMessage());
+        }
+        return points;
+    }
+
+    public List<TabPoint> sortedByFunID(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM tab_points ORDER BY funID " + sortOrder;
+        logger.info("Сортировка точек по funID: {}", sortOrder);
+        List<TabPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToTabPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по funID: {}", e.getMessage());
+        }
+        return points;
+    }
+
+    public List<TabPoint> sortedByID(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM tab_points ORDER BY id " + sortOrder;
+        logger.info("Сортировка точек по ID: {}", sortOrder);
+        List<TabPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToTabPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по ID: {}", e.getMessage());
+        }
+        return points;
+    }
+
     private TabPoint mapResultSetToTabPoint(ResultSet rs) throws SQLException {
         TabPoint tabPoint = new TabPoint();
         tabPoint.setId(rs.getLong("id"));

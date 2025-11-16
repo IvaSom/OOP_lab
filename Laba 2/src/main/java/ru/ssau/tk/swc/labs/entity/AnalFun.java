@@ -1,18 +1,8 @@
 package ru.ssau.tk.swc.labs.entity;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "analFun")
 public class AnalFun {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name", nullable = false, length = 50)
     private String name;
-
-    @Column(name = "type", nullable = false)
     private Integer type;
 
     public AnalFun(){}

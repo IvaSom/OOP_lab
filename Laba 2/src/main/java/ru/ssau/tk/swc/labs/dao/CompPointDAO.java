@@ -126,6 +126,63 @@ public class CompPointDAO {
         return false;
     }
 
+    public List<CompPoint> sortedByX(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM comp_points ORDER BY x " + sortOrder;
+        logger.info("Сортировка точек по X: {}", sortOrder);
+        List<CompPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToCompPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по X: {}", e.getMessage());
+        }
+        return points;
+    }
+
+    public List<CompPoint> sortedByFunID(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM comp_points ORDER BY funID " + sortOrder;
+        logger.info("Сортировка точек по funID: {}", sortOrder);
+        List<CompPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToCompPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по funID: {}", e.getMessage());
+        }
+        return points;
+    }
+
+    public List<CompPoint> sortedByID(String order) {
+        String sortOrder = "DESC".equalsIgnoreCase(order) ? "DESC" : "ASC";
+        String sql = "SELECT * FROM comp_points ORDER BY id " + sortOrder;
+        logger.info("Сортировка точек по ID: {}", sortOrder);
+        List<CompPoint> points = new ArrayList<>();
+
+        try (Connection conn = dataSourceProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                points.add(mapResultSetToCompPoint(rs));
+            }
+            logger.info("Найдено {} точек", points.size());
+        } catch (SQLException e) {
+            logger.error("Ошибка при сортировке по ID: {}", e.getMessage());
+        }
+        return points;
+    }
+
     private CompPoint mapResultSetToCompPoint(ResultSet rs) throws SQLException {
         CompPoint compPoint = new CompPoint();
         compPoint.setId(rs.getLong("id"));
