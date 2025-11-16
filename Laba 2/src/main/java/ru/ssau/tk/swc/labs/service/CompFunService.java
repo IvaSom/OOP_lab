@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.ssau.tk.swc.labs.entity.compFun;
 import ru.ssau.tk.swc.labs.repository.CompFunRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Comparator;
@@ -45,7 +46,7 @@ public class CompFunService {
         List<compFun> allFunctions = compFunRepository.findAll();
 
         List<compFun> filtered = allFunctions.stream()
-                .filter(f -> names == null || names.length == 0)
+                .filter(f -> names == null || names.length == 0 || Arrays.asList(names).contains(f.getName()))
                 .toList();
 
         Comparator<compFun> comparator = createComparator(sortBy, direction);
