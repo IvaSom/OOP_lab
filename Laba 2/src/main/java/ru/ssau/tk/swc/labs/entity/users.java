@@ -34,6 +34,10 @@ public class users {
         return name;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getLogin() {
         return login;
     }
@@ -42,7 +46,4 @@ public class users {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
 }

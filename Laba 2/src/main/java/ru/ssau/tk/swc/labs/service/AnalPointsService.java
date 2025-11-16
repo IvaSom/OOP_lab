@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.ssau.tk.swc.labs.entity.anal_points;
+import ru.ssau.tk.swc.labs.entity.tab_points;
 import ru.ssau.tk.swc.labs.repository.AnalPointsRepository;
 
 import java.util.*;
@@ -86,6 +87,17 @@ public class AnalPointsService {
         return result;
     }
 
+    public List<anal_points> findByFunctionId(Long functionId) {
+        logger.info("Поиск всех точек по functionId: {}", functionId);
+
+        List<anal_points> result = analPointsRepository.findAll()
+                .stream()
+                .filter(p -> p.getFunction().getId().equals(functionId))
+                .collect(Collectors.toList());
+
+        logger.info("Найдено точек для функции {}: {}", functionId, result.size());
+        return result;
+    }
     //приватные методы
     private Comparator<anal_points> createComparator(String sortBy, String direction) {
         Comparator<anal_points> comparator = switch(sortBy.toLowerCase()) {

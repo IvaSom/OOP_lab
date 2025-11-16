@@ -3,6 +3,7 @@ package ru.ssau.tk.swc.labs.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.ssau.tk.swc.labs.entity.anal_points;
 import ru.ssau.tk.swc.labs.entity.comp_points;
 import ru.ssau.tk.swc.labs.repository.CompPointsRepository;
 
@@ -87,6 +88,18 @@ public class CompPointsService {
         return result;
     }
 
+
+    public List<comp_points> findByFunctionId(Long functionId) {
+        logger.info("Поиск всех точек по functionId: {}", functionId);
+
+        List<comp_points> result = compPointsRepository.findAll()
+                .stream()
+                .filter(p -> p.getFunction().getId().equals(functionId))
+                .collect(Collectors.toList());
+
+        logger.info("Найдено точек для функции {}: {}", functionId, result.size());
+        return result;
+    }
     private Comparator<comp_points> createComparator(String sortBy, String direction) {
         Comparator<comp_points> comparator = switch(sortBy.toLowerCase()) {
             case "x" -> Comparator.comparing(comp_points::getX);
