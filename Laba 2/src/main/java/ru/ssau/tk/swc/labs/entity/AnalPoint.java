@@ -1,10 +1,24 @@
 package ru.ssau.tk.swc.labs.entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "anal_points")
 public class AnalPoint {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "x", nullable = false)
     private double x;
+
+    @Column(name = "y", nullable = false)
     private double y;
+
+    @Column(name = "derive", nullable = false)
     private double derive;
+
+    @Column(name = "funID", nullable = false)
     private Long funID;
 
     public AnalPoint(){}
