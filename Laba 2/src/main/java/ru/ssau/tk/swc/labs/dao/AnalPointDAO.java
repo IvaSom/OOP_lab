@@ -80,15 +80,14 @@ public class AnalPointDAO {
     }
 
     public Long create(AnalPoint point) {
-        String sql = "INSERT INTO anal_points (x, y, derive, funID) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO anal_points (x, y, funID) VALUES (?, ?, ?)";
         logger.info("Создание новой точки по x: {} и по функции: {}", point.getX(), point.getFunID());
 
         try (Connection conn = dataSourceProvider.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setDouble(1, point.getX());
             stmt.setDouble(2, point.getY());
-            stmt.setDouble(3, point.getDerive());
-            stmt.setLong(4, point.getFunID());
+            stmt.setLong(3, point.getFunID());
 
             if (stmt.executeUpdate() > 0) {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
@@ -114,12 +113,13 @@ public class AnalPointDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
-            if (stmt.executeUpdate() > 0) {
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Точка под id: {} удалена", id);
             } else {
                 logger.warn("Точка под id: {} не найдена", id);
             }
-            return stmt.executeUpdate() > 0;
+            return affectedRows > 0;
         } catch (SQLException e) {
             logger.error("Ошибка удаления точки под id: {}", id, e);
         }
@@ -188,7 +188,6 @@ public class AnalPointDAO {
         analPoint.setId(rs.getLong("id"));
         analPoint.setX(rs.getDouble("x"));
         analPoint.setY(rs.getDouble("y"));
-        analPoint.setDerive(rs.getDouble("derive"));
         analPoint.setFunID(rs.getLong("funID"));
         return analPoint;
     }
