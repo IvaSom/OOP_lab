@@ -23,6 +23,9 @@ public class users {
     @Column(name = "password", nullable = false, length = 50)
     private String password;
 
+    public users() {
+    }
+
     public users(String name, String login, String email, String password) {
         this.name = name;
         this.login = login;

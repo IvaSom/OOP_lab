@@ -32,7 +32,7 @@ public class tabFun {
         return name;
     }
 
-    public void setName(Integer type) {
+    public void setName(String name) {
         this.name = name;
     }
 }
