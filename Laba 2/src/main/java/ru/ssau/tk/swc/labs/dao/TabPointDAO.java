@@ -38,7 +38,7 @@ public class TabPointDAO {
         return Optional.empty();
     }
 
-    public Optional<TabPoint> findByXAndFubID(double x, Long funid){
+    public Optional<TabPoint> findByXAndFunID(double x, Long funid){
         String sql = "SELECT * FROM tab_points WHERE x = ? AND funID = ?";
         logger.info("Начало поиска точки по x: {} и по функции: {}", x, funid);
 
@@ -105,7 +105,6 @@ public class TabPointDAO {
         logger.error("Ошибка создания точки");
         return null;
     }
-
     public boolean delete(Long id) {
         String sql = "DELETE FROM tab_points WHERE id = ?";
         logger.info("Удаление точки под id: {}", id);
@@ -114,12 +113,13 @@ public class TabPointDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
-            if (stmt.executeUpdate() > 0) {
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Точка под id: {} удалена", id);
             } else {
                 logger.warn("Точка под id: {} не найдена", id);
             }
-            return stmt.executeUpdate() > 0;
+            return affectedRows > 0;
         } catch (SQLException e) {
             logger.error("Ошибка удаления точки под id: {}", id, e);
         }

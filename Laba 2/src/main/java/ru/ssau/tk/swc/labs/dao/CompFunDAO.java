@@ -101,7 +101,6 @@ public class CompFunDAO {
         logger.error("Ошибка создания композитной функции: {}", compFun.getName());
         return null;
     }
-
     public boolean delete(Long id) {
         String sql = "DELETE FROM compFun WHERE id = ?";
         logger.info("Удаление композитной функции под id: {}", id);
@@ -110,12 +109,13 @@ public class CompFunDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
 
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Композитная функция под id: {} удалена", id);
-            else
+            } else {
                 logger.warn("Композитная функция под id: {} не найдена", id);
-
-            return stmt.executeUpdate() > 0;
+            }
+            return affectedRows > 0;
         } catch (SQLException e) {
             logger.error("Ошибка удаления композитной функции под id: {}", id, e);
         }

@@ -111,12 +111,13 @@ public class AnalFunDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
 
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Аналитическая функция под id: {} удалена", id);
-            else
+            } else {
                 logger.warn("Аналитическая функция под id: {} не найдена", id);
-
-            return stmt.executeUpdate() > 0;
+            }
+            return affectedRows > 0;
         } catch (SQLException e) {
             logger.error("Ошибка удаления аналитической функции под id: {}", id, e);
         }

@@ -39,7 +39,7 @@ public class CompositeStructureDAO {
     }
 
     public List<CompositeStructure> findAll(){
-        String sql = "SELECT * FROM composite_structure ORDER BY name";
+        String sql = "SELECT * FROM composite_structure ORDER BY id";
         logger.info("Выгрузка всех вложенных функций");
         List<CompositeStructure> compositeStructures = new ArrayList<>();
 
@@ -82,7 +82,6 @@ public class CompositeStructureDAO {
         logger.error("Ошибка создания вложенных функций: {}, {}", compositeStructure.getComposite_id(), compositeStructure.getAnalytic_id());
         return null;
     }
-
     public boolean delete(Long id) {
         String sql = "DELETE FROM composite_structure WHERE id = ?";
         logger.info("Удаление вложенных функций под id: {}", id);
@@ -91,12 +90,13 @@ public class CompositeStructureDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
 
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Вложенные функции под id: {} удалены", id);
-            else
+            } else {
                 logger.warn("Вложенные функции под id: {} не найдены", id);
-
-            return stmt.executeUpdate() > 0;
+            }
+            return affectedRows > 0;
         } catch (SQLException e) {
             logger.error("Ошибка удаления вложенных функций под id: {}", id, e);
         }

@@ -37,32 +37,31 @@ public class TabFunDAO {
         logger.debug("Табулированная функция по id: {} не найдена", id);
         return Optional.empty();
     }
-
-    public Optional<TabFun> findByName(String name){
-        String sql = "SELECT * FROM tabFun WHERE name = ?";
-        logger.info("Начало поиска табулированной функции по имени: {}", name);
+    public Optional<TabFun> findByType(String type) {
+        String sql = "SELECT * FROM tabFun WHERE type = ?";
+        logger.info("Начало поиска табулированной функции по типу: {}", type);
 
         try(Connection conn = dataSourceProvider.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
 
-            stmt.setString(1, name);
+            stmt.setString(1, type);
             try(ResultSet rs = stmt.executeQuery()){
                 if(rs.next()){
                     TabFun tabFun = mapResultSetToTabFun(rs);
-                    logger.info("Табулированная функция: {} найдена", name);
+                    logger.info("Табулированная функция типа: {} найдена", type);
                     return Optional.of(tabFun);
                 }
             }
         }catch (SQLException e){
-            logger.error("Ошибка поиска табулированной функции: {}", name, e);
+            logger.error("Ошибка поиска табулированной функции типа: {}", type, e);
         }
-        logger.debug("Табулированная функция: {} не найдена", name);
+        logger.debug("Табулированная функция типа: {} не найдена", type);
         return Optional.empty();
     }
 
     public List<TabFun> findAll(){
         String sql = "SELECT * FROM tabFun ORDER BY name";
-        logger.info("Выгрузка всех аналитических функций");
+        logger.info("Выгрузка всех табулированных функций");
         List<TabFun> tabFuns = new ArrayList<>();
 
         try (Connection conn = dataSourceProvider.getConnection();
@@ -71,15 +70,15 @@ public class TabFunDAO {
             while (rs.next()) {
                 tabFuns.add(mapResultSetToTabFun(rs));
             }
-            logger.info("Выгруженно {} аналитических функций", tabFuns.size());
+            logger.info("Выгруженно {} табулированных функций", tabFuns.size());
         } catch (SQLException e) {
-            logger.error("Ошибка при загрузке всех аналитических функций", e);
+            logger.error("Ошибка при загрузке всех табулированных функций", e);
         }
         return tabFuns;
     }
 
     public Long create(TabFun tabFun){
-        String sql = "INSERT INTO tabFun (type) VALUES ?;";
+        String sql = "INSERT INTO tabFun (type) VALUES (?)";
         logger.info("Создание табулированной функции: {}", tabFun.getType());
 
         try (Connection conn = dataSourceProvider.getConnection();
@@ -90,7 +89,7 @@ public class TabFunDAO {
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         Long id = generatedKeys.getLong(1);
-                        logger.info("Аналиточеская функция: {} под id: {} создана", tabFun.getType(),id);
+                        logger.info("Табулированная функция: {} под id: {} создана", tabFun.getType(),id);
                         return id;
                     }
                 }
@@ -110,12 +109,13 @@ public class TabFunDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
 
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Табулированная функция под id: {} удалена", id);
-            else
+            } else {
                 logger.warn("Табулированная функция под id: {} не найдена", id);
-
-            return stmt.executeUpdate() > 0;
+            }
+            return affectedRows > 0;
         } catch (SQLException e) {
             logger.error("Ошибка удаления табулированной функции под id: {}", id, e);
         }

@@ -156,6 +156,7 @@ public class UserDAO {
         return null;
     }
 
+
     public boolean updatePassword(User user){
         String sql = "UPDATE users SET password = ? WHERE id = ?";
         logger.info("Начало обновления пароля пользователя по id: {}", user.getId());
@@ -166,16 +167,16 @@ public class UserDAO {
             stmt.setString(1, user.getPassword());
             stmt.setLong(2, user.getId());
 
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Пароль пользователя под id: {} обновлен", user.getId());
-            else
+            } else {
                 logger.debug("Пользователь под id: {} не найден", user.getId());
-
-            return stmt.executeUpdate() > 0;
-        }catch (SQLException e) {
+            }
+            return affectedRows > 0;
+        } catch (SQLException e) {
             logger.error("Ошибка обновления пароля пользователя под id: {}", user.getId(), e);
         }
-
         return false;
     }
 
@@ -189,22 +190,22 @@ public class UserDAO {
             stmt.setString(1, user.getEmail());
             stmt.setLong(2, user.getId());
 
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Email пользователя под id: {} обновлен", user.getId());
-            else
+            } else {
                 logger.debug("Пользователь под id: {} не найден", user.getId());
-
-            return stmt.executeUpdate() > 0;
-        }catch (SQLException e) {
-            logger.error("Ошибка обновления email подбзователя под id: {}", user.getId(), e);
+            }
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            logger.error("Ошибка обновления email пользователя под id: {}", user.getId(), e);
         }
-
         return false;
     }
 
     public boolean updateLogin(User user){
         String sql = "UPDATE users SET login = ? WHERE id = ?";
-        logger.info("Начало логина обновления пользователя по id: {}", user.getId());
+        logger.info("Начало обновления логина пользователя по id: {}", user.getId());
 
         try(Connection conn = dataSourceProvider.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -212,22 +213,22 @@ public class UserDAO {
             stmt.setString(1, user.getLogin());
             stmt.setLong(2, user.getId());
 
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Логин пользователя под id: {} обновлен", user.getId());
-            else
+            } else {
                 logger.debug("Пользователь под id: {} не найден", user.getId());
-
-            return stmt.executeUpdate() > 0;
-        }catch (SQLException e) {
-            logger.error("Ошибка обновления логина подбзователя под id: {}", user.getId(), e);
+            }
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            logger.error("Ошибка обновления логина пользователя под id: {}", user.getId(), e);
         }
-
         return false;
     }
 
     public boolean updateName(User user){
         String sql = "UPDATE users SET name = ? WHERE id = ?";
-        logger.info("Начало имени обновления пользователя по id: {}", user.getId());
+        logger.info("Начало обновления имени пользователя по id: {}", user.getId());
 
         try(Connection conn = dataSourceProvider.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -235,33 +236,34 @@ public class UserDAO {
             stmt.setString(1, user.getName());
             stmt.setLong(2, user.getId());
 
-            if (stmt.executeUpdate() > 0)
-                logger.info("Имя пользователя под id: {} обновлен", user.getId());
-            else
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                logger.info("Имя пользователя под id: {} обновлено", user.getId());
+            } else {
                 logger.debug("Пользователь под id: {} не найден", user.getId());
-
-            return stmt.executeUpdate() > 0;
-        }catch (SQLException e) {
+            }
+            return affectedRows > 0;
+        } catch (SQLException e) {
             logger.error("Ошибка обновления имени пользователя под id: {}", user.getId(), e);
         }
-
         return false;
     }
 
     public boolean delete(Long id) {
         String sql = "DELETE FROM users WHERE id = ?";
-        logger.info("Deleting users with id: {}", id);
+        logger.info("Удаление пользователя с id: {}", id);
 
         try (Connection conn = dataSourceProvider.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setLong(1, id);
-            if (stmt.executeUpdate() > 0)
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
                 logger.info("Пользователь по id: {} удален", id);
-            else
+            } else {
                 logger.debug("Пользователь под id: {} не найден", id);
-
-            return stmt.executeUpdate() > 0;
+            }
+            return affectedRows > 0;
         } catch (SQLException e) {
             logger.error("Ошибка удаления пользователя под id: {}", id, e);
         }
