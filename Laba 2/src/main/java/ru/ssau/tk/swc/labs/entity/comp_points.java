@@ -16,9 +16,6 @@ public class comp_points {
     @Column(name = "y", nullable = false)
     private Double y;
 
-    @Column(name = "derive", nullable = false)
-    private Double derive;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funID", nullable = false)
     private compFun function;
@@ -27,10 +24,9 @@ public class comp_points {
     public comp_points() {
     }
 
-    public comp_points(Double x, Double y, Double derive, compFun function) {
+    public comp_points(Double x, Double y, compFun function) {
         this.x = x;
         this.y = y;
-        this.derive = derive;
         this.function = function;
     }
 
@@ -56,14 +52,6 @@ public class comp_points {
 
     public void setY(Double y) {
         this.y = y;
-    }
-
-    public Double getDerive() {
-        return derive;
-    }
-
-    public void setDerive(Double derive) {
-        this.derive = derive;
     }
 
     public compFun getFunction() {
