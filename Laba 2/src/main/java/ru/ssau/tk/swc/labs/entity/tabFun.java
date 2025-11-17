@@ -10,14 +10,14 @@ public class tabFun {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type")
-    private Integer type;
+    @Column(name = "name")
+    private String name;
 
     public tabFun(){
     }
 
     public tabFun(Integer type){
-        this.type = type;
+        this.name = name;
     }
 
     public Long getId() {
@@ -28,11 +28,11 @@ public class tabFun {
         this.id = id;
     }
 
-    public Integer getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setName(Integer type) {
+        this.name = name;
     }
 }

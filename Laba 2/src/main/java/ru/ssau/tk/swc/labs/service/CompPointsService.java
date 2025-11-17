@@ -23,7 +23,7 @@ public class CompPointsService {
 
     public Optional<comp_points> findSinglePoint(Double x, Long functionId) {
         logger.info("Одиночный поиск композитной точки: X={}, FunctionID={}", x, functionId);
-        Optional<comp_points> result = compPointsRepository.findByXAndFubID(x, functionId);
+        Optional<comp_points> result = compPointsRepository.findByXAndFunctionId(x, functionId);
         logger.info("Одиночный поиск завершен. Найдено: {}", result.isPresent() ? "1 точка" : "0 точек");
         return result;
     }
@@ -57,7 +57,7 @@ public class CompPointsService {
         Queue<comp_points> queue = new LinkedList<>();
         Set<Long> visited = new HashSet<>();
 
-        Optional<comp_points> startPoint = compPointsRepository.findByXAndFubID(startX, functionId);
+        Optional<comp_points> startPoint = compPointsRepository.findByXAndFunctionId(startX, functionId);
         if (startPoint.isEmpty()) {
             logger.warn("Поиск в ширину: стартовая композитная точка не найдена");
             return result;

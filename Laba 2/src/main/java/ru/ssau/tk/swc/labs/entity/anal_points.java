@@ -16,9 +16,6 @@ public class anal_points {
     @Column(name = "y", nullable = false)
     private Double y;
 
-    @Column(name = "derive", nullable = false)
-    private Double derive;
-
     @ManyToOne(fetch = FetchType.LAZY) //fetch - настройка когда загружать связаный объект
     //lazy значит загружается только когда обратщение к методу где надо function
     @JoinColumn(name = "funID", nullable = false) //связывает с колонкой
@@ -27,10 +24,9 @@ public class anal_points {
     public anal_points() {
     }
 
-    public anal_points(Double x, Double y, Double derive, analFun function) {
+    public anal_points(Double x, Double y, analFun function) {
         this.x = x;
         this.y = y;
-        this.derive = derive;
         this.function = function;
     }
 
@@ -56,14 +52,6 @@ public class anal_points {
 
     public void setY(Double y) {
         this.y = y;
-    }
-
-    public Double getDerive() {
-        return derive;
-    }
-
-    public void setDerive(Double derive) {
-        this.derive = derive;
     }
 
     public analFun getFunction() {

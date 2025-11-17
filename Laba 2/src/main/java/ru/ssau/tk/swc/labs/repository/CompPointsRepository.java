@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface CompPointsRepository extends JpaRepository<comp_points, Long>{
-    Optional<comp_points> findByXAndFubID(Double x, Long FunID);
+    Optional<comp_points> findByXAndFunctionId(Double x, Long FunID);
 }

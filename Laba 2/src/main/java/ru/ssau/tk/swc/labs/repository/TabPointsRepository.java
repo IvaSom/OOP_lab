@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 public interface TabPointsRepository extends JpaRepository<tab_points, Long>{
-    Optional<tab_points> findByXAndFubID(Double x, Long funid);
+    Optional<tab_points> findByXAndFunctionId(Double x, Long funid);
 }

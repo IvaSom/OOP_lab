@@ -11,6 +11,6 @@ public interface AnalPointsRepository extends JpaRepository<anal_points, Long>{
     List<anal_points> findByX(Double x);
     List<anal_points> findByY(Double y);
     List<anal_points> findByDerive(Double derive);
-    List<anal_points> findByFunId(Long funId);
-    Optional<anal_points> findByXAndFunId(Double x, Long funId);
+    List<anal_points> findByFunctionId(Long funId);
+    Optional<anal_points> findByXAndFunctionId(Double x, Long funId);
 }
