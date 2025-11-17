@@ -23,7 +23,7 @@ public class AnalPointsService {
 
     public Optional<anal_points> findSinglePoint(Double x, Long functionId) {
         logger.info("Одиночный поиск: X={}, FunctionID={}", x, functionId);
-        Optional<anal_points> result = analPointsRepository.findByXAndFunId(x, functionId);
+        Optional<anal_points> result = analPointsRepository.findByXAndFunctionId(x, functionId);
         logger.info("Одиночный поиск завершен. Найдено: {}", result.isPresent() ? "1 точка" : "0 точек");
         return result;
     }
@@ -57,7 +57,7 @@ public class AnalPointsService {
         Queue<anal_points> queue = new LinkedList<>();
         Set<Long> visited = new HashSet<>();
 
-        Optional<anal_points> startPoint = analPointsRepository.findByXAndFunId(startX, functionId);
+        Optional<anal_points> startPoint = analPointsRepository.findByXAndFunctionId(startX, functionId);
         if (startPoint.isEmpty()) {
             logger.warn("Поиск в ширину: стартовая точка не найдена");
             return result;
@@ -70,7 +70,7 @@ public class AnalPointsService {
             anal_points current = queue.poll();
             result.add(current);
 
-            List<anal_points> neighbors = analPointsRepository.findByFunId(functionId)
+            List<anal_points> neighbors = analPointsRepository.findByFunctionId(functionId)
                     .stream()
                     .filter(p -> !visited.contains(p.getId()))
                     .filter(p -> Math.abs(p.getX() - current.getX()) <= radius)
@@ -103,7 +103,6 @@ public class AnalPointsService {
         Comparator<anal_points> comparator = switch(sortBy.toLowerCase()) {
             case "x" -> Comparator.comparing(anal_points::getX);
             case "y" -> Comparator.comparing(anal_points::getY);
-            case "derive" -> Comparator.comparing(anal_points::getDerive);
             default -> Comparator.comparing(anal_points::getId);
         };
 

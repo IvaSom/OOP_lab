@@ -42,7 +42,7 @@ public class TabFunService {
         List<tabFun> allFunctions = tabFunRepository.findAll();
 
         List<tabFun> filtered = allFunctions.stream()
-                .filter(f -> types == null || types.length == 0 || Arrays.asList(types).contains(f.getType()))
+                .filter(f -> types == null || types.length == 0 || Arrays.asList(types).contains(f.getName()))
                 .toList();
 
         Comparator<tabFun> comparator = createComparator(sortBy, direction);
@@ -58,7 +58,7 @@ public class TabFunService {
 
     private Comparator<tabFun> createComparator(String sortBy, String direction) {
         Comparator<tabFun> comparator = switch(sortBy.toLowerCase()) {
-            case "type" -> Comparator.comparing(tabFun::getType);
+            case "type" -> Comparator.comparing(tabFun::getName);
             default -> Comparator.comparing(tabFun::getId);
         };
 

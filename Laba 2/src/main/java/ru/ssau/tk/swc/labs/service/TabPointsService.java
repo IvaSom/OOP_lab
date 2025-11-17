@@ -22,7 +22,7 @@ public class TabPointsService {
 
     public Optional<tab_points> findSinglePoint(Double x, Long functionId) {
         logger.info("Одиночный поиск точки: X={}, FunctionID={}", x, functionId);
-        Optional<tab_points> result = tabPointsRepository.findByXAndFubID(x, functionId);
+        Optional<tab_points> result = tabPointsRepository.findByXAndFunctionId(x, functionId);
         logger.info("Одиночный поиск завершен. Найдено: {}", result.isPresent() ? "1 точка" : "0 точек");
         return result;
     }
@@ -56,7 +56,7 @@ public class TabPointsService {
         Queue<tab_points> queue = new LinkedList<>();
         Set<Long> visited = new HashSet<>();
 
-        Optional<tab_points> startPoint = tabPointsRepository.findByXAndFubID(startX, functionId);
+        Optional<tab_points> startPoint = tabPointsRepository.findByXAndFunctionId(startX, functionId);
         if (startPoint.isEmpty()) {
             logger.warn("Поиск в ширину: стартовая точка не найдена");
             return result;
