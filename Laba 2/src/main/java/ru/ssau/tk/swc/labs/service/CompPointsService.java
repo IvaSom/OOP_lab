@@ -104,7 +104,6 @@ public class CompPointsService {
         Comparator<comp_points> comparator = switch(sortBy.toLowerCase()) {
             case "x" -> Comparator.comparing(comp_points::getX);
             case "y" -> Comparator.comparing(comp_points::getY);
-            case "derive" -> Comparator.comparing(comp_points::getDerive);
             default -> Comparator.comparing(comp_points::getId);
         };
 
