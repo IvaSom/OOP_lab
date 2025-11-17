@@ -70,6 +70,29 @@ public class CompStructureService {
         return result;
     }
 
+    //поиск по иерерхии
+    public List<Map<String, Object>> getFlattenedHierarchy(Long compositeFunctionId) {
+        logger.info("Построение плоской иерархии для композитной функции: {}", compositeFunctionId);
+
+        //находим все структуры для нашей функции
+        List<composite_structure> structures = this.findByCompositeFunctionId(compositeFunctionId);
+
+        List<composite_structure> sortedStructures = structures.stream()
+                .sorted(Comparator.comparing(composite_structure::getExecutionOrder))
+                .toList();
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (composite_structure structure : sortedStructures) {
+            Map<String, Object> component = new HashMap<>();
+            component.put("executionOrder", structure.getExecutionOrder());
+            component.put("type", "ANALYTIC");
+            component.put("function", structure.getAnalFun());
+            list.add(component);
+        }
+
+        logger.info("Иерархия построена. Количество компонентов: {}", list.size());
+        return list;
+    }
 
     private Comparator<composite_structure> createComparator(String sortBy, String direction) {
         Comparator<composite_structure> comparator = switch(sortBy.toLowerCase()) {
