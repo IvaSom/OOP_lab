@@ -93,6 +93,21 @@ public class CompStructureService {
         logger.info("Иерархия построена. Количество компонентов: {}", list.size());
         return list;
     }
+    public List<composite_structure> findAllStructures() {
+        logger.info("Получение всех композитных структур");
+        return compStructureRepository.findAll();
+    }
+
+    public composite_structure save(composite_structure structure) {
+        logger.info("Сохранение композитной структуры: compositeFunction={}, analyticFunction={}, order={}",
+                structure.getCompFun().getId(), structure.getAnalFun().getId(), structure.getExecutionOrder());
+        return compStructureRepository.save(structure);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление композитной структуры с ID: {}", id);
+        compStructureRepository.deleteById(id);
+    }
 
     private Comparator<composite_structure> createComparator(String sortBy, String direction) {
         Comparator<composite_structure> comparator = switch(sortBy.toLowerCase()) {

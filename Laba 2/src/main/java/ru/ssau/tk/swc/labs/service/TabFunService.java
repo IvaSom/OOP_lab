@@ -54,6 +54,20 @@ public class TabFunService {
         logger.info("Множественный поиск функций завершен. Найдено функций: {}", result.size());
         return result;
     }
+    public List<tabFun> findAllFunctions() {
+        logger.info("Получение всех табличных функций");
+        return tabFunRepository.findAll();
+    }
+
+    public tabFun save(tabFun function) {
+        logger.info("Сохранение табличной функции: {}", function.getName());
+        return tabFunRepository.save(function);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление табличной функции с ID: {}", id);
+        tabFunRepository.deleteById(id);
+    }
 
 
     private Comparator<tabFun> createComparator(String sortBy, String direction) {
