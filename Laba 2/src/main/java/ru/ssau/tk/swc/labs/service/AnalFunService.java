@@ -54,6 +54,20 @@ public class AnalFunService {
         logger.info("Множественный поиск завершен. Найдено функций: {}", result.size());
         return result;
     }
+    public List<analFun> findAllFunctions() {
+        logger.info("Получение всех аналитических функций");
+        return analFunRepository.findAll();
+    }
+
+    public analFun save(analFun function) {
+        logger.info("Сохранение аналитической функции: {}", function.getName());
+        return analFunRepository.save(function);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление аналитической функции с ID: {}", id);
+        analFunRepository.deleteById(id);
+    }
 
 
 
