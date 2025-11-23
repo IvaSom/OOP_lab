@@ -100,6 +100,26 @@ public class CompPointsService {
         logger.info("Найдено точек для функции {}: {}", functionId, result.size());
         return result;
     }
+    public List<comp_points> findAll() {
+        logger.info("Получение всех точек композитных функций");
+        return compPointsRepository.findAll();
+    }
+
+    public Optional<comp_points> findById(Long id) {
+        logger.info("Поиск точки по ID: {}", id);
+        return compPointsRepository.findById(id);
+    }
+
+    public comp_points save(comp_points point) {
+        logger.info("Сохранение точки: X={}, Y={}, FunctionID={}",
+                point.getX(), point.getY(), point.getFunction().getId());
+        return compPointsRepository.save(point);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление точки с ID: {}", id);
+        compPointsRepository.deleteById(id);
+    }
     private Comparator<comp_points> createComparator(String sortBy, String direction) {
         Comparator<comp_points> comparator = switch(sortBy.toLowerCase()) {
             case "x" -> Comparator.comparing(comp_points::getX);

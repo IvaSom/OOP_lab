@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/analytic-functions")
+@RequestMapping("/api/anal-fun")
 public class AnalFunController {
 
     @Autowired
@@ -36,7 +36,6 @@ public class AnalFunController {
     @PutMapping("/{id}")
     public ResponseEntity<analFun> updateFunction(@PathVariable Long id, @RequestBody analFun function) {
         function.setId(id);
-        // Нужно добавить метод save в сервис
         analFun updated = service.save(function);
         return ResponseEntity.ok(updated);
     }

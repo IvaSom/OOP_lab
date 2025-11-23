@@ -98,6 +98,26 @@ public class TabPointsService {
         logger.info("Найдено точек для функции {}: {}", functionId, result.size());
         return result;
     }
+    public List<tab_points> findAll() {
+        logger.info("Получение всех точек табличных функций");
+        return tabPointsRepository.findAll();
+    }
+
+    public Optional<tab_points> findById(Long id) {
+        logger.info("Поиск точки по ID: {}", id);
+        return tabPointsRepository.findById(id);
+    }
+
+    public tab_points save(tab_points point) {
+        logger.info("Сохранение точки: X={}, Y={}, Derive={}, FunctionID={}",
+                point.getX(), point.getY(), point.getDerive(), point.getFunction().getId());
+        return tabPointsRepository.save(point);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление точки с ID: {}", id);
+        tabPointsRepository.deleteById(id);
+    }
 
     private Comparator<tab_points> createComparator(String sortBy, String direction) {
         Comparator<tab_points> comparator = switch(sortBy.toLowerCase()) {

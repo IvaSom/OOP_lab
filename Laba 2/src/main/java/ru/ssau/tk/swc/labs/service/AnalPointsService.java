@@ -98,6 +98,27 @@ public class AnalPointsService {
         logger.info("Найдено точек для функции {}: {}", functionId, result.size());
         return result;
     }
+    public List<anal_points> findAll() {
+        logger.info("Получение всех аналитических точек");
+        return analPointsRepository.findAll();
+    }
+
+    public Optional<anal_points> findById(Long id) {
+        logger.info("Поиск точки по ID: {}", id);
+        return analPointsRepository.findById(id);
+    }
+
+    public anal_points save(anal_points point) {
+        logger.info("Сохранение точки: X={}, Y={}, FunctionID={}",
+                point.getX(), point.getY(), point.getFunction().getId());
+        return analPointsRepository.save(point);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление точки с ID: {}", id);
+        analPointsRepository.deleteById(id);
+    }
+
     //приватные методы
     private Comparator<anal_points> createComparator(String sortBy, String direction) {
         Comparator<anal_points> comparator = switch(sortBy.toLowerCase()) {

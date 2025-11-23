@@ -58,6 +58,20 @@ public class CompFunService {
         logger.info("Множественный поиск композитных функций завершен. Найдено функций: {}", result.size());
         return result;
     }
+    public List<compFun> findAllFunctions() {
+        logger.info("Получение всех композитных функций");
+        return compFunRepository.findAll();
+    }
+
+    public compFun save(compFun function) {
+        logger.info("Сохранение композитной функции: {}", function.getName());
+        return compFunRepository.save(function);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление композитной функции с ID: {}", id);
+        compFunRepository.deleteById(id);
+    }
 
     private Comparator<compFun> createComparator(String sortBy, String direction) {
         Comparator<compFun> comparator = switch(sortBy.toLowerCase()) {

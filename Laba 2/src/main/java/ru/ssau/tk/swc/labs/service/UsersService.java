@@ -94,6 +94,15 @@ public class UsersService {
         logger.info("Email {} существует: {}", email, exists);
         return exists;
     }
+    public users save(users user) {
+        logger.info("Сохранение пользователя: {}", user.getLogin());
+        return userRepository.save(user);
+    }
+
+    public void deleteById(Long id) {
+        logger.info("Удаление пользователя с ID: {}", id);
+        userRepository.deleteById(id);
+    }
 
     private Comparator<users> createComparator(String sortBy, String direction) {
         Comparator<users> comparator = switch(sortBy.toLowerCase()) {
