@@ -3,11 +3,13 @@ package ru.ssau.tk.swc.labs.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ssau.tk.swc.labs.dto.AnalPointsDTO;
 import ru.ssau.tk.swc.labs.entity.anal_points;
 import ru.ssau.tk.swc.labs.service.AnalPointsService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/anal-points")
@@ -17,24 +19,28 @@ public class AnalPointsController {
     private AnalPointsService service;
 
     @GetMapping
-    public List<anal_points> getAllPoints() {
-        return service.findAll();
+    public List<AnalPointsDTO> getAllPoints() {
+        return service.findAll().stream()
+                .map(AnalPointsDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<anal_points> getPointById(@PathVariable Long id) {
+    public ResponseEntity<AnalPointsDTO> getPointById(@PathVariable Long id) {
         Optional<anal_points> point = service.findById(id);
-        return point.map(ResponseEntity::ok)
+        return point.map(p -> ResponseEntity.ok(new AnalPointsDTO(p)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/function/{funId}")
-    public List<anal_points> getPointsByFunction(@PathVariable Long funId) {
-        return service.findByFunctionId(funId);
+    public List<AnalPointsDTO> getPointsByFunction(@PathVariable Long funId) {
+        return service.findByFunctionId(funId).stream()
+                .map(AnalPointsDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/search")
-    public List<anal_points> searchPoints(
+    public List<AnalPointsDTO> searchPoints(
             @RequestParam Double minX,
             @RequestParam Double maxX,
             @RequestParam Double minY,
@@ -43,38 +49,43 @@ public class AnalPointsController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction) {
 
-        return service.findMultipleWithSorting(minX, maxX, minY, maxY, sortBy, direction, funId);
+        return service.findMultipleWithSorting(minX, maxX, minY, maxY, sortBy, direction, funId).stream()
+                .map(AnalPointsDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/bfs")
-    public List<anal_points> breadthFirstSearch(
+    public List<AnalPointsDTO> breadthFirstSearch(
             @RequestParam Double startX,
             @RequestParam Double radius,
             @RequestParam Long functionId) {
 
-        return service.breadthFirstSearch(startX, radius, functionId);
+        return service.breadthFirstSearch(startX, radius, functionId).stream()
+                .map(AnalPointsDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/point")
-    public ResponseEntity<anal_points> getPointByXAndFunction(
+    public ResponseEntity<AnalPointsDTO> getPointByXAndFunction(
             @RequestParam Double x,
             @RequestParam Long functionId) {
 
         Optional<anal_points> point = service.findSinglePoint(x, functionId);
-        return point.map(ResponseEntity::ok)
+        return point.map(p -> ResponseEntity.ok(new AnalPointsDTO(p)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public anal_points createPoint(@RequestBody anal_points point) {
-        return service.save(point);
+    public AnalPointsDTO createPoint(@RequestBody anal_points point) {
+        anal_points saved = service.save(point);
+        return new AnalPointsDTO(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<anal_points> updatePoint(@PathVariable Long id, @RequestBody anal_points point) {
+    public ResponseEntity<AnalPointsDTO> updatePoint(@PathVariable Long id, @RequestBody anal_points point) {
         point.setId(id);
         anal_points updated = service.save(point);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(new AnalPointsDTO(updated));
     }
 
     @DeleteMapping("/{id}")

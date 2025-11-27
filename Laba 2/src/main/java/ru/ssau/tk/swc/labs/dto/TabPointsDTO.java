@@ -1,5 +1,7 @@
 package ru.ssau.tk.swc.labs.dto;
 
+import ru.ssau.tk.swc.labs.entity.*;
+
 public class TabPointsDTO {
     private Long id;
     private Double x;
@@ -15,6 +17,13 @@ public class TabPointsDTO {
         this.y = y;
         this.derive = derive;
         this.functionId = functionId;
+    }
+    public TabPointsDTO(tab_points entity) {
+        this.id = entity.getId();
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.derive = entity.getDerive();
+        this.functionId = entity.getFunction().getId();
     }
 
     public Long getId() { return id; }

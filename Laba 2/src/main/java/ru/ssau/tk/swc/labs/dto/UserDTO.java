@@ -1,5 +1,7 @@
 package ru.ssau.tk.swc.labs.dto;
 
+import ru.ssau.tk.swc.labs.entity.*;
+
 public class UserDTO {
     private Long id;
     private String name;
@@ -13,6 +15,12 @@ public class UserDTO {
         this.name = name;
         this.login = login;
         this.email = email;
+    }
+    public UserDTO(users entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.login = entity.getLogin();
+        this.email = entity.getEmail();
     }
 
     public Long getId() { return id; }

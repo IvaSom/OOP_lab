@@ -3,11 +3,14 @@ package ru.ssau.tk.swc.labs.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ssau.tk.swc.labs.dto.UserAuthDTO;
+import ru.ssau.tk.swc.labs.dto.UserDTO;
 import ru.ssau.tk.swc.labs.entity.users;
 import ru.ssau.tk.swc.labs.service.UsersService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -17,52 +20,50 @@ public class UsersController {
     private UsersService service;
 
     @GetMapping
-    public List<users> getAllUsers() {
-        return service.findAllUsers();
+    public List<UserDTO> getAllUsers() {
+        return service.findAllUsers().stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<users> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
         Optional<users> user = service.findUserById(id);
-        return user.map(ResponseEntity::ok)
+        return user.map(u -> ResponseEntity.ok(new UserDTO(u)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/search/login")
-    public ResponseEntity<users> getUserByLogin(@RequestParam String login) {
+    public ResponseEntity<UserDTO> getUserByLogin(@RequestParam String login) {
         Optional<users> user = service.findUserByLogin(login);
-        return user.map(ResponseEntity::ok)
+        return user.map(u -> ResponseEntity.ok(new UserDTO(u)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/search/email")
-    public ResponseEntity<users> getUserByEmail(@RequestParam String email) {
+    public ResponseEntity<UserDTO> getUserByEmail(@RequestParam String email) {
         Optional<users> user = service.findUserByEmail(email);
-        return user.map(ResponseEntity::ok)
+        return user.map(u -> ResponseEntity.ok(new UserDTO(u)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/filter")
-    public List<users> getUsersWithFilter(
+    public List<UserDTO> getUsersWithFilter(
             @RequestParam(required = false) List<String> names,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction) {
 
         String[] namesArray = names != null ? names.toArray(new String[0]) : null;
-        return service.findMultipleWithSorting(namesArray, sortBy, direction);
+        return service.findMultipleWithSorting(namesArray, sortBy, direction).stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<users> authenticateUser(
-            @RequestParam String login,
-            @RequestParam String password) {
-
-        Optional<users> user = service.authenticateUser(login, password);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
-            return ResponseEntity.status(401).build();
-        }
+    public ResponseEntity<UserDTO> authenticateUser(@RequestBody UserAuthDTO authDTO) {
+        Optional<users> user = service.authenticateUser(authDTO.getLogin(), authDTO.getPassword());
+        return user.map(u -> ResponseEntity.ok(new UserDTO(u)))
+                .orElse(ResponseEntity.status(401).build());
     }
 
     @PostMapping("/check-login")
@@ -78,23 +79,23 @@ public class UsersController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<users> registerUser(@RequestBody users user) {
+    public ResponseEntity<UserDTO> registerUser(@RequestBody users user) {
         if (service.isLoginExists(user.getLogin())) {
-            return ResponseEntity.badRequest().build(); //логин занят
+            return ResponseEntity.badRequest().build();
         }
         if (service.isEmailExists(user.getEmail())) {
-            return ResponseEntity.badRequest().build(); //email занят
+            return ResponseEntity.badRequest().build();
         }
 
         users savedUser = service.save(user);
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.ok(new UserDTO(savedUser));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<users> updateUser(@PathVariable Long id, @RequestBody users user) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody users user) {
         user.setId(id);
         users updated = service.save(user);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(new UserDTO(updated));
     }
 
     @DeleteMapping("/{id}")

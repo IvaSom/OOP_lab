@@ -3,11 +3,13 @@ package ru.ssau.tk.swc.labs.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ssau.tk.swc.labs.dto.AnalFunDTO;
 import ru.ssau.tk.swc.labs.entity.analFun;
 import ru.ssau.tk.swc.labs.service.AnalFunService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/anal-fun")
@@ -17,27 +19,30 @@ public class AnalFunController {
     private AnalFunService service;
 
     @GetMapping
-    public List<analFun> getAllFunctions() {
-        return service.findAllFunctions();
+    public List<AnalFunDTO> getAllFunctions() {
+        return service.findAllFunctions().stream()
+                .map(AnalFunDTO::new)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<analFun> getFunctionById(@PathVariable Long id) {
+    public ResponseEntity<AnalFunDTO> getFunctionById(@PathVariable Long id) {
         Optional<analFun> function = service.findSingleFunctionById(id);
-        return function.map(ResponseEntity::ok) //если нашел, то возвращает
-                .orElse(ResponseEntity.notFound().build()); //иначе на 404
+        return function.map(f -> ResponseEntity.ok(new AnalFunDTO(f)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public analFun createFunction(@RequestBody analFun function) {
-        return service.save(function);
+    public AnalFunDTO createFunction(@RequestBody analFun function) {
+        analFun saved = service.save(function);
+        return new AnalFunDTO(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<analFun> updateFunction(@PathVariable Long id, @RequestBody analFun function) {
+    public ResponseEntity<AnalFunDTO> updateFunction(@PathVariable Long id, @RequestBody analFun function) {
         function.setId(id);
         analFun updated = service.save(function);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(new AnalFunDTO(updated));
     }
 
     @DeleteMapping("/{id}")

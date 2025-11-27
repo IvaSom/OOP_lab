@@ -1,5 +1,7 @@
 package ru.ssau.tk.swc.labs.dto;
 
+import ru.ssau.tk.swc.labs.entity.*;
+
 public class CompPointsDTO {
     private Long id;
     private Double x;
@@ -13,6 +15,12 @@ public class CompPointsDTO {
         this.x = x;
         this.y = y;
         this.functionId = functionId;
+    }
+    public CompPointsDTO(comp_points entity) {
+        this.id = entity.getId();
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.functionId = entity.getFunction().getId();
     }
 
     public Long getId() { return id; }
