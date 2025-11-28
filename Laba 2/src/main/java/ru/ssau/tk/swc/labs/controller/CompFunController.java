@@ -39,17 +39,6 @@ public class CompFunController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/filter")
-    public List<CompFunDTO> getFunctionsWithFilter(
-            @RequestParam(required = false) List<String> names,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction) {
-
-        String[] namesArray = names != null ? names.toArray(new String[0]) : null;
-        return service.findMultipleWithSorting(namesArray, sortBy, direction).stream()
-                .map(CompFunDTO::new)
-                .collect(Collectors.toList());
-    }
 
     @PostMapping
     public CompFunDTO createFunction(@RequestBody compFun function) {

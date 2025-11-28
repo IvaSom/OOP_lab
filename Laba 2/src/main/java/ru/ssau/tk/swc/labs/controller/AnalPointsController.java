@@ -3,9 +3,10 @@ package ru.ssau.tk.swc.labs.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.ssau.tk.swc.labs.dto.AnalPointsDTO;
-import ru.ssau.tk.swc.labs.entity.anal_points;
 import ru.ssau.tk.swc.labs.service.AnalPointsService;
+import ru.ssau.tk.swc.labs.dto.*;
+import ru.ssau.tk.swc.labs.entity.*;
+import ru.ssau.tk.swc.labs.repository.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,9 @@ public class AnalPointsController {
 
     @Autowired
     private AnalPointsService service;
+
+    @Autowired
+    private AnalFunRepository analFunRepository;
 
     @GetMapping
     public List<AnalPointsDTO> getAllPoints() {
@@ -39,32 +43,6 @@ public class AnalPointsController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/search")
-    public List<AnalPointsDTO> searchPoints(
-            @RequestParam Double minX,
-            @RequestParam Double maxX,
-            @RequestParam Double minY,
-            @RequestParam Double maxY,
-            @RequestParam Long funId,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction) {
-
-        return service.findMultipleWithSorting(minX, maxX, minY, maxY, sortBy, direction, funId).stream()
-                .map(AnalPointsDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/bfs")
-    public List<AnalPointsDTO> breadthFirstSearch(
-            @RequestParam Double startX,
-            @RequestParam Double radius,
-            @RequestParam Long functionId) {
-
-        return service.breadthFirstSearch(startX, radius, functionId).stream()
-                .map(AnalPointsDTO::new)
-                .collect(Collectors.toList());
-    }
-
     @GetMapping("/point")
     public ResponseEntity<AnalPointsDTO> getPointByXAndFunction(
             @RequestParam Double x,
@@ -76,15 +54,32 @@ public class AnalPointsController {
     }
 
     @PostMapping
-    public AnalPointsDTO createPoint(@RequestBody anal_points point) {
+    public AnalPointsDTO createPoint(@RequestBody AnalPointsDTO pointDTO) {
+        analFun function = analFunRepository.findById(pointDTO.getFunctionId())
+                .orElseThrow(() -> new RuntimeException("Function not found"));
+
+        anal_points point = new anal_points();
+        point.setX(pointDTO.getX());
+        point.setY(pointDTO.getY());
+        point.setFunction(function);
+
         anal_points saved = service.save(point);
         return new AnalPointsDTO(saved);
     }
-
     @PutMapping("/{id}")
-    public ResponseEntity<AnalPointsDTO> updatePoint(@PathVariable Long id, @RequestBody anal_points point) {
-        point.setId(id);
-        anal_points updated = service.save(point);
+    public ResponseEntity<AnalPointsDTO> updatePoint(@PathVariable Long id, @RequestBody AnalPointsDTO pointDTO) {
+
+        anal_points existingPoint = service.findById(id)
+                .orElseThrow(() -> new RuntimeException("Point not found with id: " + id));
+
+        analFun function = analFunRepository.findById(pointDTO.getFunctionId())
+                .orElseThrow(() -> new RuntimeException("Function not found with id: " + pointDTO.getFunctionId()));
+
+        existingPoint.setX(pointDTO.getX());
+        existingPoint.setY(pointDTO.getY());
+        existingPoint.setFunction(function);
+
+        anal_points updated = service.save(existingPoint);
         return ResponseEntity.ok(new AnalPointsDTO(updated));
     }
 

@@ -7,6 +7,10 @@ import ru.ssau.tk.swc.labs.dto.CompPointsDTO;
 import ru.ssau.tk.swc.labs.entity.comp_points;
 import ru.ssau.tk.swc.labs.service.CompPointsService;
 
+import ru.ssau.tk.swc.labs.dto.*;
+import ru.ssau.tk.swc.labs.entity.*;
+import ru.ssau.tk.swc.labs.repository.*;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -17,6 +21,8 @@ public class CompPointsController {
 
     @Autowired
     private CompPointsService service;
+    @Autowired
+    private CompFunRepository compFunRepository;
 
     @GetMapping
     public List<CompPointsDTO> getAllPoints() {
@@ -39,31 +45,6 @@ public class CompPointsController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/search")
-    public List<CompPointsDTO> searchPoints(
-            @RequestParam Double minX,
-            @RequestParam Double maxX,
-            @RequestParam Double minY,
-            @RequestParam Double maxY,
-            @RequestParam Long functionId,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction) {
-
-        return service.findMultipleWithSorting(minX, maxX, minY, maxY, sortBy, direction, functionId).stream()
-                .map(CompPointsDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("/bfs")
-    public List<CompPointsDTO> breadthFirstSearch(
-            @RequestParam Double startX,
-            @RequestParam Double radius,
-            @RequestParam Long functionId) {
-
-        return service.breadthFirstSearch(startX, radius, functionId).stream()
-                .map(CompPointsDTO::new)
-                .collect(Collectors.toList());
-    }
 
     @GetMapping("/point")
     public ResponseEntity<CompPointsDTO> getPointByXAndFunction(
@@ -74,17 +55,34 @@ public class CompPointsController {
         return point.map(p -> ResponseEntity.ok(new CompPointsDTO(p)))
                 .orElse(ResponseEntity.notFound().build());
     }
-
     @PostMapping
-    public CompPointsDTO createPoint(@RequestBody comp_points point) {
+    public CompPointsDTO createPoint(@RequestBody CompPointsDTO pointDTO) {
+        compFun function = compFunRepository.findById(pointDTO.getFunctionId())
+                .orElseThrow(() -> new RuntimeException("Composite function not found with id: " + pointDTO.getFunctionId()));
+
+        comp_points point = new comp_points();
+        point.setX(pointDTO.getX());
+        point.setY(pointDTO.getY());
+        point.setFunction(function);
+
         comp_points saved = service.save(point);
         return new CompPointsDTO(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompPointsDTO> updatePoint(@PathVariable Long id, @RequestBody comp_points point) {
-        point.setId(id);
-        comp_points updated = service.save(point);
+    public ResponseEntity<CompPointsDTO> updatePoint(@PathVariable Long id, @RequestBody CompPointsDTO pointDTO) {
+
+        comp_points existingPoint = service.findById(id)
+                .orElseThrow(() -> new RuntimeException("Composite point not found with id: " + id));
+
+        compFun function = compFunRepository.findById(pointDTO.getFunctionId())
+                .orElseThrow(() -> new RuntimeException("Composite function not found with id: " + pointDTO.getFunctionId()));
+
+        existingPoint.setX(pointDTO.getX());
+        existingPoint.setY(pointDTO.getY());
+        existingPoint.setFunction(function);
+
+        comp_points updated = service.save(existingPoint);
         return ResponseEntity.ok(new CompPointsDTO(updated));
     }
 

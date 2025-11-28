@@ -33,6 +33,8 @@ public class UsersController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
+
     @GetMapping("/search/login")
     public ResponseEntity<UserDTO> getUserByLogin(@RequestParam String login) {
         Optional<users> user = service.findUserByLogin(login);
@@ -45,18 +47,6 @@ public class UsersController {
         Optional<users> user = service.findUserByEmail(email);
         return user.map(u -> ResponseEntity.ok(new UserDTO(u)))
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/filter")
-    public List<UserDTO> getUsersWithFilter(
-            @RequestParam(required = false) List<String> names,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction) {
-
-        String[] namesArray = names != null ? names.toArray(new String[0]) : null;
-        return service.findMultipleWithSorting(namesArray, sortBy, direction).stream()
-                .map(UserDTO::new)
-                .collect(Collectors.toList());
     }
 
     @PostMapping("/auth")

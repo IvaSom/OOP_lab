@@ -6,7 +6,7 @@ public class AnalPointsDTO {
     private Long id;
     private Double x;
     private Double y;
-    private Long functionId; // Only ID instead of full object
+    private Long functionId;
 
     public AnalPointsDTO() {}
 

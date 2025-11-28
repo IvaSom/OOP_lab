@@ -39,17 +39,6 @@ public class TabFunController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/filter")
-    public List<TabFunDTO> getFunctionsWithFilter(
-            @RequestParam(required = false) Integer[] types,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction) {
-
-        return service.findMultipleWithSorting(types, sortBy, direction).stream()
-                .map(TabFunDTO::new)
-                .collect(Collectors.toList());
-    }
-
     @PostMapping
     public TabFunDTO createFunction(@RequestBody tabFun function) {
         tabFun saved = service.save(function);
