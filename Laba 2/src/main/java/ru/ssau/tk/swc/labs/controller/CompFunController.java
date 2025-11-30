@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.tk.swc.labs.dto.CompFunDTO;
 import ru.ssau.tk.swc.labs.entity.compFun;
@@ -76,6 +77,7 @@ public class CompFunController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFunction(@PathVariable Long id) {
         logger.info("DELETE /api/comp-fun/{} - Удаление композитной функции", id);
         service.deleteById(id);

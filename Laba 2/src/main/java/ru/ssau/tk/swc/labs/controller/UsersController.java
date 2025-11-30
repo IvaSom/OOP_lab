@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.tk.swc.labs.dto.*;
 import ru.ssau.tk.swc.labs.entity.users;
@@ -113,6 +114,7 @@ public class UsersController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody users user) {
         logger.info("PUT /api/users/{} - Обновление данных пользователя", id);
         user.setId(id);
@@ -122,6 +124,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         logger.info("DELETE /api/users/{} - Удаление пользователя", id);
         service.deleteById(id);

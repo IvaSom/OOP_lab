@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.tk.swc.labs.dto.TabFunDTO;
 import ru.ssau.tk.swc.labs.entity.tabFun;
@@ -67,6 +68,7 @@ public class TabFunController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TabFunDTO> updateFunction(@PathVariable Long id, @RequestBody tabFun function) {
         logger.info("PUT /api/tab-fun/{} - Обновление табулированной функции", id);
         function.setId(id);
@@ -76,6 +78,7 @@ public class TabFunController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFunction(@PathVariable Long id) {
         logger.info("DELETE /api/tab-fun/{} - Удаление табулированной функции", id);
         service.deleteById(id);

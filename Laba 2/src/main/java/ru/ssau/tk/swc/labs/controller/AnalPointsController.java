@@ -4,11 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.ssau.tk.swc.labs.functions.MathFunction;
 import ru.ssau.tk.swc.labs.service.AnalPointsService;
 import ru.ssau.tk.swc.labs.dto.*;
 import ru.ssau.tk.swc.labs.entity.*;
 import ru.ssau.tk.swc.labs.repository.*;
+import ru.ssau.tk.swc.labs.service.MathFunctionFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +28,8 @@ public class AnalPointsController {
 
     @Autowired
     private AnalFunRepository analFunRepository;
+    @Autowired
+    private MathFunctionFactory mathFunctionFactory;
 
     @GetMapping
     public List<AnalPointsDTO> getAllPoints() {
@@ -75,18 +80,26 @@ public class AnalPointsController {
     }
 
     @PostMapping
-    public AnalPointsDTO createPoint(@RequestBody AnalPointsDTO pointDTO) {
-        logger.info("POST /api/anal-points - Создание новой точки");
+    public AnalPointsDTO createPoint(@RequestBody CreateAnalPointDTO createPointDTO) {
+        logger.info("POST /api/anal-points - Создание новой точки для X: {}, FunctionID: {}",
+                createPointDTO.getX(), createPointDTO.getFunctionId());
 
-        analFun function = analFunRepository.findById(pointDTO.getFunctionId())
+        analFun function = analFunRepository.findById(createPointDTO.getFunctionId())
                 .orElseThrow(() -> {
-                    logger.error("POST /api/anal-points - Функция не найдена с ID: {}", pointDTO.getFunctionId());
-                    return new RuntimeException("Function not found");
+                    logger.error("POST /api/anal-points - Функция не найдена с ID: {}", createPointDTO.getFunctionId());
+                    return new RuntimeException("Function not found with id: " + createPointDTO.getFunctionId());
                 });
 
+        //y вычисляется
+        MathFunction mathFunction = mathFunctionFactory.createMathFunction(function);
+        Double calculatedY = mathFunction.apply(createPointDTO.getX());
+
+        logger.info("Вычислено значение Y: {} для X: {} с функцией: {} (тип: {})",
+                calculatedY, createPointDTO.getX(), function.getName(), function.getType());
+
         anal_points point = new anal_points();
-        point.setX(pointDTO.getX());
-        point.setY(pointDTO.getY());
+        point.setX(createPointDTO.getX());
+        point.setY(calculatedY);
         point.setFunction(function);
 
         anal_points saved = service.save(point);
@@ -95,23 +108,33 @@ public class AnalPointsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AnalPointsDTO> updatePoint(@PathVariable Long id, @RequestBody AnalPointsDTO pointDTO) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AnalPointsDTO> updatePoint(@PathVariable Long id, @RequestBody CreateAnalPointDTO updatePointDTO) {
         logger.info("PUT /api/anal-points/{} - Обновление точки", id);
 
+        // находим точку
         anal_points existingPoint = service.findById(id)
                 .orElseThrow(() -> {
                     logger.error("PUT /api/anal-points/{} - Точка не найдена", id);
                     return new RuntimeException("Point not found with id: " + id);
                 });
 
-        analFun function = analFunRepository.findById(pointDTO.getFunctionId())
+        //находим функцию
+        analFun function = analFunRepository.findById(updatePointDTO.getFunctionId())
                 .orElseThrow(() -> {
-                    logger.error("PUT /api/anal-points/{} - Функция не найдена с ID: {}", id, pointDTO.getFunctionId());
-                    return new RuntimeException("Function not found with id: " + pointDTO.getFunctionId());
+                    logger.error("PUT /api/anal-points/{} - Функция не найдена с ID: {}", id, updatePointDTO.getFunctionId());
+                    return new RuntimeException("Function not found with id: " + updatePointDTO.getFunctionId());
                 });
 
-        existingPoint.setX(pointDTO.getX());
-        existingPoint.setY(pointDTO.getY());
+
+        MathFunction mathFunction = mathFunctionFactory.createMathFunction(function);
+        Double calculatedY = mathFunction.apply(updatePointDTO.getX());
+
+        logger.info("Для X: {} вычислено Y: {} с функцией: {} (тип: {})",
+                updatePointDTO.getX(), calculatedY, function.getName(), function.getType());
+
+        existingPoint.setX(updatePointDTO.getX());
+        existingPoint.setY(calculatedY);
         existingPoint.setFunction(function);
 
         anal_points updated = service.save(existingPoint);
@@ -120,6 +143,7 @@ public class AnalPointsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletePoint(@PathVariable Long id) {
         logger.info("DELETE /api/anal-points/{} - Удаление точки", id);
         service.deleteById(id);

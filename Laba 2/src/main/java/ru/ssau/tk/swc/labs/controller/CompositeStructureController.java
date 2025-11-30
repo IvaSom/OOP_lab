@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.tk.swc.labs.dto.CompositeStructureDTO;
 import ru.ssau.tk.swc.labs.entity.composite_structure;
@@ -102,6 +103,7 @@ public class CompositeStructureController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CompositeStructureDTO> updateStructure(@PathVariable Long id, @RequestBody CompositeStructureDTO structureDTO) {
         logger.info("PUT /api/comp-structures/{} - Обновление композитной структуры", id);
 
@@ -133,6 +135,7 @@ public class CompositeStructureController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteStructure(@PathVariable Long id) {
         logger.info("DELETE /api/comp-structures/{} - Удаление композитной структуры", id);
         service.deleteById(id);

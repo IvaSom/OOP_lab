@@ -2,6 +2,7 @@ package ru.ssau.tk.swc.labs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.tk.swc.labs.dto.AnalFunDTO;
 import ru.ssau.tk.swc.labs.entity.analFun;
@@ -46,6 +47,7 @@ public class AnalFunController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public AnalFunDTO createFunction(@RequestBody analFun function) {
         logger.info("POST /api/anal-fun - Создание новой функции");
         analFun saved = service.save(function);
@@ -54,6 +56,7 @@ public class AnalFunController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AnalFunDTO> updateFunction(@PathVariable Long id, @RequestBody analFun function) {
         logger.info("PUT /api/anal-fun/{} - Обновление функции", id);
         function.setId(id);
@@ -63,6 +66,7 @@ public class AnalFunController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFunction(@PathVariable Long id) {
         logger.info("DELETE /api/anal-fun/{} - Удаление функции", id);
         service.deleteById(id);

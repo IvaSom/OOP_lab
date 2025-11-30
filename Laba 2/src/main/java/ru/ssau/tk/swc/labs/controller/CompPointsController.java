@@ -4,10 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.tk.swc.labs.dto.CompPointsDTO;
 import ru.ssau.tk.swc.labs.entity.comp_points;
+import ru.ssau.tk.swc.labs.functions.MathFunction;
 import ru.ssau.tk.swc.labs.service.CompPointsService;
+import ru.ssau.tk.swc.labs.service.CreateCompositeFunctionService;
 
 import ru.ssau.tk.swc.labs.dto.*;
 import ru.ssau.tk.swc.labs.entity.*;
@@ -27,6 +30,8 @@ public class CompPointsController {
     private CompPointsService service;
     @Autowired
     private CompFunRepository compFunRepository;
+    @Autowired
+    private CreateCompositeFunctionService createCompositeFunctionService;
 
     @GetMapping
     public List<CompPointsDTO> getAllPoints() {
@@ -75,29 +80,33 @@ public class CompPointsController {
             return ResponseEntity.notFound().build();
         }
     }
-
     @PostMapping
-    public CompPointsDTO createPoint(@RequestBody CompPointsDTO pointDTO) {
+    public CompPointsDTO createPoint(@RequestBody CompPointCreateDTO createDTO) {
         logger.info("POST /api/comp-points - Создание новой точки композитной функции");
 
-        compFun function = compFunRepository.findById(pointDTO.getFunctionId())
+        compFun function = compFunRepository.findById(createDTO.getFunctionId())
                 .orElseThrow(() -> {
-                    logger.error("POST /api/comp-points - Композитная функция не найдена с ID: {}", pointDTO.getFunctionId());
-                    return new RuntimeException("Composite function not found with id: " + pointDTO.getFunctionId());
+                    logger.error("POST /api/comp-points - Композитная функция не найдена с ID: {}", createDTO.getFunctionId());
+                    return new RuntimeException("Composite function not found with id: " + createDTO.getFunctionId());
                 });
 
+        MathFunction compositeMathFunction = createCompositeFunctionService.buildCompositeFunction(function);
+
+        Double calculatedY = compositeMathFunction.apply(createDTO.getX());
+
         comp_points point = new comp_points();
-        point.setX(pointDTO.getX());
-        point.setY(pointDTO.getY());
+        point.setX(createDTO.getX());
+        point.setY(calculatedY);
         point.setFunction(function);
 
         comp_points saved = service.save(point);
-        logger.info("POST /api/comp-points - Точка композитной функции создана с ID: {}", saved.getId());
+        logger.info("POST /api/comp-points - Точка композитной функции создана с ID: {}, вычислено y = {}", saved.getId(), calculatedY);
         return new CompPointsDTO(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CompPointsDTO> updatePoint(@PathVariable Long id, @RequestBody CompPointsDTO pointDTO) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CompPointsDTO> updatePoint(@PathVariable Long id, @RequestBody CompPointCreateDTO createDTO) {
         logger.info("PUT /api/comp-points/{} - Обновление точки композитной функции", id);
 
         comp_points existingPoint = service.findById(id)
@@ -106,22 +115,26 @@ public class CompPointsController {
                     return new RuntimeException("Composite point not found with id: " + id);
                 });
 
-        compFun function = compFunRepository.findById(pointDTO.getFunctionId())
+        compFun function = compFunRepository.findById(createDTO.getFunctionId())
                 .orElseThrow(() -> {
-                    logger.error("PUT /api/comp-points/{} - Композитная функция не найдена с ID: {}", id, pointDTO.getFunctionId());
-                    return new RuntimeException("Composite function not found with id: " + pointDTO.getFunctionId());
+                    logger.error("PUT /api/comp-points/{} - Композитная функция не найдена с ID: {}", id, createDTO.getFunctionId());
+                    return new RuntimeException("Composite function not found with id: " + createDTO.getFunctionId());
                 });
 
-        existingPoint.setX(pointDTO.getX());
-        existingPoint.setY(pointDTO.getY());
+        MathFunction compositeMathFunction = createCompositeFunctionService.buildCompositeFunction(function);
+        Double calculatedY = compositeMathFunction.apply(createDTO.getX());
+
+        existingPoint.setX(createDTO.getX());
+        existingPoint.setY(calculatedY);
         existingPoint.setFunction(function);
 
         comp_points updated = service.save(existingPoint);
-        logger.info("PUT /api/comp-points/{} - Точка композитной функции успешно обновлена", id);
+        logger.info("PUT /api/comp-points/{} - Точка композитной функции успешно обновлена, вычислено y = {}", id, calculatedY);
         return ResponseEntity.ok(new CompPointsDTO(updated));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deletePoint(@PathVariable Long id) {
         logger.info("DELETE /api/comp-points/{} - Удаление точки композитной функции", id);
         service.deleteById(id);
