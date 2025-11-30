@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ssau.tk.swc.labs.entity.users;
@@ -28,6 +30,7 @@ class UsersServiceTest {
     private UserRepository userRepository;
 
     private UsersService usersService;
+    private PasswordEncoder passwordEncoder;
 
     private users user1;
     private users user2;
@@ -35,7 +38,8 @@ class UsersServiceTest {
 
     @BeforeEach
     void setUp() {
-        usersService = new UsersService(userRepository);
+        passwordEncoder = new BCryptPasswordEncoder();
+        usersService = new UsersService(userRepository, passwordEncoder);
 
         userRepository.deleteAll();
 
@@ -97,25 +101,12 @@ class UsersServiceTest {
     }
 
     @Test
-    void testAuthenticateUserSuccess() {
-        Optional<users> result = usersService.authenticateUser("ivanov", "password123");
+    void testPasswordHashing() {
+        String rawPassword = "testpassword";
+        users testUser = new users("Тест", "testuser", "test@mail.ru", rawPassword);
+        users savedUser = usersService.save(testUser);
 
-        assertTrue(result.isPresent(), "Аутентификация должна быть успешной");
-        assertEquals("ivanov", result.get().getLogin(), "Логин должен быть 'ivanov'");
-    }
-
-    @Test
-    void testAuthenticateUserWrongPassword() {
-        Optional<users> result = usersService.authenticateUser("ivanov", "wrongpassword");
-
-        assertFalse(result.isPresent(), "Аутентификация должна провалиться при неверном пароле");
-    }
-
-    @Test
-    void testAuthenticateUserWrongLogin() {
-        Optional<users> result = usersService.authenticateUser("unknown", "password123");
-
-        assertFalse(result.isPresent(), "Аутентификация должна провалиться при неверном логине");
+        assertNotEquals(rawPassword, savedUser.getPassword(), "Пароль должен быть захеширован");
     }
 
     @Test

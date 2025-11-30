@@ -5,11 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.ssau.tk.swc.labs.dto.UserAuthDTO;
-import ru.ssau.tk.swc.labs.dto.UserDTO;
+import ru.ssau.tk.swc.labs.dto.*;
 import ru.ssau.tk.swc.labs.entity.users;
 import ru.ssau.tk.swc.labs.service.UsersService;
 
+import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -72,19 +72,6 @@ public class UsersController {
         }
     }
 
-    @PostMapping("/auth")
-    public ResponseEntity<UserDTO> authenticateUser(@RequestBody UserAuthDTO authDTO) {
-        logger.info("POST /api/users/auth - Аутентификация пользователя с логином: {}", authDTO.getLogin());
-        Optional<users> user = service.authenticateUser(authDTO.getLogin(), authDTO.getPassword());
-        if (user.isPresent()) {
-            logger.info("POST /api/users/auth - Пользователь '{}' успешно аутентифицирован", authDTO.getLogin());
-            return ResponseEntity.ok(new UserDTO(user.get()));
-        } else {
-            logger.warn("POST /api/users/auth - Неудачная аутентификация для логина: {}", authDTO.getLogin());
-            return ResponseEntity.status(401).build();
-        }
-    }
-
     @PostMapping("/check-login")
     public ResponseEntity<Boolean> checkLoginExists(@RequestParam String login) {
         logger.info("POST /api/users/check-login - Проверка существования логина: {}", login);
@@ -100,19 +87,25 @@ public class UsersController {
         logger.info("POST /api/users/check-email - Email '{}' {}существует", email, exists ? "" : "не ");
         return ResponseEntity.ok(exists);
     }
-
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody users user) {
-        logger.info("POST /api/users/register - Регистрация нового пользователя с логином: {}", user.getLogin());
+    public ResponseEntity<UserDTO> registerUser(@RequestBody UserCreateDTO userCreateDTO) {
+        logger.info("POST /api/users/register - Регистрация нового пользователя с логином: {}", userCreateDTO.getLogin());
 
-        if (service.isLoginExists(user.getLogin())) {
-            logger.warn("POST /api/users/register - Логин '{}' уже существует", user.getLogin());
+        if (service.isLoginExists(userCreateDTO.getLogin())) {
+            logger.warn("POST /api/users/register - Логин '{}' уже существует", userCreateDTO.getLogin());
             return ResponseEntity.badRequest().build();
         }
-        if (service.isEmailExists(user.getEmail())) {
-            logger.warn("POST /api/users/register - Email '{}' уже существует", user.getEmail());
+        if (service.isEmailExists(userCreateDTO.getEmail())) {
+            logger.warn("POST /api/users/register - Email '{}' уже существует", userCreateDTO.getEmail());
             return ResponseEntity.badRequest().build();
         }
+
+        users user = new users();
+        user.setName(userCreateDTO.getName());
+        user.setLogin(userCreateDTO.getLogin());
+        user.setEmail(userCreateDTO.getEmail());
+        user.setPassword(userCreateDTO.getPassword());
+        user.setRole(userCreateDTO.getRole());
 
         users savedUser = service.save(user);
         logger.info("POST /api/users/register - Пользователь успешно зарегистрирован с ID: {}", savedUser.getId());
