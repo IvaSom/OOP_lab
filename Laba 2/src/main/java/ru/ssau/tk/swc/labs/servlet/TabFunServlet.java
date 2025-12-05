@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/api/tab-functions/*")
+@WebServlet("/api/tab-fun/*")
 public class TabFunServlet extends HttpServlet {
     private TabFunDAO tabFunDAO;
     private ObjectMapper objectMapper;
