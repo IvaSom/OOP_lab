@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@WebServlet("/api/anal-fun/*")
 public class AnalFunServlet extends HttpServlet {
     private AnalFunDAO analFunDAO;
     private ObjectMapper objectMapper;

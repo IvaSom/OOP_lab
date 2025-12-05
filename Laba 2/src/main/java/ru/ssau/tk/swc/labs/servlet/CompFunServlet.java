@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@WebServlet("/api/comp-fun/*")
 public class CompFunServlet extends HttpServlet {
     private CompFunDAO compFunDAO;
     private ObjectMapper objectMapper;

@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@WebServlet("/api/comp-structures/*")
 public class CompositeStructureServlet extends HttpServlet {
     private CompositeStructureDAO compositeStructureDAO;
     private ObjectMapper objectMapper;
