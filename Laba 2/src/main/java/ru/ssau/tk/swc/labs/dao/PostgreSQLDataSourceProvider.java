@@ -14,7 +14,7 @@ public class PostgreSQLDataSourceProvider implements DataSourceProvider {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("PostgreSQL Driver not found ", e);
+            throw new RuntimeException("PostgreSQL Driver not found", e);
         }
     }
 
