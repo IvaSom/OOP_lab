@@ -1,0 +1,2526 @@
+{
+  "info": {
+    "_postman_id": "manual-branch-tests",
+    "name": "Manual",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Тесты для manual ветки (Tomcat + Servlets)"
+  },
+  "item": [
+    {
+      "name": "Analytic Functions API",
+      "item": [
+        {
+          "name": "GET All Analytic Functions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test('Response time < 1000ms', function() {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1000);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-fun",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-fun"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Analytic Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has ID', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "});",
+                  "",
+                  "pm.environment.set('anal_fun_id', response.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"test_sin_function\",\n    \"type\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-fun",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-fun"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Analytic Function by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-fun/{{anal_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-fun", "{{anal_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Analytic Function",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"updated_sin_function\",\n    \"type\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-fun/{{anal_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-fun", "{{anal_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Analytic Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-fun/{{anal_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-fun", "{{anal_fun_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Analytic Points API",
+      "item": [
+        {
+          "name": "GET All Analytic Points",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-points",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-points"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Analytic Point",
+          "event": [
+            {
+              "listen": "pre-request",
+              "script": {
+                "exec": [
+                  "// Генерируем тестовые данные",
+                  "const x = Math.random() * 100;",
+                  "const y = Math.sin(x);",
+                  "const derive = Math.cos(x);",
+                  "",
+                  "pm.variables.set('test_x', x.toFixed(2));",
+                  "pm.variables.set('test_y', y.toFixed(4));",
+                  "pm.variables.set('test_derive', derive.toFixed(4));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"x\": {{test_x}},\n    \"y\": {{test_y}},\n    \"derive\": {{test_derive}},\n    \"funID\": {{anal_fun_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-points",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-points"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Analytic Point by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has correct structure', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('x');",
+                  "    pm.expect(response).to.have.property('y');",
+                  "    pm.expect(response).to.have.property('derive');",
+                  "    pm.expect(response).to.have.property('funID');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-points/{{anal_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-points", "{{anal_point_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Points by Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "pm.test('All points belong to specified function', function() {",
+                  "    response.forEach(point => {",
+                  "        pm.expect(point.funID).to.equal(pm.variables.get('anal_fun_id'));",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-points/function/{{anal_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-points", "function", "{{anal_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Point by X and Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Point has correct X value', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('test_x')));",
+                  "});",
+                  "pm.test('Point belongs to correct function', function() {",
+                  "    pm.expect(response.funID).to.equal(pm.variables.get('anal_fun_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-points/search?x={{test_x}}&funID={{anal_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-points", "search"],
+              "query": [
+                {
+                  "key": "x",
+                  "value": "{{test_x}}"
+                },
+                {
+                  "key": "funID",
+                  "value": "{{anal_fun_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Analytic Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Point was updated', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('updated_x')));",
+                  "    pm.expect(response.y).to.equal(parseFloat(pm.variables.get('updated_y')));",
+                  "    pm.expect(response.derive).to.equal(parseFloat(pm.variables.get('updated_derive')));",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем обновленные данные",
+                  "const updatedX = Math.random() * 100;",
+                  "const updatedY = Math.sin(updatedX);",
+                  "const updatedDerive = Math.cos(updatedX);",
+                  "",
+                  "pm.variables.set('updated_x', updatedX.toFixed(2));",
+                  "pm.variables.set('updated_y', updatedY.toFixed(4));",
+                  "pm.variables.set('updated_derive', updatedDerive.toFixed(4));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"x\": {{updated_x}},\n    \"y\": {{updated_y}},\n    \"derive\": {{updated_derive}},\n    \"funID\": {{anal_fun_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-points/{{anal_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-points", "{{anal_point_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Analytic Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/anal-points/{{anal_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "anal-points", "{{anal_point_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tab Functions API",
+      "item": [
+        {
+          "name": "GET All Tab Functions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-fun",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-fun"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Tab Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has ID', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "});",
+                  "pm.test('Response has name', function() {",
+                  "    pm.expect(response).to.have.property('name');",
+                  "});",
+                  "",
+                  "pm.environment.set('tab_fun_id', response.id);",
+                  "pm.environment.set('tab_fun_name', response.name);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем уникальное имя для функции",
+                  "const timestamp = Date.now();",
+                  "pm.variables.set('tab_fun_name_var', 'test_tab_function_' + timestamp);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"linear\",\n    \"name\": \"{{tab_fun_name_var}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-fun",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-fun"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Tab Function by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has correct structure', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('type');",
+                  "    pm.expect(response).to.have.property('name').that.is.a('string');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-fun/{{tab_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-fun", "{{tab_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Tab Function by Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Function has correct name', function() {",
+                  "    pm.expect(response.name).to.equal(pm.variables.get('tab_fun_name'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-fun/name/{{tab_fun_name}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-fun", "name", "{{tab_fun_name}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Tab Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Function was updated', function() {",
+                  "    pm.expect(response.type).to.equal('quadratic');",
+                  "    pm.expect(response.name).to.equal(pm.variables.get('updated_tab_fun_name'));",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем обновленные данные",
+                  "const updatedName = 'updated_tab_function_' + Date.now();",
+                  "pm.variables.set('updated_tab_fun_name', updatedName);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"quadratic\",\n    \"name\": \"{{updated_tab_fun_name}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-fun/{{tab_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-fun", "{{tab_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Tab Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-fun/{{tab_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-fun", "{{tab_fun_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tab Points API",
+      "item": [
+        {
+          "name": "GET All Tab Points",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-points",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-points"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Tab Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has ID', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "});",
+                  "pm.test('Response has correct values', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('tab_point_x')));",
+                  "    pm.expect(response.y).to.equal(parseFloat(pm.variables.get('tab_point_y')));",
+                  "    pm.expect(response.funID).to.equal(parseInt(pm.variables.get('tab_fun_id')));",
+                  "});",
+                  "",
+                  "pm.environment.set('tab_point_id', response.id);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем тестовые данные для табличной точки",
+                  "const x = Math.random() * 100;",
+                  "const y = 2 * x + 3; // линейная функция",
+                  "",
+                  "pm.variables.set('tab_point_x', x.toFixed(2));",
+                  "pm.variables.set('tab_point_y', y.toFixed(4));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"x\": {{tab_point_x}},\n    \"y\": {{tab_point_y}},\n    \"funID\": {{tab_fun_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-points",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-points"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Tab Point by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has correct structure', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('x');",
+                  "    pm.expect(response).to.have.property('y');",
+                  "    pm.expect(response).to.have.property('funID');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-points/{{tab_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-points", "{{tab_point_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Points by Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "pm.test('All points belong to specified function', function() {",
+                  "    response.forEach(point => {",
+                  "        pm.expect(point.funID).to.equal(pm.variables.get('tab_fun_id'));",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-points/function/{{tab_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-points", "function", "{{tab_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Tab Point by X and Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Point has correct X value', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('tab_point_x')));",
+                  "});",
+                  "pm.test('Point belongs to correct function', function() {",
+                  "    pm.expect(response.funID).to.equal(pm.variables.get('tab_fun_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-points/search?x={{tab_point_x}}&funID={{tab_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-points", "search"],
+              "query": [
+                {
+                  "key": "x",
+                  "value": "{{tab_point_x}}"
+                },
+                {
+                  "key": "funID",
+                  "value": "{{tab_fun_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Tab Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Point was updated', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('updated_tab_point_x')));",
+                  "    pm.expect(response.y).to.equal(parseFloat(pm.variables.get('updated_tab_point_y')));",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем обновленные данные",
+                  "const updatedX = Math.random() * 100;",
+                  "const updatedY = 3 * updatedX - 5; // новая линейная функция",
+                  "",
+                  "pm.variables.set('updated_tab_point_x', updatedX.toFixed(2));",
+                  "pm.variables.set('updated_tab_point_y', updatedY.toFixed(4));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"x\": {{updated_tab_point_x}},\n    \"y\": {{updated_tab_point_y}},\n    \"funID\": {{tab_fun_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-points/{{tab_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-points", "{{tab_point_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Tab Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/tab-points/{{tab_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "tab-points", "{{tab_point_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Composite Functions API",
+      "item": [
+        {
+          "name": "GET All Composite Functions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-fun",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-fun"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Composite Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has ID', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "});",
+                  "pm.test('Response has name and type', function() {",
+                  "    pm.expect(response).to.have.property('name');",
+                  "    pm.expect(response).to.have.property('type');",
+                  "});",
+                  "",
+                  "pm.environment.set('comp_fun_id', response.id);",
+                  "pm.environment.set('comp_fun_name', response.name);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем уникальное имя для композитной функции",
+                  "const timestamp = Date.now();",
+                  "pm.variables.set('comp_fun_name_var', 'composite_function_' + timestamp);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{comp_fun_name_var}}\",\n    \"type\": \"addition\",\n    \"description\": \"Test composite function\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-fun",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-fun"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Composite Function by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has correct structure', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('name');",
+                  "    pm.expect(response).to.have.property('type');",
+                  "    pm.expect(response).to.have.property('description');",
+                  "});",
+                  "pm.test('ID matches requested', function() {",
+                  "    pm.expect(response.id).to.equal(pm.variables.get('comp_fun_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-fun/{{comp_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-fun", "{{comp_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Composite Function by Name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Function has correct name', function() {",
+                  "    pm.expect(response.name).to.equal(pm.variables.get('comp_fun_name'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-fun/name/{{comp_fun_name}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-fun", "name", "{{comp_fun_name}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Composite Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Function was updated', function() {",
+                  "    pm.expect(response.type).to.equal('multiplication');",
+                  "    pm.expect(response.description).to.equal('Updated composite function');",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем обновленное имя",
+                  "const updatedName = 'updated_composite_' + Date.now();",
+                  "pm.variables.set('updated_comp_fun_name', updatedName);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{updated_comp_fun_name}}\",\n    \"type\": \"multiplication\",\n    \"description\": \"Updated composite function\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-fun/{{comp_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-fun", "{{comp_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Composite Function",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-fun/{{comp_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-fun", "{{comp_fun_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Composite Points API",
+      "item": [
+        {
+          "name": "GET All Composite Points",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-points",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-points"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Composite Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has ID', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "});",
+                  "pm.test('Response has correct values', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('comp_point_x')));",
+                  "    pm.expect(response.y).to.equal(parseFloat(pm.variables.get('comp_point_y')));",
+                  "    pm.expect(response.funID).to.equal(parseInt(pm.variables.get('comp_fun_id')));",
+                  "});",
+                  "",
+                  "pm.environment.set('comp_point_id', response.id);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем тестовые данные для композитной точки",
+                  "const x = Math.random() * 100;",
+                  "// Для композитной функции типа addition: y = x + sin(x)",
+                  "const y = x + Math.sin(x);",
+                  "",
+                  "pm.variables.set('comp_point_x', x.toFixed(2));",
+                  "pm.variables.set('comp_point_y', y.toFixed(4));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"x\": {{comp_point_x}},\n    \"y\": {{comp_point_y}},\n    \"funID\": {{comp_fun_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-points",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-points"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Composite Point by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has correct structure', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('x');",
+                  "    pm.expect(response).to.have.property('y');",
+                  "    pm.expect(response).to.have.property('funID');",
+                  "});",
+                  "pm.test('ID matches requested', function() {",
+                  "    pm.expect(response.id).to.equal(pm.variables.get('comp_point_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-points/{{comp_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-points", "{{comp_point_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Points by Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "pm.test('All points belong to specified function', function() {",
+                  "    response.forEach(point => {",
+                  "        pm.expect(point.funID).to.equal(pm.variables.get('comp_fun_id'));",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-points/function/{{comp_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-points", "function", "{{comp_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Composite Point by X and Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Point has correct X value', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('comp_point_x')));",
+                  "});",
+                  "pm.test('Point belongs to correct function', function() {",
+                  "    pm.expect(response.funID).to.equal(pm.variables.get('comp_fun_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-points/search?x={{comp_point_x}}&funID={{comp_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-points", "search"],
+              "query": [
+                {
+                  "key": "x",
+                  "value": "{{comp_point_x}}"
+                },
+                {
+                  "key": "funID",
+                  "value": "{{comp_fun_id}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Composite Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Point was updated', function() {",
+                  "    pm.expect(response.x).to.equal(parseFloat(pm.variables.get('updated_comp_point_x')));",
+                  "    pm.expect(response.y).to.equal(parseFloat(pm.variables.get('updated_comp_point_y')));",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем обновленные данные для композитной точки",
+                  "const updatedX = Math.random() * 100;",
+                  "// Для композитной функции типа multiplication: y = x * sin(x)",
+                  "const updatedY = updatedX * Math.sin(updatedX);",
+                  "",
+                  "pm.variables.set('updated_comp_point_x', updatedX.toFixed(2));",
+                  "pm.variables.set('updated_comp_point_y', updatedY.toFixed(4));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"x\": {{updated_comp_point_x}},\n    \"y\": {{updated_comp_point_y}},\n    \"funID\": {{comp_fun_id}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-points/{{comp_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-points", "{{comp_point_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Composite Point",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-points/{{comp_point_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-points", "{{comp_point_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Composite Structures API",
+      "item": [
+        {
+          "name": "GET All Composite Structures",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-structures",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-structures"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Composite Structure",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has ID', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "});",
+                  "pm.test('Response has correct structure', function() {",
+                  "    pm.expect(response).to.have.property('compositeFunctionID');",
+                  "    pm.expect(response).to.have.property('analyticFunctionID');",
+                  "    pm.expect(response).to.have.property('tabFunctionID');",
+                  "    pm.expect(response).to.have.property('weight').that.is.a('number');",
+                  "});",
+                  "",
+                  "pm.environment.set('comp_structure_id', response.id);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Убедимся, что у нас есть все необходимые ID функций",
+                  "console.log('Using composite function ID:', pm.variables.get('comp_fun_id'));",
+                  "console.log('Using analytic function ID:', pm.variables.get('anal_fun_id'));",
+                  "console.log('Using tab function ID:', pm.variables.get('tab_fun_id'));",
+                  "",
+                  "// Генерируем случайный вес для структуры",
+                  "const weight = (Math.random() * 2).toFixed(2);",
+                  "pm.variables.set('comp_structure_weight', weight);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"compositeFunctionID\": {{comp_fun_id}},\n    \"analyticFunctionID\": {{anal_fun_id}},\n    \"tabFunctionID\": {{tab_fun_id}},\n    \"weight\": {{comp_structure_weight}},\n    \"description\": \"Test composite structure\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-structures",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-structures"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Composite Structure by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has correct structure', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('compositeFunctionID');",
+                  "    pm.expect(response).to.have.property('analyticFunctionID');",
+                  "    pm.expect(response).to.have.property('tabFunctionID');",
+                  "    pm.expect(response).to.have.property('weight');",
+                  "    pm.expect(response).to.have.property('description');",
+                  "});",
+                  "pm.test('ID matches requested', function() {",
+                  "    pm.expect(response.id).to.equal(pm.variables.get('comp_structure_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-structures/{{comp_structure_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-structures", "{{comp_structure_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Structures by Composite Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "pm.test('All structures belong to specified composite function', function() {",
+                  "    response.forEach(structure => {",
+                  "        pm.expect(structure.compositeFunctionID).to.equal(pm.variables.get('comp_fun_id'));",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-structures/composite/{{comp_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-structures", "composite", "{{comp_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET Structures by Analytic Function ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});",
+                  "pm.test('All structures belong to specified analytic function', function() {",
+                  "    response.forEach(structure => {",
+                  "        pm.expect(structure.analyticFunctionID).to.equal(pm.variables.get('anal_fun_id'));",
+                  "    });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-structures/analytic/{{anal_fun_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-structures", "analytic", "{{anal_fun_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update Composite Structure",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Structure was updated', function() {",
+                  "    pm.expect(response.weight).to.equal(parseFloat(pm.variables.get('updated_comp_structure_weight')));",
+                  "    pm.expect(response.description).to.equal('Updated composite structure');",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем обновленный вес",
+                  "const updatedWeight = (Math.random() * 3).toFixed(2);",
+                  "pm.variables.set('updated_comp_structure_weight', updatedWeight);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"compositeFunctionID\": {{comp_fun_id}},\n    \"analyticFunctionID\": {{anal_fun_id}},\n    \"tabFunctionID\": {{tab_fun_id}},\n    \"weight\": {{updated_comp_structure_weight}},\n    \"description\": \"Updated composite structure\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-structures/{{comp_structure_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-structures", "{{comp_structure_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Composite Structure",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/comp-structures/{{comp_structure_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "comp-structures", "{{comp_structure_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users API",
+      "item": [
+        {
+          "name": "GET All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response is array', function() {",
+                  "    pm.expect(response).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201 Created', function() {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has ID and user data', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('name');",
+                  "    pm.expect(response).to.have.property('login');",
+                  "    pm.expect(response).to.have.property('email');",
+                  "});",
+                  "",
+                  "pm.environment.set('user_id', response.id);",
+                  "pm.environment.set('user_login', response.login);",
+                  "pm.environment.set('user_email', response.email);",
+                  "pm.environment.set('user_password', 'test123');"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем уникальные данные для пользователя",
+                  "const timestamp = Date.now();",
+                  "pm.variables.set('user_name_var', 'Test User ' + timestamp);",
+                  "pm.variables.set('user_login_var', 'testuser' + timestamp);",
+                  "pm.variables.set('user_email_var', 'test' + timestamp + '@example.com');"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{user_name_var}}\",\n    \"login\": \"{{user_login_var}}\",\n    \"email\": \"{{user_email_var}}\",\n    \"password\": \"test123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Authenticate User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Authentication successful', function() {",
+                  "    pm.expect(response).to.have.property('success').that.is.true;",
+                  "    pm.expect(response).to.have.property('token');",
+                  "});",
+                  "",
+                  "// Сохраняем токен для последующих запросов",
+                  "if (response.token) {",
+                  "    pm.environment.set('auth_token', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"login\": \"{{user_login}}\",\n    \"password\": \"{{user_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/auth",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "auth"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET User by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response has user data', function() {",
+                  "    pm.expect(response).to.have.property('id');",
+                  "    pm.expect(response).to.have.property('name');",
+                  "    pm.expect(response).to.have.property('login');",
+                  "    pm.expect(response).to.have.property('email');",
+                  "});",
+                  "pm.test('ID matches requested', function() {",
+                  "    pm.expect(response.id).to.equal(pm.variables.get('user_id'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/{{user_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET User by Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('User has correct login', function() {",
+                  "    pm.expect(response.login).to.equal(pm.variables.get('user_login'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/login/{{user_login}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "login", "{{user_login}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET User by Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('User has correct email', function() {",
+                  "    pm.expect(response.email).to.equal(pm.variables.get('user_email'));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/email/{{user_email}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "email", "{{user_email}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Check Login Exists",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response indicates login exists', function() {",
+                  "    pm.expect(response).to.have.property('exists').that.is.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"login\": \"{{user_login}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/check-login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "check-login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Check Email Exists",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('Response indicates email exists', function() {",
+                  "    pm.expect(response).to.have.property('exists').that.is.true;",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"{{user_email}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/check-email",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "check-email"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Update User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200 OK', function() {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "pm.test('User was updated', function() {",
+                  "    pm.expect(response.name).to.equal(pm.variables.get('updated_user_name'));",
+                  "});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// Генерируем обновленные данные",
+                  "const updatedName = 'Updated User ' + Date.now();",
+                  "pm.variables.set('updated_user_name', updatedName);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"{{updated_user_name}}\",\n    \"email\": \"{{user_email}}\",\n    \"password\": \"newpassword456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/{{user_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 204 No Content', function() {",
+                  "    pm.response.to.have.status(204);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/laba6-manual/api/users/{{user_id}}",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["laba6-manual", "api", "users", "{{user_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
