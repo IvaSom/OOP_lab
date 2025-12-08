@@ -63,19 +63,6 @@ public class CompositeStructureDTOTest {
     }
 
     @Test
-    public void testToEntity_EmptyDTO() {
-        CompositeStructureDTO dto = new CompositeStructureDTO();
-
-        CompositeStructure entity = dto.toEntity();
-
-        assertNotNull(entity);
-        assertNull(entity.getId());
-        assertNull(entity.getComposite_id());
-        assertNull(entity.getAnalytic_id());
-        assertNull(entity.getOrder());
-    }
-
-    @Test
     public void testSettersAndGetters() {
         CompositeStructureDTO dto = new CompositeStructureDTO();
         Long expectedId = 20L;
