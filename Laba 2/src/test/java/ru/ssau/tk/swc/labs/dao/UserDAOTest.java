@@ -15,7 +15,6 @@ public class UserDAOTest {
 
     @BeforeEach
     public void setup() throws Exception {
-        // Генерируем уникальное имя БД для каждого теста
         dbName = "testdb_" + System.currentTimeMillis() + "_" + Math.random();
 
         try (Connection setupConn = DriverManager.getConnection(
@@ -56,7 +55,6 @@ public class UserDAOTest {
     public void testBasicCRUD() {
         System.out.println("=== Тест Basic CRUD для User ===");
 
-        // CREATE
         User user = new User();
         user.setName("Иван Иванов");
         user.setLogin("ivanov");
@@ -67,7 +65,6 @@ public class UserDAOTest {
         System.out.println("Создан пользователь с ID: " + id);
         assertNotNull(id, "ID не должен быть null");
 
-        // READ by ID
         Optional<User> found = dao.findByID(id);
         System.out.println("Найден по ID: " + found.isPresent());
         assertTrue(found.isPresent(), "Пользователь должен быть найден по ID");
@@ -76,17 +73,14 @@ public class UserDAOTest {
         assertEquals("ivanov@example.com", found.get().getEmail());
         assertEquals("password123", found.get().getPassword());
 
-        // READ by Login
         Optional<User> foundByLogin = dao.findByLogin("ivanov");
         System.out.println("Найден по логину: " + foundByLogin.isPresent());
         assertTrue(foundByLogin.isPresent(), "Пользователь должен быть найден по логину");
 
-        // READ by Email
         Optional<User> foundByEmail = dao.findByEmail("ivanov@example.com");
         System.out.println("Найден по email: " + foundByEmail.isPresent());
         assertTrue(foundByEmail.isPresent(), "Пользователь должен быть найден по email");
 
-        // DELETE
         boolean deleted = dao.delete(id);
         System.out.println("Удален: " + deleted);
         assertTrue(deleted, "Пользователь должен быть удален");
@@ -109,18 +103,15 @@ public class UserDAOTest {
         Long id = dao.create(user);
         assertNotNull(id, "Пользователь должен быть создан");
 
-        // Правильные логин и пароль
         Optional<User> authenticated = dao.findByLoginAndPassword("petrov", "securePass");
         System.out.println("Аутентификация с правильными данными: " + authenticated.isPresent());
         assertTrue(authenticated.isPresent(), "Пользователь должен быть аутентифицирован");
         assertEquals(id, authenticated.get().getId());
 
-        // Неправильный пароль
         Optional<User> wrongPassword = dao.findByLoginAndPassword("petrov", "wrongPass");
         System.out.println("Аутентификация с неправильным паролем: " + wrongPassword.isPresent());
         assertFalse(wrongPassword.isPresent(), "Пользователь не должен быть аутентифицирован с неправильным паролем");
 
-        // Несуществующий логин
         Optional<User> wrongLogin = dao.findByLoginAndPassword("nonexistent", "securePass");
         System.out.println("Аутентификация с неправильным логином: " + wrongLogin.isPresent());
         assertFalse(wrongLogin.isPresent(), "Несуществующий пользователь не должен быть аутентифицирован");
@@ -140,17 +131,14 @@ public class UserDAOTest {
         assertNotNull(id, "Пользователь должен быть создан");
         user.setId(id);
 
-        // Обновляем пароль
         user.setPassword("newSecurePassword");
         boolean updated = dao.updatePassword(user);
         System.out.println("Пароль обновлен: " + updated);
         assertTrue(updated, "Пароль должен быть обновлен");
 
-        // Проверяем, что новый пароль работает
         Optional<User> authenticated = dao.findByLoginAndPassword("smirnov", "newSecurePassword");
         assertTrue(authenticated.isPresent(), "Должна работать аутентификация с новым паролем");
 
-        // Старый пароль не должен работать
         Optional<User> oldPasswordAuth = dao.findByLoginAndPassword("smirnov", "oldPassword");
         assertFalse(oldPasswordAuth.isPresent(), "Старый пароль не должен работать");
     }
@@ -169,18 +157,15 @@ public class UserDAOTest {
         assertNotNull(id, "Пользователь должен быть создан");
         user.setId(id);
 
-        // Обновляем email
         user.setEmail("new@example.com");
         boolean updated = dao.updateEmail(user);
         System.out.println("Email обновлен: " + updated);
         assertTrue(updated, "Email должен быть обновлен");
 
-        // Проверяем поиск по новому email
         Optional<User> foundByNewEmail = dao.findByEmail("new@example.com");
         assertTrue(foundByNewEmail.isPresent(), "Пользователь должен быть найден по новому email");
         assertEquals(id, foundByNewEmail.get().getId());
 
-        // Старый email не должен находиться
         Optional<User> foundByOldEmail = dao.findByEmail("old@example.com");
         assertFalse(foundByOldEmail.isPresent(), "Пользователь не должен быть найден по старому email");
     }
@@ -199,22 +184,18 @@ public class UserDAOTest {
         assertNotNull(id, "Пользователь должен быть создан");
         user.setId(id);
 
-        // Обновляем логин
         user.setLogin("newlogin");
         boolean updated = dao.updateLogin(user);
         System.out.println("Логин обновлен: " + updated);
         assertTrue(updated, "Логин должен быть обновлен");
 
-        // Проверяем поиск по новому логину
         Optional<User> foundByNewLogin = dao.findByLogin("newlogin");
         assertTrue(foundByNewLogin.isPresent(), "Пользователь должен быть найден по новому логину");
         assertEquals(id, foundByNewLogin.get().getId());
 
-        // Старый логин не должен находиться
         Optional<User> foundByOldLogin = dao.findByLogin("oldlogin");
         assertFalse(foundByOldLogin.isPresent(), "Пользователь не должен быть найден по старому логину");
 
-        // Проверяем аутентификацию с новым логином
         Optional<User> authenticated = dao.findByLoginAndPassword("newlogin", "password");
         assertTrue(authenticated.isPresent(), "Должна работать аутентификация с новым логином");
     }
@@ -233,13 +214,11 @@ public class UserDAOTest {
         assertNotNull(id, "Пользователь должен быть создан");
         user.setId(id);
 
-        // Обновляем имя
         user.setName("Новое Имя");
         boolean updated = dao.updateName(user);
         System.out.println("Имя обновлено: " + updated);
         assertTrue(updated, "Имя должно быть обновлено");
 
-        // Проверяем, что имя изменилось
         Optional<User> found = dao.findByID(id);
         assertTrue(found.isPresent(), "Пользователь должен быть найден");
         assertEquals("Новое Имя", found.get().getName());
@@ -249,7 +228,6 @@ public class UserDAOTest {
     public void testUniqueConstraints() {
         System.out.println("\n=== Тест уникальных ограничений для User ===");
 
-        // Создаем первого пользователя
         User user1 = new User();
         user1.setName("Первый Пользователь");
         user1.setLogin("unique1");
@@ -259,10 +237,9 @@ public class UserDAOTest {
         Long id1 = dao.create(user1);
         assertNotNull(id1, "Первый пользователь должен быть создан");
 
-        // Попытка создать пользователя с тем же логином (должно вернуть null)
         User user2 = new User();
         user2.setName("Второй Пользователь");
-        user2.setLogin("unique1"); // Дубликат логина
+        user2.setLogin("unique1");
         user2.setEmail("unique2@example.com");
         user2.setPassword("pass2");
 
@@ -270,11 +247,10 @@ public class UserDAOTest {
         System.out.println("Создание с дубликатом логина: " + id2);
         assertNull(id2, "Не должен быть создан пользователь с дублирующимся логином");
 
-        // Попытка создать пользователя с тем же email (должно вернуть null)
         User user3 = new User();
         user3.setName("Третий Пользователь");
         user3.setLogin("unique3");
-        user3.setEmail("unique1@example.com"); // Дубликат email
+        user3.setEmail("unique1@example.com");
         user3.setPassword("pass3");
 
         Long id3 = dao.create(user3);
@@ -286,7 +262,6 @@ public class UserDAOTest {
     public void testFindAll() {
         System.out.println("\n=== Тест FindAll для User ===");
 
-        // Создаем несколько пользователей
         String[] names = {"Александр", "Борис", "Вадим"};
 
         for (int i = 0; i < names.length; i++) {
@@ -305,12 +280,10 @@ public class UserDAOTest {
         System.out.println("Всего пользователей: " + all.size());
         assertEquals(3, all.size(), "Должно быть 3 пользователя");
 
-        // Проверяем сортировку по имени
         System.out.println("Список пользователей (должен быть отсортирован по имени):");
         for (int i = 0; i < all.size(); i++) {
             System.out.println("  " + all.get(i).getName());
             if (i > 0) {
-                // Проверяем, что имена отсортированы
                 assertTrue(all.get(i).getName().compareTo(all.get(i-1).getName()) >= 0,
                         "Пользователи должны быть отсортированы по имени");
             }
@@ -330,7 +303,6 @@ public class UserDAOTest {
         Long id = dao.create(user);
         assertNotNull(id, "Пользователь должен быть создан");
 
-        // Проверяем поиск с разным регистром (обычно БД нечувствительна к регистру для сравнения строк)
         Optional<User> foundLowerLogin = dao.findByLogin("testuser");
         Optional<User> foundUpperLogin = dao.findByLogin("TESTUSER");
 
@@ -347,18 +319,14 @@ public class UserDAOTest {
     public void testEmptyAndNullValues() {
         System.out.println("\n=== Тест пустых и null значений для User ===");
 
-        // Тест с пустым именем
         User user1 = new User();
-        user1.setName(""); // Пустое имя
+        user1.setName("");
         user1.setLogin("emptyuser");
         user1.setEmail("empty@example.com");
         user1.setPassword("pass");
 
         Long id1 = dao.create(user1);
-        System.out.println("Создан пользователь с пустым именем, ID: " + id1);
-        // Пустое имя должно быть допустимо, так как это просто пустая строка
 
-        // Тест с очень длинными значениями
         User user2 = new User();
         user2.setName("Очень очень очень очень очень длинное имя пользователя которое может быть обрезано");
         user2.setLogin("verylongloginname");
@@ -371,7 +339,6 @@ public class UserDAOTest {
         if (id2 != null) {
             Optional<User> found = dao.findByID(id2);
             assertTrue(found.isPresent(), "Пользователь должен быть найден");
-            // Проверяем, что длинные значения были обрезаны или сохранены
             assertTrue(found.get().getName().length() <= 50, "Имя должно быть обрезано до 50 символов");
             assertTrue(found.get().getLogin().length() <= 50, "Логин должен быть обрезан до 50 символов");
             assertTrue(found.get().getEmail().length() <= 100, "Email должен быть обрезан до 100 символов");
@@ -432,7 +399,6 @@ public class UserDAOTest {
         assertNotNull(id, "Пользователь должен быть создан");
         user.setId(id);
 
-        // Последовательные обновления
         user.setName("Обновленное Имя");
         boolean nameUpdated = dao.updateName(user);
         assertTrue(nameUpdated, "Имя должно быть обновлено");
@@ -449,21 +415,18 @@ public class UserDAOTest {
         boolean passwordUpdated = dao.updatePassword(user);
         assertTrue(passwordUpdated, "Пароль должен быть обновлен");
 
-        // Проверяем все обновления
         Optional<User> found = dao.findByID(id);
         assertTrue(found.isPresent(), "Пользователь должен быть найден");
         assertEquals("Обновленное Имя", found.get().getName());
         assertEquals("updatedlogin", found.get().getLogin());
         assertEquals("updated@example.com", found.get().getEmail());
 
-        // Проверяем аутентификацию с новыми данными
         Optional<User> authenticated = dao.findByLoginAndPassword("updatedlogin", "updatedpass");
         assertTrue(authenticated.isPresent(), "Должна работать аутентификация с обновленными данными");
     }
 
     @Test
     public void testUpdateNonExistentUser() {
-        System.out.println("\n=== Тест обновления несуществующего пользователя ===");
 
         User nonExistentUser = new User();
         nonExistentUser.setId(999999L);
@@ -472,21 +435,16 @@ public class UserDAOTest {
         nonExistentUser.setEmail("nonexistent@example.com");
         nonExistentUser.setPassword("password");
 
-        // Все операции обновления должны вернуть false для несуществующего пользователя
         boolean nameUpdated = dao.updateName(nonExistentUser);
-        System.out.println("Обновлено имя несуществующего: " + nameUpdated);
         assertFalse(nameUpdated, "Обновление имени несуществующего пользователя должно вернуть false");
 
         boolean loginUpdated = dao.updateLogin(nonExistentUser);
-        System.out.println("Обновлен логин несуществующего: " + loginUpdated);
         assertFalse(loginUpdated, "Обновление логина несуществующего пользователя должно вернуть false");
 
         boolean emailUpdated = dao.updateEmail(nonExistentUser);
-        System.out.println("Обновлен email несуществующего: " + emailUpdated);
         assertFalse(emailUpdated, "Обновление email несуществующего пользователя должно вернуть false");
 
         boolean passwordUpdated = dao.updatePassword(nonExistentUser);
-        System.out.println("Обновлен пароль несуществующего: " + passwordUpdated);
         assertFalse(passwordUpdated, "Обновление пароля несуществующего пользователя должно вернуть false");
     }
 }
