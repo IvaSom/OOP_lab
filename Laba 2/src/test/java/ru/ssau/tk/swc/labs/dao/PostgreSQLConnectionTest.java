@@ -1,4 +1,4 @@
-package ru.ssau.tk.swc.labs;
+package ru.ssau.tk.swc.labs.dao;
 
 import org.junit.jupiter.api.Test;
 import java.sql.Connection;
@@ -9,9 +9,9 @@ class PostgreSQLConnectionTest {
 
     @Test
     void testDatabaseConnection() {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
+        String url = "jdbc:postgresql://localhost:5433/postgres";
         String user = "postgres";
-        String password = "123456";
+        String password = "12345";
 
         System.out.println("Тестируем подключение к PostgreSQL...");
 

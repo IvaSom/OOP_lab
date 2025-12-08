@@ -75,7 +75,6 @@ public class CompPointServlet extends HttpServlet {
             CompPoint point = new CompPoint();
             point.setX(dto.getX());
             point.setY(dto.getY());
-            point.setDerive(dto.getDerive());
             point.setFunID(dto.getFunID());
 
             Long newId = compPointDAO.create(point);

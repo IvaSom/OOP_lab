@@ -60,7 +60,7 @@ public class TabFunDAO {
     }
 
     public List<TabFun> findAll(){
-        String sql = "SELECT * FROM tabFun ORDER BY name";
+        String sql = "SELECT * FROM tabFun ORDER BY type";
         logger.info("Выгрузка всех табулированных функций");
         List<TabFun> tabFuns = new ArrayList<>();
 

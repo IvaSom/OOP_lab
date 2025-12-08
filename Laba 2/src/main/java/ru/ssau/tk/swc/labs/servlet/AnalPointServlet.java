@@ -75,7 +75,6 @@ public class AnalPointServlet extends HttpServlet {
             AnalPoint point = new AnalPoint();
             point.setX(dto.getX());
             point.setY(dto.getY());
-            point.setDerive(dto.getDerive());
             point.setFunID(dto.getFunID());
 
             Long newId = analPointDAO.create(point);
