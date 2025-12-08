@@ -5,7 +5,6 @@ public class CompPoint {
     private Long funID;
     private Double x;
     private Double y;
-    private Double derive;
 
     public CompPoint(){}
 
@@ -13,16 +12,11 @@ public class CompPoint {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.derive = derive;
         this.funID = funID;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setDerive(double derive) {
-        this.derive = derive;
     }
 
     public void setFunID(Long funID) {
@@ -41,10 +35,6 @@ public class CompPoint {
         return id;
     }
 
-    public double getDerive() {
-        return derive;
-    }
-
     public double getX() {
         return x;
     }
@@ -55,16 +45,5 @@ public class CompPoint {
 
     public Long getFunID() {
         return funID;
-    }
-
-    @Override
-    public String toString() {
-        return "CompPoint{" +
-                "id=" + id +
-                ", x=" + x +
-                ", y=" + y +
-                ", derive=" + derive +
-                ", funID=" + funID +
-                '}';
     }
 }

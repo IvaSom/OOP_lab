@@ -9,17 +9,15 @@ public class AnalPointDTO {
     private Long id;
     private double x;
     private double y;
-    private double derive;
     private Long funID;
 
     private static final Logger logger = LoggerFactory.getLogger(AnalPointDTO.class);
     public AnalPointDTO() {logger.info("Создан пустой AnalPointDTO");}
 
-    public AnalPointDTO(Long id, double x, double y, double derive, Long funID){
+    public AnalPointDTO(Long id, double x, double y, Long funID){
         this.id = id;
         this.x = x;
         this.y = y;
-        this.derive = derive;
         this.funID = funID;
         logger.info("Создан AnalPointDTO по значениям");
     }
@@ -28,7 +26,7 @@ public class AnalPointDTO {
         if (entity == null) {
             return null;
         }
-        AnalPointDTO temp = new AnalPointDTO(entity.getId(), entity.getX(), entity.getY(), entity.getDerive(), entity.getFunID());
+        AnalPointDTO temp = new AnalPointDTO(entity.getId(), entity.getX(), entity.getY(), entity.getFunID());
         logger.info("Создан AnalPointDTO по entity");
         return temp;
     }
@@ -38,7 +36,6 @@ public class AnalPointDTO {
         entity.setId(this.id);
         entity.setX(this.x);
         entity.setY(this.y);
-        entity.setDerive(this.derive);
         entity.setFunID(this.funID);
         logger.info("AnalPointDTO переведен в entity");
         return entity;
@@ -46,10 +43,6 @@ public class AnalPointDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setDerive(double derive) {
-        this.derive = derive;
     }
 
     public void setFunID(Long funID) {
@@ -66,10 +59,6 @@ public class AnalPointDTO {
 
     public Long getId() {
         return id;
-    }
-
-    public double getDerive() {
-        return derive;
     }
 
     public double getX() {
@@ -90,12 +79,12 @@ public class AnalPointDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AnalPointDTO that = (AnalPointDTO) o;
-        return (Objects.equals(id, that.id) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(derive, that.derive)&& Objects.equals(funID, that.funID));
+        return (Objects.equals(id, that.id) && Objects.equals(x, that.x) && Objects.equals(y, that.y) && Objects.equals(funID, that.funID));
     }
 
     @Override
     public int hashCode() {
         logger.info("Возвращается хэш-код AnalPointDTO");
-        return Objects.hash(id, x, y, derive, funID);
+        return Objects.hash(id, x, y, funID);
     }
 }

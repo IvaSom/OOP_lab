@@ -9,7 +9,6 @@ public class CompPointDTO {
     private Long id;
     private double x;
     private double y;
-    private double derive;
     private Long funID;
 
     private static final Logger logger = LoggerFactory.getLogger(CompPointDTO.class);
@@ -18,11 +17,10 @@ public class CompPointDTO {
         logger.info("Создан пустой CompPointDTO");
     }
 
-    public CompPointDTO(Long id, double x, double y, double derive, Long funID) {
+    public CompPointDTO(Long id, double x, double y, Long funID) {
         this.id = id;
         this.x = x;
         this.y = y;
-        this.derive = derive;
         this.funID = funID;
         logger.info("Создан CompPointDTO по значениям");
     }
@@ -31,7 +29,7 @@ public class CompPointDTO {
         if (entity == null) {
             return null;
         }
-        CompPointDTO temp = new CompPointDTO(entity.getId(), entity.getX(), entity.getY(), entity.getDerive(), entity.getFunID());
+        CompPointDTO temp = new CompPointDTO(entity.getId(), entity.getX(), entity.getY(), entity.getFunID());
         logger.info("Создан CompPointDTO по entity");
         return temp;
     }
@@ -41,7 +39,6 @@ public class CompPointDTO {
         entity.setId(this.id);
         entity.setX(this.x);
         entity.setY(this.y);
-        entity.setDerive(this.derive);
         entity.setFunID(this.funID);
         logger.info("CompPointDTO переведен в entity");
         return entity;
@@ -49,10 +46,6 @@ public class CompPointDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setDerive(double derive) {
-        this.derive = derive;
     }
 
     public void setFunID(Long funID) {
@@ -69,10 +62,6 @@ public class CompPointDTO {
 
     public Long getId() {
         return id;
-    }
-
-    public double getDerive() {
-        return derive;
     }
 
     public double getX() {
@@ -96,13 +85,12 @@ public class CompPointDTO {
         return (Objects.equals(id, that.id) &&
                 Objects.equals(x, that.x) &&
                 Objects.equals(y, that.y) &&
-                Objects.equals(derive, that.derive) &&
                 Objects.equals(funID, that.funID));
     }
 
     @Override
     public int hashCode() {
         logger.info("Возвращается хэш-код CompPointDTO");
-        return Objects.hash(id, x, y, derive, funID);
+        return Objects.hash(id, x, y, funID);
     }
 }

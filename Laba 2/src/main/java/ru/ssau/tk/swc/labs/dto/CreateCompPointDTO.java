@@ -12,9 +12,6 @@ public class CreateCompPointDTO {
     @NotNull(message = "y обязателен")
     private double y;
 
-    @NotNull(message = "производная обязательна")
-    private double derive;
-
     @NotNull(message = "ID функции обязательно")
     private Long funID;
 
@@ -24,16 +21,11 @@ public class CreateCompPointDTO {
         logger.info("Создан пустой CreateCompPointDTO");
     }
 
-    public CreateCompPointDTO(double x, double y, double derive, Long funID) {
+    public CreateCompPointDTO(double x, double y, Long funID) {
         this.x = x;
         this.y = y;
-        this.derive = derive;
         this.funID = funID;
         logger.info("Создан CreateCompPointDTO по значениям");
-    }
-
-    public void setDerive(double derive) {
-        this.derive = derive;
     }
 
     public void setFunID(Long funID) {
@@ -46,10 +38,6 @@ public class CreateCompPointDTO {
 
     public void setY(double y) {
         this.y = y;
-    }
-
-    public double getDerive() {
-        return derive;
     }
 
     public double getX() {
