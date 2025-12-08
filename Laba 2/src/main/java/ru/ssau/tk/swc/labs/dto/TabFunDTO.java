@@ -1,5 +1,7 @@
 package ru.ssau.tk.swc.labs.dto;
 
+import ru.ssau.tk.swc.labs.entity.*;
+
 public class TabFunDTO {
     private Long id;
     private String name;
@@ -13,6 +15,10 @@ public class TabFunDTO {
     public TabFunDTO(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+    public TabFunDTO(tabFun entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
     }
 
     public Long getId() { return id; }

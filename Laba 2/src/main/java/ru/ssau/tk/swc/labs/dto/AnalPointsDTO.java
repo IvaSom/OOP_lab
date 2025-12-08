@@ -1,10 +1,12 @@
 package ru.ssau.tk.swc.labs.dto;
 
+import ru.ssau.tk.swc.labs.entity.*;
+
 public class AnalPointsDTO {
     private Long id;
     private Double x;
     private Double y;
-    private Long functionId; // Only ID instead of full object
+    private Long functionId;
 
     public AnalPointsDTO() {}
 
@@ -13,6 +15,12 @@ public class AnalPointsDTO {
         this.x = x;
         this.y = y;
         this.functionId = functionId;
+    }
+    public AnalPointsDTO(anal_points entity) {
+        this.id = entity.getId();
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.functionId = entity.getFunction().getId();
     }
 
     public Long getId() { return id; }

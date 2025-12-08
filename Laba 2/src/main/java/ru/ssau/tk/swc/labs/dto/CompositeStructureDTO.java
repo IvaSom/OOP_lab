@@ -1,5 +1,7 @@
 package ru.ssau.tk.swc.labs.dto;
 
+import ru.ssau.tk.swc.labs.entity.*;
+
 public class CompositeStructureDTO {
     private Long id;
     private Long compositeFunctionId;
@@ -13,6 +15,12 @@ public class CompositeStructureDTO {
         this.compositeFunctionId = compositeFunctionId;
         this.analyticFunctionId = analyticFunctionId;
         this.executionOrder = executionOrder;
+    }
+    public CompositeStructureDTO(composite_structure entity) {
+        this.id = entity.getId();
+        this.compositeFunctionId = entity.getCompFun().getId();
+        this.analyticFunctionId = entity.getAnalFun().getId();
+        this.executionOrder = entity.getExecutionOrder();
     }
 
     public Long getId() { return id; }

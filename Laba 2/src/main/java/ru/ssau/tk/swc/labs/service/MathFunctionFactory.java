@@ -1,6 +1,7 @@
 package ru.ssau.tk.swc.labs.service;
 
 import org.springframework.stereotype.Service;
+import ru.ssau.tk.swc.labs.dto.AnalFunDTO;
 import ru.ssau.tk.swc.labs.entity.analFun;
 import ru.ssau.tk.swc.labs.functions.*;
 
@@ -32,6 +33,20 @@ public class MathFunctionFactory {
             case 7 -> new IdentityFunction();
             case 8 -> new UnitFunction();
             default -> throw new IllegalArgumentException("Unknown analytic function type: " + type);
+        };
+    }
+
+    public MathFunction createMathFunctionByType(AnalFunDTO anal_fun) {
+        return switch (anal_fun.getType()) {
+            case 1 -> new SinFunction();
+            case 2 -> new CosFunction();
+            case 3 -> new SqrFunction();
+            case 4 -> new ConstantFunction(1.0);
+            case 5 -> new ZeroFunction();
+            case 6 -> new LnFunction();
+            case 7 -> new IdentityFunction();
+            case 8 -> new UnitFunction();
+            default -> throw new IllegalArgumentException("Unknown analytic function type: " + anal_fun.getType());
         };
     }
 }

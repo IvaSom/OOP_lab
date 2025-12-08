@@ -1,5 +1,7 @@
 package ru.ssau.tk.swc.labs.dto;
 
+import ru.ssau.tk.swc.labs.entity.*;
+
 public class AnalFunDTO {
     private Long id;
     private String name;
@@ -18,6 +20,11 @@ public class AnalFunDTO {
         this.type = type;
     }
 
+    public AnalFunDTO(analFun entity) {
+        this.id = entity.getId();
+        this.name = entity.getName();
+        this.type = entity.getType();
+    }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getName() { return name; }

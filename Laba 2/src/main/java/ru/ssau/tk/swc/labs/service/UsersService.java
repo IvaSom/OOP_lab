@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.ssau.tk.swc.labs.entity.users;
 import ru.ssau.tk.swc.labs.repository.UserRepository;
+import ru.ssau.tk.swc.labs.config.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,11 +14,27 @@ import java.util.stream.Collectors;
 public class UsersService {
 
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
-
     private final UserRepository userRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
-    public UsersService(UserRepository userRepository) {
+    public UsersService(UserRepository userRepository,
+                        org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+
+    public users save(users user) {
+        logger.info("Сохранение пользователя: {}", user.getLogin());
+
+        // Если это новый пользователь, хэшируем пароль
+        if (user.getId() == null || user.getId() == 0) {
+            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPassword);
+            logger.info("Пароль пользователя {} захеширован", user.getLogin());
+        }
+
+        return userRepository.save(user);
     }
 
     public Optional<users> findUserByLogin(String login) {
@@ -38,17 +55,6 @@ public class UsersService {
         logger.info("Поиск пользователя по ID: {}", id);
         Optional<users> result = userRepository.findById(id);
         logger.info("Поиск по ID завершен. Найдено: {}", result.isPresent() ? "1 пользователь" : "0 пользователей");
-        return result;
-    }
-
-    public Optional<users> authenticateUser(String login, String password) {
-        logger.info("Аутентификация пользователя: login={}", login);
-        Optional<users> result = userRepository.findByLoginAndPassword(login, password);
-        if (result.isPresent()) {
-            logger.info("Аутентификация успешна для пользователя: {}", login);
-        } else {
-            logger.warn("Аутентификация не удалась для пользователя: {}", login);
-        }
         return result;
     }
 
@@ -79,8 +85,6 @@ public class UsersService {
         return result;
     }
 
-
-
     public boolean isLoginExists(String login) {
         logger.info("Проверка существования логина: {}", login);
         boolean exists = userRepository.findByLogin(login).isPresent();
@@ -93,10 +97,6 @@ public class UsersService {
         boolean exists = userRepository.findByEmail(email).isPresent();
         logger.info("Email {} существует: {}", email, exists);
         return exists;
-    }
-    public users save(users user) {
-        logger.info("Сохранение пользователя: {}", user.getLogin());
-        return userRepository.save(user);
     }
 
     public void deleteById(Long id) {
@@ -118,5 +118,4 @@ public class UsersService {
 
         return comparator;
     }
-
 }
