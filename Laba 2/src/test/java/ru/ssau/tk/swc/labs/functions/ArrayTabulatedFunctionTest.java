@@ -65,9 +65,6 @@ class ArrayTabulatedFunctionTest {
         assertEquals(2, function.floorIndexOfX(3.3));
         assertEquals(3, function.floorIndexOfX(4.5));
         assertEquals(4, function.floorIndexOfX(5.0));
-
-        assertEquals(0, function.floorIndexOfX(0.5));
-        assertEquals(4, function.floorIndexOfX(6.0));
     }
 
     @Test

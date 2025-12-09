@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:18
+    container_name: laba6-postgres
+    environment:
+      POSTGRES_DB: lab5_benchmark
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - laba6-network
+
+  tomcat-app:
+    build: .
+    container_name: laba6-tomcat
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: lab5_benchmark
+      DB_USER: postgres
+      DB_PASSWORD: 12345
+    networks:
+      - laba6-network
+    volumes:
+      - ./logs:/usr/local/tomcat/logs
+
+volumes:
+  postgres_data:
+
+networks:
+  laba6-network:
+    driver: bridge
