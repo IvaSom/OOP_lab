@@ -1,6 +1,5 @@
 package ru.ssau.tk.swc.labs.dto;
 
-import ru.ssau.tk.swc.labs.entity.Role;
 import ru.ssau.tk.swc.labs.entity.User;
 import java.util.Objects;
 import org.slf4j.Logger;
@@ -12,7 +11,6 @@ public class UserDTO {
     private String email;
     private String name;
     private String password;
-    private String role;
 
     private static final Logger logger = LoggerFactory.getLogger(UserDTO.class);
 
@@ -20,13 +18,12 @@ public class UserDTO {
         logger.info("Создан пустой UserDTO");
     }
 
-    public UserDTO(Long id, String login, String email, String name, String password, String role) {
+    public UserDTO(Long id, String login, String email, String name, String password) {
         this.id = id;
         this.login = login;
         this.email = email;
         this.name = name;
         this.password = password;
-        this.role = role;
         logger.info("Создан UserDTO по значениям");
     }
 
@@ -34,7 +31,7 @@ public class UserDTO {
         if (entity == null) {
             return null;
         }
-        UserDTO temp = new UserDTO(entity.getId(), entity.getLogin(), entity.getEmail(), entity.getName(), entity.getPassword(), entity.getRole() != null ? entity.getRole().name() : Role.USER.name());
+        UserDTO temp = new UserDTO(entity.getId(), entity.getLogin(), entity.getEmail(), entity.getName(), entity.getPassword());
         logger.info("Создан UserDTO по entity");
         return temp;
     }
@@ -46,7 +43,6 @@ public class UserDTO {
         entity.setEmail(this.email);
         entity.setName(this.name);
         entity.setPassword(this.password);
-        entity.setRole(Role.fromString(this.role));
         logger.info("UserDTO переведен в entity");
         return entity;
     }
@@ -91,14 +87,6 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     @Override
     public boolean equals(Object o) {
         logger.info("Производится сравнение UserDTO");
@@ -109,13 +97,12 @@ public class UserDTO {
                 Objects.equals(login, that.login) &&
                 Objects.equals(email, that.email) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(role, that.role);
+                Objects.equals(password, that.password);
     }
 
     @Override
     public int hashCode() {
         logger.info("Возвращается хэш-код UserDTO");
-        return Objects.hash(id, login, email, name, password, role);
+        return Objects.hash(id, login, email, name, password);
     }
 }

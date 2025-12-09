@@ -1,11 +1,8 @@
 package ru.ssau.tk.swc.labs.dao;
 
-import ru.ssau.tk.swc.labs.entity.Role;
 import ru.ssau.tk.swc.labs.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.ssau.tk.swc.labs.util.PasswordHasher;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,27 +79,25 @@ public class UserDAO {
         return Optional.empty();
     }
 
-    public Optional<User> findByLoginAndPassword(String login, String password) {
-        String sql = "SELECT * FROM users WHERE login = ?";
+    public Optional<User> findByLoginAndPassword(String login, String password){
+        String sql = "SELECT * FROM users WHERE login = ? AND password = ?";
         logger.info("Начало поиска пользователя по login: {} и паролю", login);
 
-        try (Connection conn = dataSourceProvider.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try(Connection conn = dataSourceProvider.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1, login);
+            stmt.setString(2, password);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     User user = mapResultSetToUser(rs);
-                    // Теперь проверяем пароль через BCrypt
-                    if (PasswordHasher.verify(password, user.getPassword())) {
-                        logger.debug("Пользователь авторизирован: {}", login);
-                        return Optional.of(user);
-                    }
+                    logger.debug("Пользоватль авторизирован: {}", login);
+                    return Optional.of(user);
                 }
             }
         } catch (SQLException e) {
             logger.error("Ошибка поиска пользователя по логину и паролю", e);
         }
-        logger.debug("Аутентификация по login: {} провалена", login);
+        logger.debug("Аутентификация по login: {} проваленa", login);
         return Optional.empty();
     }
 
@@ -131,23 +126,21 @@ public class UserDAO {
         user.setLogin(rs.getString("login"));
         user.setEmail(rs.getString("email"));
         user.setPassword(rs.getString("password"));
-        user.setRole(mapStringToRole(rs.getString("role")));
         return user;
     }
 
-    public Long create(User user) {
-        String sql = "INSERT INTO users (name, login, email, password, role) VALUES (?, ?, ?, ?, ?)";
+    public Long create(User user){
+        String sql = "INSERT INTO users (name, login, email, password) VALUES (?, ?, ?, ?)";
         logger.info("Добавляем нового пользователя под login: {}", user.getLogin());
 
         try (Connection conn = dataSourceProvider.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, user.getName());
-            stmt.setString(2, user.getLogin());
-            stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getPassword());
-            stmt.setString(5, mapRoleToString(user.getRole()));
+             stmt.setString(1, user.getName());
+             stmt.setString(2, user.getLogin());
+             stmt.setString(3, user.getEmail());
+             stmt.setString(4, user.getPassword());
 
-            if (stmt.executeUpdate() > 0) {
+            if (stmt.executeUpdate() > 0){
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         Long id = generatedKeys.getLong(1);
@@ -233,28 +226,6 @@ public class UserDAO {
         return false;
     }
 
-    public boolean updateRole(User user) {
-        String sql = "UPDATE users SET role = ? WHERE id = ?";
-        logger.info("Обновление роли пользователя по id: {}", user.getId());
-
-        try (Connection conn = dataSourceProvider.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, mapRoleToString(user.getRole()));
-            stmt.setLong(2, user.getId());
-
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows > 0) {
-                logger.info("Роль пользователя под id: {} обновлена", user.getId());
-            } else {
-                logger.debug("Пользователь под id: {} не найден", user.getId());
-            }
-            return affectedRows > 0;
-        } catch (SQLException e) {
-            logger.error("Ошибка обновления роли пользователя под id: {}", user.getId(), e);
-        }
-        return false;
-    }
-
     public boolean updateName(User user){
         String sql = "UPDATE users SET name = ? WHERE id = ?";
         logger.info("Начало обновления имени пользователя по id: {}", user.getId());
@@ -276,18 +247,6 @@ public class UserDAO {
             logger.error("Ошибка обновления имени пользователя под id: {}", user.getId(), e);
         }
         return false;
-    }
-
-    private Role mapStringToRole(String roleStr) {
-        try {
-            return Role.valueOf(roleStr.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return Role.USER; // По умолчанию USER
-        }
-    }
-
-    private String mapRoleToString(Role role) {
-        return role != null ? role.name() : Role.USER.name();
     }
 
     public boolean delete(Long id) {

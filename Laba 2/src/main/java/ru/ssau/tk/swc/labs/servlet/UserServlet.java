@@ -4,12 +4,10 @@ import ru.ssau.tk.swc.labs.dao.UserDAO;
 import ru.ssau.tk.swc.labs.dao.PostgreSQLDataSourceProvider;
 import ru.ssau.tk.swc.labs.dto.UserDTO;
 import ru.ssau.tk.swc.labs.dto.CreateUserDTO;
-import ru.ssau.tk.swc.labs.entity.Role;
 import ru.ssau.tk.swc.labs.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.ssau.tk.swc.labs.util.PasswordHasher;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -91,21 +89,19 @@ public class UserServlet extends HttpServlet {
         logger.info("POST запрос для создания пользователя");
 
         try {
+            // Читаем JSON из тела запроса
             String requestBody = req.getReader().lines().collect(Collectors.joining());
             logger.debug("Тело запроса: {}", requestBody);
 
             CreateUserDTO createUserDTO = objectMapper.readValue(requestBody, CreateUserDTO.class);
             logger.info("Создание пользователя: {}", createUserDTO.getLogin());
 
-            // Хэшируем пароль
-            String hashedPassword = PasswordHasher.hash(createUserDTO.getPassword());
-
+            // Преобразуем DTO в Entity и создаем пользователя
             User user = new User();
             user.setName(createUserDTO.getName());
             user.setLogin(createUserDTO.getLogin());
             user.setEmail(createUserDTO.getEmail());
-            user.setPassword(hashedPassword);
-            user.setRole(Role.fromString(createUserDTO.getRole()));
+            user.setPassword(createUserDTO.getPassword()); // В реальном приложении хэшировать!
 
             Long newUserId = userDAO.create(user);
 
@@ -116,7 +112,7 @@ public class UserServlet extends HttpServlet {
                 String jsonResponse = objectMapper.writeValueAsString(userDTO);
                 resp.setStatus(HttpServletResponse.SC_CREATED);
                 resp.getWriter().write(jsonResponse);
-                logger.info("Пользователь создан с ID: {}, роль: {}", newUserId, createdUser.getRole());
+                logger.info("Пользователь создан с ID: {}", newUserId);
             } else {
                 logger.error("Ошибка при создании пользователя");
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -25,20 +25,17 @@ public class CreateUserDTO {
     @Size(min = 1, max = 100, message = "Пароль должен быть от 1 до 100 символов")
     private String password;
 
-    private String role = "USER";
-
     private static final Logger logger = LoggerFactory.getLogger(CreateUserDTO.class);
 
     public CreateUserDTO() {
         logger.info("Создан пустой CreateUserDTO");
     }
 
-    public CreateUserDTO(String name, String login, String email, String password, String role) {
+    public CreateUserDTO(String name, String login, String email, String password) {
         this.name = name;
         this.login = login;
         this.email = email;
         this.password = password;
-        this.role = role;
         logger.info("Создан CreateUserDTO по значениям");
     }
 
@@ -72,13 +69,5 @@ public class CreateUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role != null ? role : "USER";
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }
