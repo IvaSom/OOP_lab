@@ -32,7 +32,7 @@ public class AnalPointDTOTest {
 
     @Test
     public void testFromEntity() {
-        AnalPoint entity = new AnalPoint(3L, 15.2, 25.7, 0.0, 9L);
+        AnalPoint entity = new AnalPoint(3L, 15.2, 25.7, 9L);
 
         AnalPointDTO dto = AnalPointDTO.fromEntity(entity);
 
@@ -158,7 +158,7 @@ public class AnalPointDTOTest {
 
     @Test
     public void testCompleteCycle_EntityToDTOToEntity() {
-        AnalPoint originalEntity = new AnalPoint(100L, 50.5, 75.5, 0.0, 200L);
+        AnalPoint originalEntity = new AnalPoint(100L, 50.5, 75.5, 200L);
 
         AnalPointDTO dto = AnalPointDTO.fromEntity(originalEntity);
         AnalPoint restoredEntity = dto.toEntity();

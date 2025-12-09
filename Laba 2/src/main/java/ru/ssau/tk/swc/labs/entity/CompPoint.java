@@ -8,7 +8,7 @@ public class CompPoint {
 
     public CompPoint(){}
 
-    public CompPoint(Long id, double x, double y, double derive, Long funID){
+    public CompPoint(Long id, double x, double y, Long funID){
         this.id = id;
         this.x = x;
         this.y = y;

@@ -32,7 +32,7 @@ public class CompPointDTOTest {
 
     @Test
     public void testFromEntity() {
-        CompPoint entity = new CompPoint(4L, 7.3, 11.5, 0.0, 14L);
+        CompPoint entity = new CompPoint(4L, 7.3, 11.5, 14L);
 
         CompPointDTO dto = CompPointDTO.fromEntity(entity);
 
@@ -158,7 +158,7 @@ public class CompPointDTOTest {
 
     @Test
     public void testCompleteCycle_EntityToDTOToEntity() {
-        CompPoint originalEntity = new CompPoint(100L, 33.3, 66.6, 0.0, 200L);
+        CompPoint originalEntity = new CompPoint(100L, 33.3, 66.6, 200L);
 
         CompPointDTO dto = CompPointDTO.fromEntity(originalEntity);
         CompPoint restoredEntity = dto.toEntity();

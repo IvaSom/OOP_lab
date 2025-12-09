@@ -40,7 +40,6 @@ public class UserServlet extends HttpServlet {
 
         try {
             if (pathInfo == null || pathInfo.equals("/")) {
-                // Получить всех пользователей
                 logger.info("Получение всех пользователей");
                 List<User> users = userDAO.findAll();
                 List<UserDTO> userDTOs = users.stream()
@@ -52,7 +51,6 @@ public class UserServlet extends HttpServlet {
                 logger.info("Успешно возвращено {} пользователей", userDTOs.size());
 
             } else {
-                // Получить пользователя по ID
                 String idStr = pathInfo.substring(1);
                 logger.info("Получение пользователя по ID: {}", idStr);
 
@@ -89,19 +87,17 @@ public class UserServlet extends HttpServlet {
         logger.info("POST запрос для создания пользователя");
 
         try {
-            // Читаем JSON из тела запроса
             String requestBody = req.getReader().lines().collect(Collectors.joining());
             logger.debug("Тело запроса: {}", requestBody);
 
             CreateUserDTO createUserDTO = objectMapper.readValue(requestBody, CreateUserDTO.class);
             logger.info("Создание пользователя: {}", createUserDTO.getLogin());
 
-            // Преобразуем DTO в Entity и создаем пользователя
             User user = new User();
             user.setName(createUserDTO.getName());
             user.setLogin(createUserDTO.getLogin());
             user.setEmail(createUserDTO.getEmail());
-            user.setPassword(createUserDTO.getPassword()); // В реальном приложении хэшировать!
+            user.setPassword(createUserDTO.getPassword());
 
             Long newUserId = userDAO.create(user);
 
@@ -145,7 +141,6 @@ public class UserServlet extends HttpServlet {
 
             Long id = Long.parseLong(idStr);
 
-            // Проверяем существование пользователя
             var existingUser = userDAO.findByID(id);
             if (existingUser.isEmpty()) {
                 logger.warn("Пользователь с ID {} не найден для обновления", id);
@@ -154,17 +149,14 @@ public class UserServlet extends HttpServlet {
                 return;
             }
 
-            // Читаем обновленные данные
             String requestBody = req.getReader().lines().collect(Collectors.joining());
             UserDTO updateDTO = objectMapper.readValue(requestBody, UserDTO.class);
 
-            // Обновляем пользователя
             User userToUpdate = existingUser.get();
             userToUpdate.setName(updateDTO.getName());
             userToUpdate.setLogin(updateDTO.getLogin());
             userToUpdate.setEmail(updateDTO.getEmail());
 
-            // Обновляем данные (в данном случае используем отдельные методы DAO)
             boolean updated = userDAO.updateName(userToUpdate) &&
                     userDAO.updateLogin(userToUpdate) &&
                     userDAO.updateEmail(userToUpdate);

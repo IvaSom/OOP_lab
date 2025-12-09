@@ -90,7 +90,7 @@ public class AnalPointServlet extends HttpServlet {
         } catch (Exception e) {
             logger.error("Ошибка создания точки аналитической функции", e);
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"Ошибка создания точки аналитической функции\"}");
+            resp.getWriter().write("{\"error\": \"Ошибка создания точки аналитической точки\"}");
         }
     }
 

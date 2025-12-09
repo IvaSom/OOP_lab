@@ -8,7 +8,7 @@ public class AnalPoint {
 
     public AnalPoint(){}
 
-    public AnalPoint(Long id, double x, double y, double derive, Long funID){
+    public AnalPoint(Long id, double x, double y, Long funID){
         this.id = id;
         this.x = x;
         this.y = y;
