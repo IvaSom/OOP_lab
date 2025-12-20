@@ -20,6 +20,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         //разрешаем регистрацию, вход и проверки без авторизации
                         .requestMatchers("/api/users/register").permitAll()
+                        .requestMatchers("/api/users/auth").permitAll()
                         .requestMatchers("/api/users/check-login").permitAll()
                         .requestMatchers("/api/users/check-email").permitAll()
                         //все остальное требует авторизации
