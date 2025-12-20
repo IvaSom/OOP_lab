@@ -15,12 +15,12 @@ public class UsersService {
 
     private static final Logger logger = LoggerFactory.getLogger(UsersService.class);
     private final UserRepository userRepository;
-    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    //private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     public UsersService(UserRepository userRepository,
                         org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        //this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -28,11 +28,14 @@ public class UsersService {
         logger.info("Сохранение пользователя: {}", user.getLogin());
 
         // Если это новый пользователь, хэшируем пароль
+        /*
         if (user.getId() == null || user.getId() == 0) {
             String encodedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encodedPassword);
             logger.info("Пароль пользователя {} захеширован", user.getLogin());
         }
+
+         */
 
         return userRepository.save(user);
     }
