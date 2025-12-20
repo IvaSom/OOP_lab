@@ -28,32 +28,20 @@ const LoginPage: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async ( LoginForm) => {
-    try {
-      setLoading(true);
+    const onSubmit = async (data: LoginForm) => {
+      try {
+        setLoading(true);
 
-      // Выполняем вход
-      await login(data);
-
-      // Получаем информацию о пользователе (можно расширить)
-      const user = {
-        id: 1,
-        name: data.login,
-        login: data.login,
-        email: '',
-        role: 'USER'
-      };
-
-      setUser(user);
-      toast.success('Вход выполнен успешно!');
-      navigate('/');
-    } catch (error) {
-      toast.error('Неверный логин или пароль');
-      console.error('Login error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        await login(data.login, data.password);
+        setAuthenticated();
+        toast.success('Вход выполнен успешно!');
+        navigate('/');
+      } catch (error) {
+        toast.error('Неверный логин или пароль');
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const handleRegisterClick = () => {
     navigate('/register');
