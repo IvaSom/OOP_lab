@@ -1,10 +1,12 @@
 package ru.ssau.tk.swc.labs.controller;
 
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import ru.ssau.tk.swc.labs.dto.*;
 import ru.ssau.tk.swc.labs.entity.users;
@@ -111,6 +113,40 @@ public class UsersController {
         users savedUser = service.save(user);
         logger.info("POST /api/users/register - Пользователь успешно зарегистрирован с ID: {}", savedUser.getId());
         return ResponseEntity.ok(new UserDTO(savedUser));
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity<?> authenticateUser(@RequestBody UserAuthDTO authRequest) {
+        logger.info("POST /api/users/auth - Аутентификация пользователя с логином: {}", authRequest.getLogin());
+
+        // Проверка наличия логина и пароля
+        if (authRequest.getLogin() == null || authRequest.getLogin().trim().isEmpty()) {
+            logger.warn("POST /api/users/auth - Логин не указан");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if (authRequest.getPassword() == null || authRequest.getPassword().trim().isEmpty()) {
+            logger.warn("POST /api/users/auth - Пароль не указан для пользователя '{}'", authRequest.getLogin());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        Optional<users> userOptional = service.findUserByLogin(authRequest.getLogin());
+
+        if (userOptional.isEmpty()) {
+            logger.warn("POST /api/users/auth - Пользователь с логином '{}' не найден", authRequest.getLogin());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        users user = userOptional.get();
+
+        // Проверка пароля (безопасность: в реальном приложении используйте шифрование!)
+        if (!user.getPassword().equals(authRequest.getPassword())) {
+            logger.warn("POST /api/users/auth - Неверный пароль для пользователя '{}'", authRequest.getLogin());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        logger.info("POST /api/users/auth - Пользователь '{}' успешно аутентифицирован", authRequest.getLogin());
+        return ResponseEntity.ok(new UserDTO(user));
     }
 
     @PutMapping("/{id}")
