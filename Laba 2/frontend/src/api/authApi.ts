@@ -1,8 +1,13 @@
 import api from './api';
 import { UserAuthDTO, UserCreateDTO, UserDTO } from '../types';
-
 export const registerUser = async (userData: UserCreateDTO): Promise<UserDTO> => {
-  const response = await api.post('/users/register', userData);
+  // Убедимся, что роль всегда передается
+  const registrationData = {
+    ...userData,
+    role: userData.role || 'USER' // По умолчанию USER
+  };
+
+  const response = await api.post('/users/register', registrationData);
   return response.data;
 };
 

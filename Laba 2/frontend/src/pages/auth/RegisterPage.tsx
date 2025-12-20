@@ -117,29 +117,35 @@ const RegisterPage: React.FC = () => {
       clearErrors('passwordConfirm');
     }
   }, [watch('password'), watch('passwordConfirm')]);
+const onSubmit = async ( RegisterForm) => {
+  try {
+    setLoading(true);
 
-  const onSubmit = async (data: RegisterForm) => {
-    try {
-      setLoading(true);
+    const userData: UserCreateDTO = {
+      name: data.name,
+      login: data.login,
+      email: data.email,
+      password: data.password,
+      role: 'USER' // Явно указываем роль
+    };
 
-      const userData: UserCreateDTO = {
-        name: data.name,
-        login: data.login,
-        email: data.email,
-        password: data.password,
-      };
-
-      await registerUser(userData);
-      toast.success('Регистрация успешно завершена! Теперь вы можете войти в систему.');
-      navigate('/login');
-    } catch (error) {
+    await registerUser(userData);
+    toast.success('Регистрация успешно завершена! Теперь вы можете войти в систему.');
+    navigate('/login');
+  } catch (error: any) {
+    // Более детальная обработка ошибок
+    if (error.response?.data?.message) {
+      toast.error(`Ошибка: ${error.response.data.message}`);
+    } else if (error.response?.status === 400) {
+      toast.error('Неверные данные регистрации');
+    } else {
       toast.error('Ошибка при регистрации');
-      console.error('Registration error:', error);
-    } finally {
-      setLoading(false);
     }
-  };
-
+    console.error('Registration error:', error);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
