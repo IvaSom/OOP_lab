@@ -1,49 +1,37 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { toast } from 'react-toastify';
-import { useAuthStore } from '../store/authStore';
+import axios from 'axios';
 
-const api: AxiosInstance = axios.create({
-    baseURL: '/api',
-    withCredentials: true,
-    headers: {
-        'Content-Type': 'application/json'
-    }
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true, // Важно для работы с сессиями
 });
 
-
-// Interceptor для обработки ошибок
-api.interceptors.response.use(
-    (response: AxiosResponse) => response,
-    (error: AxiosError) => {
-        if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    toast.error('Сессия истекла. Пожалуйста, войдите снова.');
-                    useAuthStore.getState().logout();
-                    window.location.href = '/login';
-                    break;
-                case 403:
-                    toast.error('У вас нет прав для выполнения этой операции');
-                    break;
-                case 400:
-                    toast.error('Неверные данные запроса');
-                    break;
-                case 404:
-                    toast.error('Ресурс не найден');
-                    break;
-                case 500:
-                    toast.error('Внутренняя ошибка сервера');
-                    break;
-                default:
-                    toast.error(`Ошибка: ${error.response.status}`);
-            }
-        } else if (error.request) {
-            toast.error('Нет соединения с сервером');
-        } else {
-            toast.error('Ошибка при выполнении запроса');
-        }
-        return Promise.reject(error);
+// Перехватчик для добавления токена
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Перехватчик для обработки ошибок 401 (Unauthorized)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Если токен истек или невалиден, делаем logout
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
 );
 
 export default api;

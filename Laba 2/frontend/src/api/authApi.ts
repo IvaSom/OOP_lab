@@ -23,6 +23,17 @@ export const login = async (credentials: UserAuthDTO): Promise<UserDTO> => {
     return userData;
 };
 
+export const logout = async (): Promise<void> => {
+    try {
+            await api.post('/users/logout');
+        } catch (error) {
+            console.warn('Ошибка при выходе (возможно сессия уже истекла):', error);
+        } finally {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+        }
+};
+
 export const checkLoginExists = async (login: string): Promise<boolean> => {
     const response = await api.post('/users/check-login', null, {
         params: { login }
