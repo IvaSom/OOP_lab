@@ -73,6 +73,11 @@ export const createTabPoint = async (pointData: TabPointsCreateDTO): Promise<Tab
   return response.data;
 };
 
+export const updateTabPoint = async (id: number, pointData: TabPointsCreateDTO): Promise<TabPointsDTO> => {
+  const response = await api.put(`/tab-points/${id}`, pointData);
+  return response.data;
+};
+
 export const deleteTabPoint = async (id: number): Promise<void> => {
   await api.delete(`/tab-points/${id}`);
 };
