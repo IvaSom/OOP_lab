@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { registerUser, checkLoginExists, checkEmailExists } from '../../api/authApi';
@@ -32,7 +32,6 @@ type RegisterForm = {
 const RegisterPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
@@ -40,7 +39,6 @@ const RegisterPage: React.FC = () => {
     setError,
     clearErrors,
     watch,
-    trigger
   } = useForm<RegisterForm>({
     resolver: yupResolver(schema),
     mode: 'onChange',
@@ -48,7 +46,6 @@ const RegisterPage: React.FC = () => {
 
   const validateLogin = async (login: string) => {
     if (!login) return;
-
     try {
       const exists = await checkLoginExists(login);
       if (exists) {
@@ -69,7 +66,6 @@ const RegisterPage: React.FC = () => {
 
   const validateEmail = async (email: string) => {
     if (!email) return;
-
     try {
       const exists = await checkEmailExists(email);
       if (exists) {
@@ -88,26 +84,9 @@ const RegisterPage: React.FC = () => {
     }
   };
 
-  const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const login = e.target.value;
-    register('login').onChange(e);
-    if (login.length >= 3) {
-      validateLogin(login);
-    }
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const email = e.target.value;
-    register('email').onChange(e);
-    if (email.length >= 5) {
-      validateEmail(email);
-    }
-  };
-
   useEffect(() => {
     const password = watch('password');
     const passwordConfirm = watch('passwordConfirm');
-
     if (password && passwordConfirm && password !== passwordConfirm) {
       setError('passwordConfirm', {
         type: 'manual',
@@ -116,133 +95,111 @@ const RegisterPage: React.FC = () => {
     } else {
       clearErrors('passwordConfirm');
     }
-  }, [watch('password'), watch('passwordConfirm')]);
-const onSubmit = async ( RegisterForm) => {
-  try {
-    setLoading(true);
+  }, [watch('password'), watch('passwordConfirm'), setError, clearErrors]);
 
-    const userData: UserCreateDTO = {
-      name: data.name,
-      login: data.login,
-      email: data.email,
-      password: data.password,
-      role: 'USER' // Явно указываем роль
-    };
-
-    await registerUser(userData);
-    toast.success('Регистрация успешно завершена! Теперь вы можете войти в систему.');
-    navigate('/login');
-  } catch (error: any) {
-    // Более детальная обработка ошибок
-    if (error.response?.data?.message) {
-      toast.error(`Ошибка: ${error.response.data.message}`);
-    } else if (error.response?.status === 400) {
-      toast.error('Неверные данные регистрации');
-    } else {
-      toast.error('Ошибка при регистрации');
+  const onSubmit = async (data: RegisterForm) => {
+    try {
+      setLoading(true);
+      const userData: UserCreateDTO = {
+        name: data.name,
+        login: data.login,
+        email: data.email,
+        password: data.password,
+        role: 'USER'
+      };
+      await registerUser(userData);
+      toast.success('Регистрация успешно завершена! Теперь вы можете войти в систему.');
+      navigate('/login');
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        toast.error(`Ошибка: ${error.response.data.message}`);
+      } else if (error.response?.status === 400) {
+        toast.error('Неверные данные регистрации');
+      } else {
+        toast.error('Ошибка при регистрации');
+      }
+      console.error('Registration error:', error);
+    } finally {
+      setLoading(false);
     }
-    console.error('Registration error:', error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
+
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          <img className="h-12 w-auto" src={logo} alt="Логотип" />
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <img src={logo} alt="Logo" className="w-16 h-16 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-white mb-2">Создание аккаунта</h1>
+          <p className="text-gray-400">Заполните форму для регистрации</p>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-          Создание аккаунта
-        </h2>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <Input
-                label="Имя"
-                id="name"
-                type="text"
-                {...register('name')}
-                error={errors.name}
-                containerClassName="mb-4"
-              />
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="bg-gray-800 rounded-lg shadow-xl p-8 space-y-4">
+          <Input
+            label="Имя"
+            type="text"
+            placeholder="Ваше имя"
+            {...register('name')}
+            error={errors.name}
+            containerClassName="mb-4"
+          />
 
-            <div>
-              <Input
-                label="Логин"
-                id="login"
-                type="text"
-                {...register('login', {
-                  onChange: handleLoginChange,
-                  onBlur: (e) => validateLogin(e.target.value)
-                })}
-                error={errors.login}
-                containerClassName="mb-4"
-              />
-            </div>
+          <Input
+            label="Логин"
+            type="text"
+            placeholder="Уникальный логин"
+            {...register('login')}
+            onBlur={(e) => validateLogin(e.target.value)}
+            error={errors.login}
+            containerClassName="mb-4"
+          />
 
-            <div>
-              <Input
-                label="Email"
-                id="email"
-                type="email"
-                {...register('email', {
-                  onChange: handleEmailChange,
-                  onBlur: (e) => validateEmail(e.target.value)
-                })}
-                error={errors.email}
-                containerClassName="mb-4"
-              />
-            </div>
+          <Input
+            label="Email"
+            type="email"
+            placeholder="your@email.com"
+            {...register('email')}
+            onBlur={(e) => validateEmail(e.target.value)}
+            error={errors.email}
+            containerClassName="mb-4"
+          />
 
-            <div>
-              <Input
-                label="Пароль"
-                id="password"
-                type="password"
-                {...register('password')}
-                error={errors.password}
-                containerClassName="mb-4"
-              />
-            </div>
+          <Input
+            label="Пароль"
+            type="password"
+            placeholder="Минимум 6 символов"
+            {...register('password')}
+            error={errors.password}
+            containerClassName="mb-4"
+          />
 
-            <div>
-              <Input
-                label="Подтверждение пароля"
-                id="passwordConfirm"
-                type="password"
-                {...register('passwordConfirm')}
-                error={errors.passwordConfirm}
-                containerClassName="mb-4"
-              />
-            </div>
+          <Input
+            label="Подтверждение пароля"
+            type="password"
+            placeholder="Повторите пароль"
+            {...register('passwordConfirm')}
+            error={errors.passwordConfirm}
+            containerClassName="mb-6"
+          />
 
-            <div>
-              <Button
-                type="submit"
-                className="w-full"
-                loading={loading}
-                disabled={loading || Object.keys(errors).length > 0}
-              >
-                Зарегистрироваться
-              </Button>
-            </div>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full"
+          >
+            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+          </Button>
 
-            <div className="text-center">
-              <a
-                href="#login"
-                onClick={() => navigate('/login')}
-                className="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400"
-              >
-                Уже есть аккаунт? Войти
-              </a>
-            </div>
-          </form>
-        </div>
+          <div className="text-center mt-4">
+            <span className="text-gray-400">Олды тут, олды на месте? </span>
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400"
+            >
+              Я олд
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
