@@ -11,6 +11,8 @@ interface FunctionChartProps {
   className?: string;
   width?: string;
   height?: number;
+  showLegend?: boolean;
+  showTooltip?: boolean;
 }
 
 const FunctionChart: React.FC<FunctionChartProps> = ({
@@ -21,7 +23,9 @@ const FunctionChart: React.FC<FunctionChartProps> = ({
   points,
   className = '',
   width = '100%',
-  height = 300
+  height = 300,
+  showLegend = true,
+  showTooltip = true
 }) => {
   const [chartData, setChartData] = useState<{ x: number; y: number }[]>([]);
   const [loading, setLoading] = useState(false);
@@ -57,21 +61,32 @@ const FunctionChart: React.FC<FunctionChartProps> = ({
   }, [functionType, functionId, functionTypeCode, points]);
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Загрузка графика...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500 text-center p-4">{error}</div>;
+    return <div className="text-red-500 text-center p-4 text-sm">{error}</div>;
   }
 
   if (chartData.length === 0) {
-    return <div className="text-gray-500 text-center p-4">Нет данных для отображения графика</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-64 text-gray-400 dark:text-gray-500">
+        <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        <p className="text-sm">Нет данных для отображения графика</p>
+      </div>
+    );
   }
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 ${className}`} style={{ width, height: height + 40 }}>
       <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">{functionName}</h3>
-      <div style={{ width: '100%', height: height }}>
+      <div style={{ width: '100%', height }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={chartData}
@@ -82,17 +97,24 @@ const FunctionChart: React.FC<FunctionChartProps> = ({
               bottom: 5,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" darkMode={true} />
-            <XAxis dataKey="x" stroke="#6b7280" />
-            <YAxis stroke="#6b7280" />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: '#374151',
-                borderColor: '#4b5563',
-                color: '#f9fafb'
-              }}
-            />
-            <Legend />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            <XAxis dataKey="x" stroke="#6b7280" fontSize={12} />
+            <YAxis stroke="#6b7280" fontSize={12} />
+            {showTooltip && (
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#374151',
+                  borderColor: '#4b5563',
+                  color: '#f9fafb',
+                  fontSize: '12px',
+                  padding: '8px',
+                  borderRadius: '6px'
+                }}
+                formatter={(value: number) => [value.toFixed(4), 'Y']}
+                labelFormatter={(label) => `X: ${Number(label).toFixed(4)}`}
+              />
+            )}
+            {showLegend && <Legend />}
             <Line
               type="monotone"
               dataKey="y"
@@ -100,6 +122,7 @@ const FunctionChart: React.FC<FunctionChartProps> = ({
               stroke="#3b82f6"
               strokeWidth={2}
               dot={false}
+              activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2, fill: '#ffffff' }}
             />
           </LineChart>
         </ResponsiveContainer>
