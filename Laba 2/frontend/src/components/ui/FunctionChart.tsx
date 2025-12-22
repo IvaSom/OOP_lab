@@ -13,7 +13,23 @@ interface FunctionChartProps {
   height?: number;
   showLegend?: boolean;
   showTooltip?: boolean;
+  showGrid?: boolean;
+  showAxes?: boolean;
 }
+
+// Функция для получения цвета по типу функции
+const getFunctionColor = (functionType: 'anal' | 'tab' | 'comp'): string => {
+  switch (functionType) {
+    case 'anal':
+      return '#3b82f6'; // Синий для аналитических
+    case 'tab':
+      return '#10b981'; // Зеленый для табулированных
+    case 'comp':
+      return '#8b5cf6'; // Фиолетовый для композитных
+    default:
+      return '#3b82f6';
+  }
+};
 
 const FunctionChart: React.FC<FunctionChartProps> = ({
   functionType,
@@ -25,11 +41,15 @@ const FunctionChart: React.FC<FunctionChartProps> = ({
   width = '100%',
   height = 300,
   showLegend = true,
-  showTooltip = true
+  showTooltip = true,
+  showGrid = true,
+  showAxes = true
 }) => {
   const [chartData, setChartData] = useState<{ x: number; y: number }[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const lineColor = getFunctionColor(functionType);
 
   useEffect(() => {
     const loadChartData = async () => {
@@ -85,21 +105,45 @@ const FunctionChart: React.FC<FunctionChartProps> = ({
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 ${className}`} style={{ width, height: height + 40 }}>
-      <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">{functionName}</h3>
       <div style={{ width: '100%', height }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={chartData}
             margin={{
-              top: 5,
+              top: 10,
               right: 30,
               left: 20,
-              bottom: 5,
+              bottom: 10,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis dataKey="x" stroke="#6b7280" fontSize={12} />
-            <YAxis stroke="#6b7280" fontSize={12} />
+            {showGrid && (
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#e5e7eb"
+                strokeOpacity={0.5}
+                horizontal={true}
+                vertical={true}
+              />
+            )}
+            {showAxes && (
+              <>
+                <XAxis
+                  dataKey="x"
+                  stroke="#6b7280"
+                  fontSize={12}
+                  tick={{ fill: '#6b7280' }}
+                  axisLine={{ stroke: '#6b7280' }}
+                  tickLine={{ stroke: '#6b7280' }}
+                />
+                <YAxis
+                  stroke="#6b7280"
+                  fontSize={12}
+                  tick={{ fill: '#6b7280' }}
+                  axisLine={{ stroke: '#6b7280' }}
+                  tickLine={{ stroke: '#6b7280' }}
+                />
+              </>
+            )}
             {showTooltip && (
               <Tooltip
                 contentStyle={{
@@ -119,10 +163,15 @@ const FunctionChart: React.FC<FunctionChartProps> = ({
               type="monotone"
               dataKey="y"
               name={functionName}
-              stroke="#3b82f6"
+              stroke={lineColor}
               strokeWidth={2}
               dot={false}
-              activeDot={{ r: 6, stroke: '#3b82f6', strokeWidth: 2, fill: '#ffffff' }}
+              activeDot={{
+                r: 6,
+                stroke: lineColor,
+                strokeWidth: 2,
+                fill: '#ffffff'
+              }}
             />
           </LineChart>
         </ResponsiveContainer>

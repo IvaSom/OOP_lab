@@ -112,6 +112,25 @@ export const deleteCompStructure = async (id: number): Promise<void> => {
   await api.delete(`/comp-structures/${id}`);
 };
 
+export const getCompPointsByFunction = async (functionId: number): Promise<CompPointsDTO[]> => {
+  const response = await api.get(`/comp-points/function/${functionId}`);
+  return response.data;
+};
+
+export const createCompPoint = async (pointData: { x: number; functionId: number }): Promise<CompPointsDTO> => {
+  const response = await api.post('/comp-points', pointData);
+  return response.data;
+};
+
+export const updateCompPoint = async (id: number, pointData: { x: number; functionId: number }): Promise<CompPointsDTO> => {
+  const response = await api.put(`/comp-points/${id}`, pointData);
+  return response.data;
+};
+
+export const deleteCompPoint = async (id: number): Promise<void> => {
+  await api.delete(`/comp-points/${id}`);
+};
+
 // Математические операции
 export const differentiateFunction = async (
   functionType: 'anal' | 'tab' | 'comp',

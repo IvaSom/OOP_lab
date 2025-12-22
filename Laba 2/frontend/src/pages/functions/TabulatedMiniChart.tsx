@@ -7,13 +7,21 @@ interface TabulatedMiniChartProps {
   functionName: string;
   height?: number;
   className?: string;
+  showGrid?: boolean;
+  showAxes?: boolean;
 }
+
+// Цвета для разных типов функций
+const TABULATED_COLOR = '#10b981'; // Зеленый для табулированных
+const TABULATED_COLOR_DARK = '#059669'; // Темно-зеленый для контраста
 
 const TabulatedMiniChart: React.FC<TabulatedMiniChartProps> = ({
   points,
   functionName,
   height = 150,
-  className = ''
+  className = '',
+  showGrid = true,
+  showAxes = true
 }) => {
   if (points.length === 0) {
     return (
@@ -52,8 +60,8 @@ const TabulatedMiniChart: React.FC<TabulatedMiniChartProps> = ({
   const maxY = Math.max(...yValues);
 
   // Добавляем небольшие отступы для лучшего отображения
-  const xPadding = (maxX - minX) * 0.1;
-  const yPadding = (maxY - minY) * 0.1;
+  const xPadding = (maxX - minX) * 0.1 || 0.1;
+  const yPadding = (maxY - minY) * 0.1 || 0.1;
 
   const domainX = [minX - xPadding, maxX + xPadding];
   const domainY = [minY - yPadding, maxY + yPadding];
@@ -70,37 +78,50 @@ const TabulatedMiniChart: React.FC<TabulatedMiniChartProps> = ({
         <LineChart
           data={chartData}
           margin={{
-            top: 5,
-            right: 5,
-            left: 0,
-            bottom: 5,
+            top: 10,
+            right: 10,
+            left: 10,
+            bottom: 10,
           }}
         >
-          <CartesianGrid
-            strokeDasharray="2 2"
-            stroke="#e5e7eb"
-            strokeOpacity={0.3}
-            vertical={false}
-          />
-          <XAxis
-            dataKey="x"
-            stroke="#6b7280"
-            fontSize={10}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(value) => value.toFixed(1)}
-            domain={domainX}
-            hide={chartData.length <= 1}
-          />
-          <YAxis
-            stroke="#6b7280"
-            fontSize={10}
-            tickLine={false}
-            axisLine={false}
-            tickFormatter={(value) => value.toFixed(1)}
-            domain={domainY}
-            hide={chartData.length <= 1}
-          />
+          {/* Клеточная сетка */}
+          {showGrid && (
+            <CartesianGrid
+              strokeDasharray="2 2"
+              stroke="#e5e7eb"
+              strokeOpacity={0.3}
+              horizontal={true}
+              vertical={true}
+            />
+          )}
+
+          {/* Оси координат */}
+          {showAxes && (
+            <>
+              <XAxis
+                dataKey="x"
+                stroke="#6b7280"
+                fontSize={10}
+                tick={{ fill: '#6b7280' }}
+                tickLine={{ stroke: '#6b7280' }}
+                axisLine={{ stroke: '#6b7280' }}
+                tickFormatter={(value) => value.toFixed(1)}
+                domain={domainX}
+                tickCount={5}
+              />
+              <YAxis
+                stroke="#6b7280"
+                fontSize={10}
+                tick={{ fill: '#6b7280' }}
+                tickLine={{ stroke: '#6b7280' }}
+                axisLine={{ stroke: '#6b7280' }}
+                tickFormatter={(value) => value.toFixed(1)}
+                domain={domainY}
+                tickCount={5}
+              />
+            </>
+          )}
+
           <Tooltip
             contentStyle={{
               backgroundColor: '#374151',
@@ -113,17 +134,38 @@ const TabulatedMiniChart: React.FC<TabulatedMiniChartProps> = ({
             formatter={(value: number) => [value.toFixed(4), 'Значение']}
             labelFormatter={(label) => `X: ${Number(label).toFixed(4)}`}
           />
+
+          {/* Линия графика с темно-зеленым цветом */}
           <Line
             type="monotone"
             dataKey="y"
             name={functionName}
-            stroke="#10b981" // Зеленый цвет для табулированных функций
+            stroke={TABULATED_COLOR_DARK}
             strokeWidth={2}
             dot={false}
-            activeDot={{ r: 4, stroke: '#10b981', strokeWidth: 2, fill: '#ffffff' }}
+            activeDot={{
+              r: 4,
+              stroke: TABULATED_COLOR_DARK,
+              strokeWidth: 1,
+              fill: '#ffffff'
+            }}
           />
         </LineChart>
       </ResponsiveContainer>
+
+      {/* Легенда с именем функции в зеленом цвете */}
+      <div className="flex items-center justify-center mt-1 px-2">
+        <div
+          className="w-3 h-3 rounded-full mr-2 flex-shrink-0"
+          style={{ backgroundColor: TABULATED_COLOR_DARK }}
+        />
+        <span
+          className="text-xs font-medium truncate"
+          style={{ color: TABULATED_COLOR }}
+        >
+          {functionName}
+        </span>
+      </div>
     </div>
   );
 };

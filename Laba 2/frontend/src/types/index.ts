@@ -81,3 +81,10 @@ export interface CompositeStructureCreateDTO {
   analyticFunctionId: number;
   executionOrder: number;
 }
+
+export interface CompPointsDTO {
+  id: number;
+  x: number;
+  y: number;
+  functionId: number;
+}
