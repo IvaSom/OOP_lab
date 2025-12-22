@@ -88,3 +88,26 @@ export interface CompPointsDTO {
   y: number;
   functionId: number;
 }
+
+export interface FunctionOperationRequest {
+  functionId1: number;
+  functionId2: number;
+  operation: 'sum' | 'subtract' | 'multiply' | 'divide';
+}
+
+export interface TabulatedFunctionWithPoints {
+  function: TabFunDTO;
+  points: TabPointsDTO[];
+}
+
+export interface FunctionOperationResult {
+  success: boolean;
+  data?: TabulatedFunctionWithPoints;
+  error?: string;
+}
+
+export interface DifferentiationResult {
+  success: boolean;
+  data?: TabulatedFunctionWithPoints;
+  error?: string;
+}

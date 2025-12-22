@@ -16,7 +16,7 @@ import logo from '../../assets/logo.svg';
 const navigation = [
   { name: 'Дашборд', href: '/', icon: ChartBarIcon },
   { name: 'Функции', href: '/functions', icon: DocumentTextIcon },
-  { name: 'Операции', href: '/operations', icon: CalculatorIcon },
+  { name: 'Операции', href: '/functions/operations', icon: CalculatorIcon },
   { name: 'Пользователи', href: '/users', icon: UserGroupIcon, roles: ['ADMIN'] },
   { name: 'Настройки', href: '/settings', icon: CogIcon },
 ];

@@ -9,6 +9,7 @@ import RegisterPage from './pages/auth/RegisterPage';
 import FunctionsPage from './pages/functions/FunctionsPage';
 import AnalyticFunctionPage from './pages/functions/AnalyticFunctionPage';
 import TabulatedFunctionPage from './pages/functions/TabulatedFunctionPage';
+import FunctionOperationsPage from './pages/functions/FunctionOperationsPage';
 import CompositeFunctionPage from './pages/functions/CompositeFunctionPage'; // Добавьте этот импорт
 
 const App: React.FC = () => {
@@ -64,6 +65,7 @@ const App: React.FC = () => {
         <Route path="/functions/analytic/:id" element={isAuthenticated ? <AnalyticFunctionPage /> : <Navigate to="/login" replace />} />
         <Route path="/functions/tabulated/:id" element={isAuthenticated ? <TabulatedFunctionPage /> : <Navigate to="/login" replace />} />
         <Route path="/functions/composite/:id" element={isAuthenticated ? <CompositeFunctionPage /> : <Navigate to="/login" replace />} />
+        <Route path="/functions/operations" element={isAuthenticated ? <FunctionOperationsPage /> : <Navigate to="/login" replace />} />
 
         {/* Перенаправление на логин по умолчанию */}
         <Route path="*" element={<Navigate to={isAuthenticated ? "/" : "/login"} replace />} />
