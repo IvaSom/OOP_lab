@@ -12,8 +12,8 @@ import {
 import { useFunctionStore } from '../../store/functionStore';
 import { Button } from '../../components/ui/FormElements';
 import FunctionChart from '../../components/ui/FunctionChart';
-import TabulatedMiniChart from './TabulatedMiniChart';
-import CompFunMiniChart from './CompFunMiniChart';
+import TabulatedMiniChart from '../../components/ui/TabulatedMiniChart';
+import CompFunMiniChart from '../../components/ui/CompFunMiniChart';
 import Layout from '../../components/layout/Layout';
 import { AnalFunDTO, TabFunDTO, CompFunDTO, TabPointsDTO } from '../../types';
 import { PlusIcon } from '@heroicons/react/24/outline';
