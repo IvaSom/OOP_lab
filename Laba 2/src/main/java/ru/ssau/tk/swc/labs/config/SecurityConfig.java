@@ -65,7 +65,6 @@ public class SecurityConfig {
         return source;
     }
 
-    // ✅ Добавьте этот бин!
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
