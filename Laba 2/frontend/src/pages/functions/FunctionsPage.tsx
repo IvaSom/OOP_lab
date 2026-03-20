@@ -460,7 +460,7 @@ const FunctionsPage: React.FC = () => {
         {/* Function List */}
         {renderFunctionList()}
 
-        {/* Create Function Modal */}
+        {/* Create Function Modal  */}
         {showCreateModal && (
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4">
             <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
